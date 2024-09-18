@@ -23,14 +23,14 @@ class ShoppinglistController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($name)
     {
        // Retrieve all products from the Product model
-       $products = Product::all();
-
        $shoppinglist = new Shoppinglist();
+       $shoppinglist->name = $name;
+       $shoppinglist->save();
 
-       
+       $products = Product::all();
        foreach($products as $product) {
            $shoppinglist->products()->attach($product->id);
 
@@ -61,7 +61,7 @@ class ShoppinglistController extends Controller
     {
         $products = $shoppinglist->products;
 
-        return view('index', compact('shoppinglists'));
+        return view('index', compact('shoppinglist'));
     }
 
     /**
