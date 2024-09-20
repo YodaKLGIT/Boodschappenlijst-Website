@@ -10,4 +10,14 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'user_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(user::class, 'user_id');
+    }
+    
+    public function shoppinglist()
+    {
+        return $this->belongsTo(user::class, 'note_id');
+    }
 }
