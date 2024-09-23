@@ -9,7 +9,8 @@ class shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date', 'category_id', 'brand_id'];
+    protected $fillable = ['name', 'date'];
+
 
     public function notes()
     {
