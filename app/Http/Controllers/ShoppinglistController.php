@@ -15,6 +15,7 @@ class ShoppinglistController extends Controller
      */
     public function index()
     {
+      
         $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->create();
 
         return view('index', compact('shoppinglists'));
