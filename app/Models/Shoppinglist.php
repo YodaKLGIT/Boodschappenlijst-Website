@@ -11,6 +11,8 @@ class Shoppinglist extends Model
 
     protected $fillable = ['name', 'date', 'category_id', 'brand_id'];
 
+    protected $table = 'lists';  // Specify the correct table name
+
     public function notes()
     {
         return $this->hasMany(user::class, 'note_id');
@@ -18,6 +20,6 @@ class Shoppinglist extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
     }
 }

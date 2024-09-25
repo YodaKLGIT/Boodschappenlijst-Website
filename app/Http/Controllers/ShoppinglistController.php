@@ -15,10 +15,9 @@ class ShoppinglistController extends Controller
      */
     public function index()
     {
-      
-        $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->create();
-
-        return view('index', compact('shoppinglists'));
+        
+        $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
+        return view('shoppinglist.index', compact('shoppinglists'));
     }
 
     /**
@@ -41,10 +40,7 @@ class ShoppinglistController extends Controller
          // $shoppinglistWithDetails now contains the ShoppingList with related products, brands, and categories
 
        }
-       
-    
-  
-        return view('index', compact('shoppinglists'));
+        return view('index', compact('shoppinglistWithDetails'));
     }
 
     /**

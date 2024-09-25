@@ -8,7 +8,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('shoppinglist', ShoppinglistController::class);
+
+Route::get('shoppinglists', [ShoppinglistController::class, 'index'])->name('shoppinglists.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
