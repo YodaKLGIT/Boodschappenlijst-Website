@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
 
             // Foreign key for the lists table
-            $table->foreignId('list_id')->constrained()->onDelete('cascade');
-
+            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade'); // Ensure it references the correct table
+            
             // Ensure the combination of product_id and list_id is unique
             $table->unique(['product_id', 'list_id']);
         });

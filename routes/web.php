@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShoppinglistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('shoppinglists', [ShoppinglistController::class, 'index'])->name('shoppinglists.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
