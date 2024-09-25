@@ -41,6 +41,7 @@ class ShoppinglistController extends Controller
 
        }
         return view('index', compact('shoppinglistWithDetails'));
+        /* */
     }
 
     /**
