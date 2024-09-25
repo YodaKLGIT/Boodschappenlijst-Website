@@ -9,7 +9,8 @@ class Shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date', 'category_id', 'brand_id'];
+    protected $fillable = ['name', 'date'];
+
 
     protected $table = 'lists';  // Specify the correct table name
 
@@ -21,5 +22,9 @@ class Shoppinglist extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

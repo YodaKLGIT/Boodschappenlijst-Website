@@ -53,5 +53,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class, 'user_id');
     }
+    
+    public function shoppingLists()
+    {
+        return $this->belongsToMany(ShoppingList::class);
+    }
 }
 
