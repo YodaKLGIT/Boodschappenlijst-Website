@@ -56,3 +56,7 @@
 .details {
     transition: all 0.3s ease; /* Optional: smooth transition */
 }
+
+.products {
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transition for height and opacity */
+}

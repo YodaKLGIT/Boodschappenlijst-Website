@@ -23,24 +23,13 @@ class ShoppinglistController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($name)
+    public function create()
     {
-       // Retrieve all products from the Product model
-       $shoppinglist = new Shoppinglist();
-       $shoppinglist->name = $name;
-       $shoppinglist->save();
-
+       // You can retrieve all products to pass to the view, if needed
        $products = Product::all();
-       foreach($products as $product) {
-           $shoppinglist->products()->attach($product->id);
 
-         // Retrieve the ShoppingList with related products, brands, and categories
-          $shoppinglistWithDetails = Shoppinglist::with(['products.brand', 'products.category'])->find($shoppinglist->id);
-
-         // $shoppinglistWithDetails now contains the ShoppingList with related products, brands, and categories
-
-       }
-        return view('index', compact('shoppinglistWithDetails'));
+       // Return the view to create a new shopping list
+      return view('shoppinglist.create', compact('products'));
     }
 
     /**
