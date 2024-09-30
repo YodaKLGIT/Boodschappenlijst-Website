@@ -7,11 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 // home
 Route::get('/', [HomeController::class, 'index'])->name('home');
-<<< HEAD
-Route::get('shoppinglists', [ShoppinglistController::class, 'index'])->name('shoppinglists.index');
-=======
+
 Route::resource('/shoppinglist', ShoppinglistController::class);
->>>>>>> 277d59529578d10e221c562b01abe926e3c0b638
 
 Route::get('/dashboard', function () {
     return view('dashboard');
