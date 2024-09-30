@@ -17,6 +17,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.4.7/flowbite.min.js"></script>
     {{-- cssJS --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.4.7/flowbite.min.css" rel="stylesheet">
+    
+    {{-- JS --}}
+    <script src="{{ asset('js/shopping-list.js') }}"></script>
+
 
 </head>
 
