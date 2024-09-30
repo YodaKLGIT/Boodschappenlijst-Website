@@ -96,7 +96,7 @@
         <div class="flex-grow flex justify-center mr-negative-16"> <!-- Center the links -->
             <ul class="flex space-x-6 font-medium">
                 <li>
-                    <a href="/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white" aria-current="page">Home</a>
+                    <a href="{{route('/')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white" aria-current="page">Home</a>
                 </li>
                 <li>
                     <a href="/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">Products</a>
