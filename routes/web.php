@@ -9,8 +9,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 Route::get('shoppinglists', [ShoppinglistController::class, 'index'])->name('shoppinglists.index');
 
 Route::get('/dashboard', function () {
