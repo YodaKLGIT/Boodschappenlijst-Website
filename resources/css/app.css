@@ -47,3 +47,12 @@
 .mr-negative-16 {
     margin-right: -8rem;
 }
+
+
+.hidden {
+    display: none; /* Hides the element */
+}
+
+.details {
+    transition: all 0.3s ease; /* Optional: smooth transition */
+}
