@@ -83,7 +83,7 @@ class ShoppinglistController extends Controller
     {
         $products = $shoppinglist->products;
 
-        return view('index', compact('shoppinglist'));
+        return view('shoppinglist.show', compact('shoppinglist', 'products'));
     }
 
     /**
