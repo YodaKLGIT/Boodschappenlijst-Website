@@ -86,6 +86,4 @@
     </div>
 </footer>
 
-
-
 </x-app-layout>
