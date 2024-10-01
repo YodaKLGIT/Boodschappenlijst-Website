@@ -32,6 +32,8 @@ class ShoppinglistController extends Controller
       return view('shoppinglist.create', compact('products'));
     }
 
+    
+
     /**
      * Store a newly created resource in storage.
      */
