@@ -21,8 +21,10 @@ class Shoppinglist extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
+                    ->withPivot('quantity');
     }
+
     public function users()
     {
         return $this->belongsToMany(User::class);
