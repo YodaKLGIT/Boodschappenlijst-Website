@@ -21,27 +21,45 @@
     {{-- JS --}}
     <script src="{{ asset('js/shopping-list.js') }}"></script>
 
+    <!-- Add custom styles for layout -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
 
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+    <body class="font-sans antialiased">
+        <div class="flex flex-col min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+            
+            <!-- Page Heading -->
+            @isset($header)
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
 
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endisset
+            <!-- Page Content -->
+            <main class="flex-grow">
+                {{ $slot }}
+            </main>
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
-    </div>
-</body>
-
+            <!-- Include the footer -->
+            @include('layouts.footer')
+        </div>
+    </body>
 </html>
