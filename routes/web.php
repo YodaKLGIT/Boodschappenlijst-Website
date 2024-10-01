@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\ProductlistController;
@@ -8,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 // home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// products
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
 
 Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
 Route::resource('/productlist', ProductlistController::class);
