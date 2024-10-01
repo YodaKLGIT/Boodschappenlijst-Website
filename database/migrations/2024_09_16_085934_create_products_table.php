@@ -16,6 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string("name");
             $table->string("description");
+            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product');
+        Schema::dropIfExists('products');
     }
 };
