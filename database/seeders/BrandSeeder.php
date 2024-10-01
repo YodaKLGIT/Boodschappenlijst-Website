@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Database\Seeder;
+use App\Models\Brand;
 class BrandSeeder extends Seeder
 {
     /**
@@ -12,12 +12,17 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
-        // Voeg voorbeeld merken toe aan de 'brands' tabel
-        DB::table('brands')->insert([
-            ['name' => 'Nike', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Adidas', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Puma', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Under Armour', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        $brands = [
+            [
+                'name' => 'Heinz',
+                'description' => 'Thick & Rich ketchup made from red ripe tomatoes',
+            ],
+            [
+                'name' => 'Unox',
+                'description' => 'Unox is a leading manufacturer of commercial ovens',
+            ],
+        ];
+        // Insert posts into the database using the Post model
+        Brand::insert($brands);
     }
 }

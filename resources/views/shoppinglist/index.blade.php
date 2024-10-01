@@ -65,25 +65,6 @@
                         </div>
                     </div>
                 </li>
-
-                <!-- Fruit Category -->
-                <li class="list-item">
-                    <div class="bg-red-700 rounded-t p-4 transition-all duration-300 ease-in-out">
-                        <div class="flex justify-between items-center">
-                            <a href="#" class="flex-grow" onclick="toggleProducts(event)">
-                                <strong class="font-medium text-white text-lg">Fruit</strong>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="products rounded-b bg-red-600 p-2 overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;">
-                        <div class="space-y-1 mt-1">
-                            <div class="flex justify-between border-b border-gray-500 pb-2 mb-2">
-                                <p class="text-white">Apples</p>
-                                <span class="text-gray-400">2 kg</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
             </ul>
         </article>
     @endif
