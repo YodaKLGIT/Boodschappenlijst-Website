@@ -37,35 +37,40 @@ class ShoppinglistController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-          // Validate the request data
-          $validatedData = $request->validate([
-              'name' => 'required|string|max:255',
-              'product_ids' => 'nullable|array|max:255',
-              'product_ids.*' => 'exists:products,id',
-              'quantities' => 'nullable|array',
-              'quantities.*' => 'integer|min:1',
-              'list_id' => 'nullable|exists:product_lists,id',
-          ]);
+    
 
-          // Create a new ProductList
-          $shoppinglist = Shoppinglist::create([
-              'name' => $validatedData['name'],
-          ]);
-
-          // Prepare data for attaching products
-          $productData = [];
-            foreach ($validatedData['product_ids'] as $index => $productId) {
-              $productData[$productId] = ['quantity' => $validatedData['quantities'][$index] ?? 1];
-
-          // Attach products with quantities
-          $shoppinglist->products()->attach($productData);
-
-           // Redirect with success message
-          return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
-        }
-    }
+     public function store(Request $request)
+     {
+         // Validate the request data
+         $validatedData = $request->validate([
+             'name' => 'required|string|max:255',
+             'product_ids' => 'nullable|array|max:255',
+             'product_ids.*' => 'exists:products,id',
+             'quantities' => 'nullable|array',
+             'quantities.*' => 'nullable|integer|min:1',
+             'list_id' => 'nullable|exists:product_lists,id',
+         ]);
+     
+         // Create a new ShoppingList
+         $shoppinglist = Shoppinglist::create([
+             'name' => $validatedData['name'],
+         ]);
+     
+         // Prepare data for attaching products
+         $productData = [];
+         foreach ($validatedData['product_ids'] as $productId) {
+             // Check if quantity is set for this productId, if not set it to null or a default value
+             $quantity = isset($validatedData['quantities'][$productId]) ? $validatedData['quantities'][$productId] : null;
+             $productData[$productId] = ['quantity' => $quantity];
+         }
+     
+         // Attach products with quantities
+         $shoppinglist->products()->attach($productData);
+     
+         // Redirect with success message
+         return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
+     }
+     
 
     /**
      * Display the specified resource.
