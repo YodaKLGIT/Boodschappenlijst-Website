@@ -9,7 +9,7 @@ class Shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date'];
+    protected $fillable = ['name'];
 
 
     protected $table = 'lists';  // Specify the correct table name
@@ -21,12 +21,12 @@ class Shoppinglist extends Model
 
     public function products()
     {
-        // Specify the foreign key names explicitly in the belongsToMany method
+
+
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
                     ->withPivot('quantity');
     }
 
-   
     public function users()
     {
         return $this->belongsToMany(User::class);
