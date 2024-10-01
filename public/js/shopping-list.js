@@ -19,6 +19,7 @@ function toggleProducts(event) {
     }
 }
 
+
 // Function to dismiss notification
 function dismissNotification() {
     const notification = document.getElementById('notification');
@@ -26,3 +27,4 @@ function dismissNotification() {
         notification.remove(); 
     }
 }
+
