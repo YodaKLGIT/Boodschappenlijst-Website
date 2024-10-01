@@ -42,7 +42,7 @@ class ShoppinglistController extends Controller
           // Validate the request data
           $validatedData = $request->validate([
               'name' => 'required|string|max:255',
-              'product_ids' => 'nullable|string|max:255',
+              'product_ids' => 'nullable|array|max:255',
               'product_ids.*' => 'exists:products,id',
               'quantities' => 'nullable|array',
               'quantities.*' => 'integer|min:1',
@@ -63,7 +63,7 @@ class ShoppinglistController extends Controller
           $shoppinglist->products()->attach($productData);
 
            // Redirect with success message
-          return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
+          return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
         }
     }
 

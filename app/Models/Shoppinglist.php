@@ -9,7 +9,7 @@ class Shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date'];
+    protected $fillable = ['name'];
 
 
     protected $table = 'lists';  // Specify the correct table name
