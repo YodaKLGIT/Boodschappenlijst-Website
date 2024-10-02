@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ShoppingListRequestForm;
 use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Models\Product;
@@ -15,7 +16,7 @@ class ShoppinglistController extends Controller
      */
     public function index()
     {
-        
+
         $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
         return view('shoppinglist.index', compact('shoppinglists'));
     }
@@ -32,39 +33,34 @@ class ShoppinglistController extends Controller
       return view('shoppinglist.create', compact('products'));
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ShoppingListRequestForm $request)
     {
           // Validate the request data
-          $validatedData = $request->validate([
-              'name' => 'required|string|max:255',
-              'product_ids' => 'nullable|array|max:255',
-              'product_ids.*' => 'exists:products,id',
-              'quantities' => 'nullable|array',
-              'quantities.*' => 'integer|min:1',
-              'list_id' => 'nullable|exists:product_lists,id',
-          ]);
+          $validatedData = $request->validated();
+
+        //   dd($validatedData);
 
           // Create a new ProductList
-          $shoppinglist = Shoppinglist::create([
-              'name' => $validatedData['name'],
-          ]);
+          $shoppinglist = Shoppinglist::create($request->only('name'));
 
           // Prepare data for attaching products
-          $productData = [];
-            foreach ($validatedData['product_ids'] as $index => $productId) {
-              $productData[$productId] = ['quantity' => $validatedData['quantities'][$index] ?? 1];
+        $productData = [];
+        foreach ($validatedData['product_ids'] as $index => $productId) {
+            $productData[$productId] = ['quantity' => $validatedData['quantities'][$index] ?? 1];
 
+        }
           // Attach products with quantities
           $shoppinglist->products()->attach($productData);
 
+
+
            // Redirect with success message
           return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
-        }
     }
 
     /**
