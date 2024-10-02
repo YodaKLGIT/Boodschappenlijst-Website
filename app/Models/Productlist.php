@@ -27,7 +27,7 @@ class Productlist extends Model
     }
 
 
-    public function users() //
+    public function users() 
     {
         return $this->belongsToMany(User::class);
     }
