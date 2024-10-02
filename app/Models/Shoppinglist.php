@@ -9,7 +9,7 @@ class Shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date'];
+    protected $fillable = ['name'];
 
 
     protected $table = 'lists';  
@@ -26,7 +26,7 @@ class Shoppinglist extends Model
     }
 
 
-    public function users() //
+    public function users() 
     {
         return $this->belongsToMany(User::class);
     }
