@@ -39,8 +39,12 @@
                                 <ul class="text-sm text-gray-700 dark:text-gray-200">
                                     @foreach($products as $product)
                                         <li class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200">
-                                            <input id="product-{{ $product->id }}" type="checkbox" name="product_ids[]" value="{{ $product->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500" {{ in_array($product->id, old('product_ids', [])) ? 'checked' : '' }}>
+                                            <input id="product-{{ $product->id }}" type="checkbox" name="product_ids[]" value="{{ $product->id }}" 
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500" 
+                                                {{ in_array($product->id, old('product_ids', [])) ? 'checked' : '' }}>
                                             <label for="product-{{ $product->id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $product->name }}</label>
+                                            <input type="number" name="quantities[{{ $product->id }}]" min="" placeholder="Optional" class="ml-1 w-12 text-gray-900 dark:text-gray-300" 
+                                                value="{{ old('quantities.' . $product->id) }}">
                                         </li>
                                     @endforeach
                                 </ul>
