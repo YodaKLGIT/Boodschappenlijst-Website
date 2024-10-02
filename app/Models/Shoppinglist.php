@@ -16,7 +16,7 @@ class Shoppinglist extends Model
 
     public function notes()
     {
-        return $this->hasMany(user::class, 'note_id');
+        return $this->hasMany(User::class, 'note_id');
     }
 
     public function products()

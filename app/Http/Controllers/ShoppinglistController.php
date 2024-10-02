@@ -86,17 +86,12 @@ class ShoppinglistController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Shoppinglist $shoppinglist)
-    {
-          // Step 1: You already have the shopping list injected, no need to find it again
+    {  
+       $products = Product::with(['brand', 'category'])->get(); 
 
-         // Step 2: Retrieve all products to display in the view (for selection or updating)
-        $products = $shoppinglist->products;
+       $shoppinglist = $shoppinglist->load(['products.brand', 'products.category']);
 
-        // Step 3: Retrieve the existing related products, brands, and categories
-       $shoppinglistWithDetails = $shoppinglist->load(['products.brand', 'products.category']);
-
-       // Step 4: Pass the data to the edit view (including the shopping list and available products)
-       return view('edit', compact('shoppinglistWithDetails', 'products'));
+       return view('shoppinglist.edit', compact('shoppinglist', 'products'));
     }
 
     /**
@@ -106,12 +101,12 @@ class ShoppinglistController extends Controller
     {
           // Validate the request data
           $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'product_ids' => 'nullable|string|max:255',
-            'product_ids.*' => 'exists:products,id',
-            'quantities' => 'nullable|array',
-            'quantities.*' => 'integer|min:1',
-            'list_id' => 'nullable|exists:product_lists,id',
+             'name' => 'required|string|max:255',
+             'product_ids' => 'nullable|array|max:255',
+             'product_ids.*' => 'exists:products,id',
+             'quantities' => 'nullable|array',
+             'quantities.*' => 'nullable|integer|min:1',
+             'list_id' => 'nullable|exists:product_lists,id',
         ]);
 
         // Create a new ProductList
@@ -120,19 +115,20 @@ class ShoppinglistController extends Controller
 
         // Prepare data for attaching products
         $productData = [];
-          foreach ($validatedData['product_ids'] as $index => $productId) {
-            $productData[$productId] = ['quantity' => $validatedData['quantities'][$index] ?? 1];
-
+        foreach ($validatedData['product_ids'] as $productId) {
+            // Check if quantity is set for this productId, if not set it to null or a default value
+            $quantity = isset($validatedData['quantities'][$productId]) ? $validatedData['quantities'][$productId] : null;
+            $productData[$productId] = ['quantity' => $quantity];
+        }
         // Attach products with quantities
         $shoppinglist->products()->sync($productData);
 
          // Step 3: Retrieve the updated shopping list with related products, brands, and categories
-         $shoppinglistWithDetails = $shoppinglist->load(['products.brand', 'products.category']);
+        $shoppinglist->load(['products.brand', 'products.category']);
 
          // Redirect with success message
-        return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
+        return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
       }
-    }
 
     /**
      * Remove the specified resource from storage.

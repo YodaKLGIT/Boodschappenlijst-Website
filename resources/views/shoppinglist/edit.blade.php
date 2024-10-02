@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 mt-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
-            <div class="p-6 space-y-2" style="min-height: 300px;"> {{-- Adjusted minimum height --}}
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Edit Shopping List</h2> {{-- Updated title --}}
+            <div class="p-6 space-y-2" style="min-height: 300px;">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Edit Shopping List</h2>
 
                 @if ($errors->any())
-                    <div class="mb-2 p-4 text-red-600 bg-red-100 border border-red-300 rounded-lg"> {{-- Reduced bottom margin --}}
+                    <div class="mb-2 p-4 text-red-600 bg-red-100 border border-red-300 rounded-lg">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -14,20 +14,20 @@
                     </div>
                 @endif
 
-                <form action="{{ route('shoppinglist.update', $shoppingList->id) }}" method="POST" class="space-y-2"> {{-- Updated action to edit --}}
+                <form action="{{ route('shoppinglist.update', $shoppinglist->id) }}" method="POST" class="space-y-2">
                     @csrf
-                    @method('PUT') {{-- Add method field for PUT request --}}
+                    @method('PUT')
 
                     {{-- Title Input --}}
-                    <div class="mb-3"> {{-- Reduced bottom margin --}}
+                    <div class="mb-3">
                         <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" id="name" name="name" value="{{ old('name', $shoppingList->name) }}" {{-- Use old input or existing name --}}
+                        <input type="text" id="name" name="name" value="{{ old('name', $shoppinglist->name) }}"
                             class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             required>
                     </div>
 
                     {{-- Products Dropdown --}}
-                    <div class="mb-3"> {{-- Reduced bottom margin --}}
+                    <div class="mb-3">
                         <label class="block text-sm font-medium text-gray-900 dark:text-white">Products</label>
                         <details class="relative border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600">
                             <summary class="flex items-center justify-between cursor-pointer p-2">
@@ -36,21 +36,26 @@
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                                 </svg>
                             </summary>
-                            <div class="bg-white dark:bg-gray-700 max-h-40 overflow-y-auto rounded-lg shadow w-full"> {{-- Set max height to enable scrolling --}}
+                            <div class="bg-white dark:bg-gray-700 max-h-40 overflow-y-auto rounded-lg shadow w-full">
                                 <ul class="text-sm text-gray-700 dark:text-gray-200">
                                     @foreach($products as $product)
-                                        <li class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200">
-                                            <input id="product-{{ $product->id }}" type="checkbox" name="product_ids[]" value="{{ $product->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500" {{ in_array($product->id, old('product_ids', $shoppingList->products->pluck('id')->toArray())) ? 'checked' : '' }}> {{-- Check existing products --}}
-                                            <label for="product-{{ $product->id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $product->name }}</label>
-                                        </li>
-                                    @endforeach
+    <li class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200">
+        <input id="product-{{ $product->id }}" type="checkbox" name="product_ids[]" value="{{ $product->id }}" 
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500" 
+            {{ $shoppinglist->products->contains($product) ? 'checked' : '' }}>
+        <label for="product-{{ $product->id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $product->name }}</label>
+        <input type="number" name="quantities[{{ $product->id }}]" min="1" placeholder="0" class="ml-1 w-12 text-gray-900 dark:text-gray-300" 
+            value="{{ optional($shoppinglist->products->find($product->id))->pivot->quantity ?? '' }}">
+    </li>
+@endforeach
+
                                 </ul>
                             </div>
                         </details>
                     </div>
 
                     {{-- Buttons --}}
-                    <div class="flex justify-between mt-4"> {{-- Adjusted top margin to provide spacing below the form --}}
+                    <div class="flex justify-between mt-4">
                         <a href="{{ route('shoppinglist.index') }}" 
                             class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
                             Go Back
@@ -65,4 +70,8 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+
 
