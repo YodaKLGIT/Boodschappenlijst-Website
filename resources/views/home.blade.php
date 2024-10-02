@@ -10,10 +10,9 @@
             <div class="hero-content mr-auto">
                 <h1 class="text-4xl font-extrabold mb-4 text-white">Make healthy life with fresh groceries</h1>
                 <p class="text-lg font-light text-white mb-4">Easily make your grocery list from home and enjoy our healthy selection of products.</p>
-                <a href="#" class="btn-primary inline-flex items-center px-6 py-3 mr-3 text-white bg-blue-600 hover:bg-blue-500 rounded-lg">View lists</a>
-                <a href="#" class="btn-secondary inline-flex items-center px-6 py-3 text-white border border-gray-300 hover:bg-gray-700 rounded-lg">View products</a>
+                <a href="/shoppinglist" class="btn-primary inline-flex items-center px-6 py-3 mr-3 text-white bg-blue-600 hover:bg-blue-500 rounded-lg">View lists</a>
+                <a href="/products" class="btn-secondary inline-flex items-center px-6 py-3 text-white border border-gray-300 hover:bg-gray-700 rounded-lg">View products</a>
             </div>
-
             <!-- Right Image -->
             <div class="hidden lg:block hero-image">
                 <img src="{{ asset('images/grocerystock.png') }}" alt="Fresh grocery delivery" class="rounded-xl">
