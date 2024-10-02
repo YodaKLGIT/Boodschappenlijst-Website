@@ -24,9 +24,10 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
-    public function Productlist()
+    public function products()
     {
-        return $this->belongsToMany(Shoppinglist::class)->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
+                    ->withPivot('quantity');
     }
     
 

@@ -9,20 +9,17 @@ class Shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'date'];
 
 
     protected $table = 'lists';  
 
-    public function notes()
-    {
-        return $this->hasMany(User::class, 'note_id');
-    }
-
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
+                    ->withPivot('quantity');
     }
+
     public function users()
     {
         return $this->belongsToMany(User::class);

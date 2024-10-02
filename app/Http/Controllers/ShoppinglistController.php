@@ -142,4 +142,43 @@ class ShoppinglistController extends Controller
 
        return redirect()->route('shoppinglist.index');
     }
+
+    /**
+ * Attach a user to the specified shopping list.
+ */
+public function attachUserToList(Request $request, $listId)
+{
+    // Validate the user ID
+    $validatedData = $request->validate([
+        'user_id' => 'required|exists:users,id', // Check if the user exists
+    ]);
+
+    // Find the shopping list
+    $shoppinglist = Shoppinglist::findOrFail($listId);
+
+    // Attach the user to the shopping list
+    $shoppinglist->users()->attach($validatedData['user_id']);
+
+    return redirect()->route('shoppinglist.show', $listId)->with('success', 'User attached to the list successfully.');
+}
+
+/**
+ * Detach a user from the specified shopping list.
+ */
+public function detachUserFromList(Request $request, $listId)
+{
+    // Validate the user ID
+    $validatedData = $request->validate([
+        'user_id' => 'required|exists:users,id',
+    ]);
+
+    // Find the shopping list
+    $shoppinglist = Shoppinglist::findOrFail($listId);
+
+    // Detach the user from the shopping list
+    $shoppinglist->users()->detach($validatedData['user_id']);
+
+    return redirect()->route('shoppinglist.show', $listId)->with('success', 'User detached from the list successfully.');
+}
+
 }

@@ -2,16 +2,29 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\ShoppingList;
 
-class UserlistSeeder extends Seeder
+class UserListSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        // Get all users and shopping lists
+        $users = User::all();
+        $shoppingLists = ShoppingList::all();
+
+        // Check if there are any users and shopping lists
+        if ($users->isEmpty() || $shoppingLists->isEmpty()) {
+            return;
+        }
+
+        // Assign each user to a random shopping list
+        foreach ($users as $user) {
+            // Attach the user to 1 or more shopping lists (randomly)
+            $user->shoppingLists()->attach(
+                $shoppingLists->random(rand(1, $shoppingLists->count()))->pluck('id')->toArray()
+            );
+        }
     }
 }
