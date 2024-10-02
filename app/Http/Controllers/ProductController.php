@@ -3,21 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         // Fetch all products from the database
         $products = Product::all();
-        
-        // Return a view with the products data
+
+        // Return the products view with the fetched products
         return view('products.index', compact('products'));
     }
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,4 +64,4 @@ class ProductController extends Controller
     // {
     //     //
     // }
-}
+

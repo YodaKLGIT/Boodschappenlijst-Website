@@ -18,48 +18,63 @@
     {{-- cssJS --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.4.7/flowbite.min.css" rel="stylesheet">
     
+
     {{-- JS --}}
     <script src="{{ asset('js/shopping-list.js') }}"></script>
 
     <!-- Add custom styles for layout -->
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
+            background-color: transparent;
+            /* Transparent background for html and body */
         }
 
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-color: transparent;
+            /* Transparent background for body */
         }
 
         main {
             flex-grow: 1;
+            background-color: transparent;
+            /* Transparent background for main content */
+        }
+
+        header,
+        footer {
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Slight opacity for header/footer */
         }
     </style>
 </head>
 
-    <body class="font-sans antialiased">
-        <div class="flex flex-col min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-            
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+<body class="font-sans antialiased">
+    <div class="flex flex-col min-h-screen bg-transparent">
+        @include('layouts.navigation')
 
-            <!-- Page Content -->
-            <main class="flex-grow">
-                {{ $slot }}
-            </main>
+        <!-- Page Heading -->
+        @isset($header)
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endisset
 
-            <!-- Include the footer -->
-            @include('layouts.footer')
-        </div>
-    </body>
+        <!-- Page Content -->
+        <main class="flex-grow">
+            {{ $slot }}
+        </main>
+
+        <!-- Include the footer -->
+        @include('layouts.footer')
+    </div>
+</body>
+
 </html>
