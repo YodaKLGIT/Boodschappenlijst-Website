@@ -28,4 +28,6 @@ class Product extends Model
     {
         return $this->belongsToMany(Shoppinglist::class)->withPivot('quantity');
     }
+    
+
 }
