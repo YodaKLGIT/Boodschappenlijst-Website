@@ -17,6 +17,8 @@ class ShoppinglistController extends Controller
     {
         
         $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
+        $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
+   
         return view('shoppinglist.index', compact('shoppinglists'));
     }
 
@@ -25,12 +27,16 @@ class ShoppinglistController extends Controller
      */
     public function create()
     {
-       // You can retrieve all products to pass to the view, if needed
-       $products = Product::all();
+       // Eager load products with their brands and categories
+       $products = Product::with(['brand', 'category'])->get();
 
-       // Return the view to create a new shopping list
-      return view('shoppinglist.create', compact('products'));
+       // Group products by category name 
+       $groupedProducts = $products->groupBy('category.name');
+
+       // Return the view to create a new shopping list with grouped products
+       return view('shoppinglist.create', compact('groupedProducts'));
     }
+
 
     
 
@@ -77,7 +83,7 @@ class ShoppinglistController extends Controller
      */
     public function show(Shoppinglist $shoppinglist)
     {
-        $products = $shoppinglist->products;
+        $products = $shoppinglist->products()->with(['brand', 'category'])->get();
 
         return view('shoppinglist.show', compact('shoppinglist', 'products'));
     }
@@ -91,7 +97,10 @@ class ShoppinglistController extends Controller
 
        $shoppinglist = $shoppinglist->load(['products.brand', 'products.category']);
 
-       return view('shoppinglist.edit', compact('shoppinglist', 'products'));
+       // Group products by category name 
+       $groupedProducts = $products->groupBy('category.name');
+
+       return view('shoppinglist.edit', compact('shoppinglist', 'products', 'groupedProducts'));
     }
 
     /**
