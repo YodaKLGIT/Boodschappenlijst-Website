@@ -18,14 +18,44 @@
     {{-- cssJS --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.4.7/flowbite.min.css" rel="stylesheet">
     
+
     {{-- JS --}}
     <script src="{{ asset('js/shopping-list.js') }}"></script>
 
+    <!-- Add custom styles for layout -->
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background-color: transparent;
+            /* Transparent background for html and body */
+        }
 
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: transparent;
+            /* Transparent background for body */
+        }
+
+        main {
+            flex-grow: 1;
+            background-color: transparent;
+            /* Transparent background for main content */
+        }
+
+        header,
+        footer {
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Slight opacity for header/footer */
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div class="flex flex-col min-h-screen bg-transparent">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
@@ -38,9 +68,12 @@
         @endisset
 
         <!-- Page Content -->
-        <main>
+        <main class="flex-grow">
             {{ $slot }}
         </main>
+
+        <!-- Include the footer -->
+        @include('layouts.footer')
     </div>
 </body>
 

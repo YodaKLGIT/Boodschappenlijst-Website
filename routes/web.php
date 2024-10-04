@@ -1,12 +1,17 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShoppinglistController;
 use Illuminate\Support\Facades\Route;
 
 // home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// products
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
 
 Route::resource('/shoppinglist', ShoppinglistController::class);
 
