@@ -9,14 +9,14 @@ class Shoppinglist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date'];
+    protected $fillable = ['name'];
 
 
-    protected $table = 'lists';  // Specify the correct table name
+    protected $table = 'lists';  
 
     public function notes()
     {
-        return $this->hasMany(user::class, 'note_id');
+        return $this->hasMany(User::class, 'note_id');
     }
 
     public function products()
@@ -27,4 +27,5 @@ class Shoppinglist extends Model
     {
         return $this->belongsToMany(User::class);
     }
+    
 }
