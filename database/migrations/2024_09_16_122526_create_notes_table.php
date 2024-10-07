@@ -16,7 +16,7 @@ class CreateNotesTable extends Migration
             $table->string('title');
             $table->string('description'); 
             $table->timestamps();
-            $table->foreignId('list_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string("description");
         });
     }
 
