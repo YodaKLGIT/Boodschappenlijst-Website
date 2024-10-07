@@ -16,7 +16,6 @@ class ListSeeder extends Seeder
         // Step 1: Create a shopping list
         $shoppingList = [
             'name' => 'Wekelijkse Boodschappen', // Name of the shopping list
-            'date' => now(), // Current date
         ];
 
         ShoppingList::insert($shoppingList);
