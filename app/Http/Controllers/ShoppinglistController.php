@@ -13,13 +13,16 @@ class ShoppinglistController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         
         $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
+
+        $shoppinglists = $this->filter($request);
+        
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
    
-        return view('shoppinglist.index', compact('shoppinglists'));
+        return view('shoppinglist.index', compact('shoppinglists', 'groupedProducts'));
     }
 
     /**
@@ -151,5 +154,21 @@ class ShoppinglistController extends Controller
        $shoppinglist->delete();
 
        return redirect()->route('shoppinglist.index');
+    }
+
+    public function filter(Request $request)
+    {
+        // Get the sort option from the request
+        $sort = $request->input('sort', 'title'); // Default sort by title
+
+        // Fetch shopping lists based on the selected sort option
+        switch ($sort) {
+            case 'last_added':
+                return Shoppinglist::orderBy('created_at', 'desc')->get();
+            case 'last_updated':
+                return Shoppinglist::orderBy('updated_at', 'desc')->get();
+            default:
+                return Shoppinglist::orderBy('name')->get(); // Sort by name by default
+        }
     }
 }
