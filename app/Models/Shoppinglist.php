@@ -12,7 +12,7 @@ class Shoppinglist extends Model
     protected $fillable = ['name'];
 
 
-    protected $table = 'lists';  // Specify the correct table name
+    protected $table = 'lists';  
 
     public function notes()
     {
@@ -21,12 +21,14 @@ class Shoppinglist extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
-                    ->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
     }
 
+
     public function users()
+
     {
         return $this->belongsToMany(User::class);
     }
+    
 }

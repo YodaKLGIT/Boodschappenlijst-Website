@@ -37,6 +37,7 @@
                             </summary>
                             <div class="bg-white dark:bg-gray-700 max-h-40 overflow-y-auto rounded-lg shadow w-full">
                                 <ul class="text-sm text-gray-700 dark:text-gray-200">
+                                
                                     @foreach ($groupedProducts as $category => $products)
                                         <li class="font-bold text-gray-900 dark:text-white p-2 border-b border-gray-200 dark:border-gray-600">
                                             {{ $category }}
