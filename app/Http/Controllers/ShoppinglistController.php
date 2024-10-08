@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Note;
+use App\Http\Requests\Auth\ShoppinglistRequest;
 use App\Models\Product;
-
 use App\Models\Shoppinglist;
 
 class ShoppinglistController extends Controller
@@ -45,17 +43,10 @@ class ShoppinglistController extends Controller
      */
     
 
-     public function store(Request $request)
+     public function store(ShoppinglistRequest $request)
      {
          // Validate the request data
-         $validatedData = $request->validate([
-             'name' => 'required|string|max:255',
-             'product_ids' => 'nullable|array|max:255',
-             'product_ids.*' => 'exists:products,id',
-             'quantities' => 'nullable|array',
-             'quantities.*' => 'nullable|integer|min:1',
-             'list_id' => 'nullable|exists:product_lists,id',
-         ]);
+         $validatedData = $request->validate();
      
          // Create a new ShoppingList
          $shoppinglist = Shoppinglist::create([
@@ -106,17 +97,10 @@ class ShoppinglistController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shoppinglist $shoppinglist)
+    public function update(ShoppinglistRequest $request, Shoppinglist $shoppinglist)
     {
-          // Validate the request data
-          $validatedData = $request->validate([
-             'name' => 'required|string|max:255',
-             'product_ids' => 'nullable|array|max:255',
-             'product_ids.*' => 'exists:products,id',
-             'quantities' => 'nullable|array',
-             'quantities.*' => 'nullable|integer|min:1',
-             'list_id' => 'nullable|exists:product_lists,id',
-        ]);
+        // Validate the request data
+        $validatedData = $request->validate();
 
         // Create a new ProductList
         $shoppinglist->name =  $validatedData['name'];
