@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Note;
+use App\Http\Requests\Auth\ShoppinglistRequest;
 use App\Models\Product;
-
 use App\Models\Shoppinglist;
 
 class ShoppinglistController extends Controller
@@ -17,6 +15,8 @@ class ShoppinglistController extends Controller
     {
         
         $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
+        $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
+   
         return view('shoppinglist.index', compact('shoppinglists'));
     }
 
@@ -25,12 +25,16 @@ class ShoppinglistController extends Controller
      */
     public function create()
     {
-       // You can retrieve all products to pass to the view, if needed
-       $products = Product::all();
+       // Eager load products with their brands and categories
+       $products = Product::with(['brand', 'category'])->get();
 
-       // Return the view to create a new shopping list
-      return view('shoppinglist.create', compact('products'));
+       // Group products by category name 
+       $groupedProducts = $products->groupBy('category.name');
+
+       // Return the view to create a new shopping list with grouped products
+       return view('shoppinglist.create', compact('groupedProducts'));
     }
+
 
     
 
@@ -39,17 +43,10 @@ class ShoppinglistController extends Controller
      */
     
 
-     public function store(Request $request)
+     public function store(ShoppinglistRequest $request)
      {
          // Validate the request data
-         $validatedData = $request->validate([
-             'name' => 'required|string|max:255',
-             'product_ids' => 'nullable|array|max:255',
-             'product_ids.*' => 'exists:products,id',
-             'quantities' => 'nullable|array',
-             'quantities.*' => 'nullable|integer|min:1',
-             'list_id' => 'nullable|exists:product_lists,id',
-         ]);
+         $validatedData = $request->validate();
      
          // Create a new ShoppingList
          $shoppinglist = Shoppinglist::create([
@@ -77,7 +74,7 @@ class ShoppinglistController extends Controller
      */
     public function show(Shoppinglist $shoppinglist)
     {
-        $products = $shoppinglist->products;
+        $products = $shoppinglist->products()->with(['brand', 'category'])->get();
 
         return view('shoppinglist.show', compact('shoppinglist', 'products'));
     }
@@ -91,23 +88,19 @@ class ShoppinglistController extends Controller
 
        $shoppinglist = $shoppinglist->load(['products.brand', 'products.category']);
 
-       return view('shoppinglist.edit', compact('shoppinglist', 'products'));
+       // Group products by category name 
+       $groupedProducts = $products->groupBy('category.name');
+
+       return view('shoppinglist.edit', compact('shoppinglist', 'products', 'groupedProducts'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shoppinglist $shoppinglist)
+    public function update(ShoppinglistRequest $request, Shoppinglist $shoppinglist)
     {
-          // Validate the request data
-          $validatedData = $request->validate([
-             'name' => 'required|string|max:255',
-             'product_ids' => 'nullable|array|max:255',
-             'product_ids.*' => 'exists:products,id',
-             'quantities' => 'nullable|array',
-             'quantities.*' => 'nullable|integer|min:1',
-             'list_id' => 'nullable|exists:product_lists,id',
-        ]);
+        // Validate the request data
+        $validatedData = $request->validate();
 
         // Create a new ProductList
         $shoppinglist->name =  $validatedData['name'];

@@ -69,16 +69,23 @@
                         </div>
                         <div class="products rounded-b bg-gray-600 p-2 overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;">
                             <div class="space-y-1 mt-1">
-                                @foreach ($shoppinglist->products as $product)
-                                    <div class="flex justify-between border-b border-gray-500 pb-1 mb-1">
-                                        <div class="flex items-center">
-                                            <p class="text-white mr-1">{{ $product->brand->name }}</p>
-                                            <p class="text-white">{{ $product->name }}</p>
-                                        </div>
-                                        <div class="text-white">
-                                            {{-- Display the quantity --}}
-                                            <span class="font-medium">Quantity:</span> {{ $product->pivot->quantity }} {{-- Assuming the relationship is set correctly --}}
-                                        </div>
+                                @php
+                                    $groupedProducts = $shoppinglist->products->groupBy('category.name');
+                                @endphp
+                                @foreach ($groupedProducts as $category => $products)
+                                    <div class="category-section">
+                                        <h4 class="text-base font-semibold text-white">{{ $category }}</h4>
+                                        @foreach ($products as $product)
+                                            <div class="flex justify-between border-b border-gray-500 pb-1 mb-1">
+                                                <div class="flex items-center">
+                                                    <p class="text-white mr-1">{{ $product->brand->name }}</p>
+                                                    <p class="text-white">{{ $product->name }}</p>
+                                                </div>
+                                                <div class="text-white">
+                                                    <span class="font-medium">Quantity:</span> {{ $product->pivot->quantity }}
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 @endforeach
                             </div>
@@ -89,6 +96,8 @@
         </article>
     @endif
 </x-app-layout>
+
+
 
 
 
