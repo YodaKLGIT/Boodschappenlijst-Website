@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\ShoppinglistRequest;
+use App\Http\Requests\Auth\ShoppinglistRequestForm;
 use App\Models\Product;
 use App\Models\Shoppinglist;
 
@@ -43,7 +44,7 @@ class ShoppinglistController extends Controller
      */
     
 
-     public function store(ShoppinglistRequest $request)
+     public function store(ShoppinglistRequestForm $request)
      {
          // Validate the request data
          $validatedData = $request->validate();
@@ -97,7 +98,7 @@ class ShoppinglistController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ShoppinglistRequest $request, Shoppinglist $shoppinglist)
+    public function update(ShoppinglistRequestForm $request, Shoppinglist $shoppinglist)
     {
         // Validate the request data
         $validatedData = $request->validate();
@@ -105,6 +106,8 @@ class ShoppinglistController extends Controller
         // Create a new ProductList
         $shoppinglist->name =  $validatedData['name'];
         $shoppinglist->save();
+
+        $shoppinglist = Shoppinglist::create($request->only('name'));
 
         // Prepare data for attaching products
         $productData = [];
