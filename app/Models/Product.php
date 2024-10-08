@@ -28,4 +28,6 @@ class Product extends Model
     {
         return $this->belongsToMany(ShoppingList::class)->withPivot('quantity'); // Use PascalCase for ShoppingList
     }
+    
+
 }
