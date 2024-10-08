@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("description");
             $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('image_url')->nullable(); // Add this if it's not already there
         });
     }
 

@@ -1,13 +1,85 @@
 <x-app-layout>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.relative > button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const dropdown = this.nextElementSibling;
+                    dropdown.classList.toggle('hidden');
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            window.addEventListener('click', function (e) {
+                if (!e.target.closest('.relative')) {
+                    document.querySelectorAll('.absolute').forEach(dropdown => {
+                        dropdown.classList.add('hidden');
+                    });
+                }
+            });
+        });
+    </script>
+
     <div class="text-center p-10">
         <h1 class="font-bold text-4xl mb-4">Products</h1>
     </div>
 
+    <div class="flex justify-center items-center space-x-4 mb-10">
+        <!-- Sort Dropdown -->
+        <div class="relative">
+            <button class="border rounded-lg p-2 flex items-center">
+                Sort
+                <span class="ml-1 text-gray-600">{{ request()->sort ?? 'Select Sorting' }}</span>
+                <svg class="inline h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <!-- Dropdown Options -->
+            <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10">
+                <ul class="py-1">
+                    <li>
+                        <a href="{{ request()->fullUrlWithQuery(['sort' => 'asc']) }}" class="block px-4 py-2 hover:bg-gray-200">Ascending</a>
+                    </li>
+                    <li>
+                        <a href="{{ request()->fullUrlWithQuery(['sort' => 'desc']) }}" class="block px-4 py-2 hover:bg-gray-200">Descending</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Brand Filter -->
+        <div class="relative">
+            <button class="border rounded-lg p-2 flex items-center">
+                Brand
+                <span class="ml-1 text-gray-600">{{ request()->brand ? $brands->find(request()->brand)->name : 'Select a brand' }}</span>
+                <svg class="inline h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <!-- Dropdown Options -->
+            <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10">
+                <ul class="py-1">
+                    <li>
+                        <a href="{{ request()->fullUrlWithQuery(['brand' => null]) }}" class="block px-4 py-2 hover:bg-gray-200">All Brands</a>
+                    </li>
+                    @foreach($brands as $brand)
+                        <li>
+                            <a href="{{ request()->fullUrlWithQuery(['brand' => $brand->id]) }}" class="block px-4 py-2 hover:bg-gray-200">
+                                {{ $brand->name }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+
+        <!-- Reset Filters Button -->
+        <a href="{{ request()->fullUrlWithQuery(['sort' => null, 'brand' => null]) }}" class="border rounded-lg p-2 bg-blue-500 text-white">Reset Filters</a>
+    </div>
+
     <!-- ✅ Grid Section - Starts Here 👇 -->
-    <section id="Projects" class="w-full mx-auto px-0 mt-10 mb-5">
+    <section id="Projects" class="w-full mx-auto px-0 mb-5">
         <div class="container mx-auto py-8 p-0">
-            <!-- Center the grid container -->
             <div class="flex justify-center">
                 <div class="max-w-screen-xl">
                     <div class="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
