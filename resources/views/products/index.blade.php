@@ -87,8 +87,10 @@
                         <!-- ✅ Product card - Starts Here 👇 -->
                         <div class="w-64 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
                             <a href="#">
-                                <img src="https://via.placeholder.com/300" alt="{{ $product->name }}" class="h-64 w-full object-cover rounded-t-xl" />
-                                <div class="px-4 py-3">
+                                <img src="{{ $product->image_url }}" 
+                                alt="{{ $product->name }}" 
+                                class="h-64 w-full object-cover rounded-t-xl" 
+                                onerror="this.src='https://via.placeholder.com/300';"/><div class="px-4 py-3">
                                     <span class="text-gray-400 mr-3 uppercase text-xs">{{ $product->brand->name ?? 'Brand' }}</span>
                                     <p class="text-lg font-bold text-black truncate block capitalize">{{ $product->name }}</p>
                                     <p class="text-sm text-gray-600 truncate">{{ $product->description }}</p>

@@ -13,12 +13,13 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
+        
         // Step 1: Create a shopping list
         $shoppingList = [
             'name' => 'Wekelijkse Boodschappen', // Name of the shopping list
-            'date' => now(), // Current date
         ];
 
         ShoppingList::insert($shoppingList);
+        
     }
 }
