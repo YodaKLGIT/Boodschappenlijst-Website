@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\ShoppinglistRequest;
-use App\Http\Requests\Auth\ShoppinglistRequestForm;
+use App\Http\Requests\Auth\ProductlistRequestForm;
 use App\Models\Product;
 use App\Models\Shoppinglist;
+use App\Http\Requests\Auth\ShoppinglistRequestForm;
 
 class ShoppinglistController extends Controller
 {
@@ -38,7 +38,7 @@ class ShoppinglistController extends Controller
      */
     
 
-     public function store(ShoppinglistRequestForm $request)
+     public function store(ProductlistRequestForm $request)
      {
          // Validate the request data
          $validatedData = $request->validate();
@@ -67,7 +67,7 @@ class ShoppinglistController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Shoppinglist $shoppinglist)
+    public function show(Shopping $shoppinglist)
     {
         $products = $shoppinglist->products;
 
@@ -89,7 +89,7 @@ class ShoppinglistController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ShoppinglistRequestForm $request, Shoppinglist $shoppinglist)
+    public function update(ProductlistRequestForm $request, Productlist $productlist)
     {
         // Validate the request data
         $validatedData = $request->validate();
