@@ -38,7 +38,7 @@
             <div class="flex flex-col lg:flex-row">
                 <!-- Filter Section -->
                 <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
-                    <div class="bg-gray-100 p-6 rounded-lg h-full flex flex-col justify-end">
+                    <div class="bg-gray-100 p-6 rounded-lg h-auto"> <!-- Changed h-full to h-auto -->
                         <div class="mt-8">
                             <form action="{{ route('lists.index') }}" method="GET">
                                 <label for="sort" class="block mb-2 text-sm font-semibold text-gray-900">Sort By</label>
