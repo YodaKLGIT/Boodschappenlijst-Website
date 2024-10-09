@@ -2,15 +2,15 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ShoppinglistController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\ProductlistController;
 use Illuminate\Support\Facades\Route;
 
 // home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/lists', [ListController:: class, 'index']);
-Route::resource('/shoppinglist', ShoppinglistController::class);
+Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+Route::resource('/productlist', ProductlistController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

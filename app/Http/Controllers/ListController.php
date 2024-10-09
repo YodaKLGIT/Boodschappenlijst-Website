@@ -14,29 +14,31 @@ class ListController extends Controller
      */
     public function index(Request $request)
     {
-        
-        $productlists = ListItem::with(['products.brand', 'products.category'])->get();
-
         $productlists = $this->filter($request);
+        $productlists->load(['products.brand', 'products.category']);
         
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
-   
+
         return view('lists.index', compact('productlists', 'groupedProducts'));
     }
 
     public function filter(Request $request)
     {
-        // Get the sort option from the request
-        $sort = $request->input('sort', 'title'); // Default sort by title
+        $sort = $request->input('sort', 'title');
 
-        // Fetch shopping lists based on the selected sort option
+        $query = ListItem::query();
+
         switch ($sort) {
             case 'last_added':
-                return ListItem::orderBy('created_at', 'desc')->get();
+                $query->orderBy('created_at', 'desc');
+                break;
             case 'last_updated':
-                return ListItem::orderBy('updated_at', 'desc')->get();
+                $query->orderBy('updated_at', 'desc');
+                break;
             default:
-                return ListItem::orderBy('name')->get(); // Sort by name by default
+                $query->orderBy('name');
         }
+
+        return $query->get();
     }
 }

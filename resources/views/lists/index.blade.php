@@ -1,5 +1,5 @@
 <x-app-layout>
-    @if($shoppinglists->isEmpty())
+    @if($productlists->isEmpty())
         <div class="max-w-sm mx-auto mt-4">
             <div role="alert" id="notification" class="rounded-xl bg-white p-4 dark:bg-gray-900">
                 <div class="flex items-start gap-4">
@@ -14,7 +14,7 @@
                             You haven't created any shopping lists yet. Click below to create one!
                         </p>
                         <div class="mt-4 flex gap-2">
-                            <a href="{{ route('shoppinglist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
+                            <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
                                 <span class="text-sm">Create a new list</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
@@ -57,21 +57,21 @@
                     <div class="lg:col-span-2 lg:pt-10">
                         <div class="overflow-x-auto">
                             <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                @foreach ($shoppinglists as $shoppinglist)
+                                @foreach ($productlists as $productlist)
                                     <li class="w-full">
                                         <div class="shopping-list-wrapper">
                                             <article class="rounded-xl p-4 w-full h-full">
                                                 <ul class="space-y-1">
                                                     <li class="list-item">
                                                         <div class="bg-gray-700 rounded-t p-2 h-16 flex items-center"> <!-- Fixed height -->
-                                                            <a href="#" class="w-full" onclick="toggleProducts(event, '{{ $shoppinglist->id }}')">
-                                                                <strong class="font-medium text-white text-lg line-clamp-1">{{ $shoppinglist->name }}</strong>
+                                                            <a href="#" class="w-full" onclick="toggleProducts(event, '{{ $productlist->id }}')">
+                                                                <strong class="font-medium text-white text-lg line-clamp-1">{{ $productlist->name }}</strong>
                                                             </a>
                                                         </div>
-                                                        <div class="products rounded-b bg-gray-600 p-2 overflow-hidden transition-all duration-300 ease-in-out" id="products-{{ $shoppinglist->id }}" style="max-height: 0; opacity: 0;">
+                                                        <div class="products rounded-b bg-gray-600 p-2 overflow-hidden transition-all duration-300 ease-in-out" id="products-{{ $productlist->id }}" style="max-height: 0; opacity: 0;">
                                                             <div class="space-y-1 mt-1">
                                                                 @php
-                                                                    $groupedProducts = $shoppinglist->products->groupBy('category.name');
+                                                                    $groupedProducts = $productlist->products->groupBy('category.name');
                                                                 @endphp
                                                                 @foreach ($groupedProducts as $category => $products)
                                                                     <div class="category-section">
