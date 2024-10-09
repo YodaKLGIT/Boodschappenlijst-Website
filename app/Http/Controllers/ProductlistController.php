@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Note;
 use App\Models\Product;
+use App\Models\Productlist;
 
-use App\Models\Shoppinglist;
-
-class ShoppinglistController extends Controller
+class ProductlistController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +14,12 @@ class ShoppinglistController extends Controller
     public function index(Request $request)
     {
         
-        $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
+        $Productlists = Productlist::with(['products.brand', 'products.category'])->get();
 
-        $shoppinglists = $this->filter($request);
         
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
    
-        return view('shoppinglist.index', compact('shoppinglists', 'groupedProducts'));
+        return view('productlist.index', compact('productlists', 'groupedProducts'));
     }
 
     /**
@@ -36,8 +33,8 @@ class ShoppinglistController extends Controller
        // Group products by category name 
        $groupedProducts = $products->groupBy('category.name');
 
-       // Return the view to create a new shopping list with grouped products
-       return view('shoppinglist.create', compact('groupedProducts'));
+       // Return the view to create a new product list with grouped products
+       return view('productlist.create', compact('groupedProducts'));
     }
 
 
@@ -60,8 +57,8 @@ class ShoppinglistController extends Controller
              'list_id' => 'nullable|exists:product_lists,id',
          ]);
      
-         // Create a new ShoppingList
-         $shoppinglist = Shoppinglist::create([
+         // Create a new ProductList
+         $productlist = Productlist::create([
              'name' => $validatedData['name'],
          ]);
      
@@ -74,21 +71,21 @@ class ShoppinglistController extends Controller
          }
      
          // Attach products with quantities
-         $shoppinglist->products()->attach($productData);
+         $productlist->products()->attach($productData);
      
          // Redirect with success message
-         return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
+         return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
      }
      
 
     /**
      * Display the specified resource.
      */
-    public function show(Shoppinglist $shoppinglist)
+    public function show(Shoppinglist $productlist)
     {
-        $products = $shoppinglist->products()->with(['brand', 'category'])->get();
+        $products = $productlist->products()->with(['brand', 'category'])->get();
 
-        return view('shoppinglist.show', compact('shoppinglist', 'products'));
+        return view('productlist.show', compact('productlist', 'products'));
     }
 
     /**
@@ -98,18 +95,18 @@ class ShoppinglistController extends Controller
     {  
        $products = Product::with(['brand', 'category'])->get(); 
 
-       $shoppinglist = $shoppinglist->load(['products.brand', 'products.category']);
+       $productlist = $productlist->load(['products.brand', 'products.category']);
 
        // Group products by category name 
        $groupedProducts = $products->groupBy('category.name');
 
-       return view('shoppinglist.edit', compact('shoppinglist', 'products', 'groupedProducts'));
+       return view('product.edit', compact('productlist', 'products', 'groupedProducts'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Shoppinglist $shoppinglist)
+    public function update(Request $request, Shoppinglist $productlist)
     {
           // Validate the request data
           $validatedData = $request->validate([
@@ -122,8 +119,8 @@ class ShoppinglistController extends Controller
         ]);
 
         // Create a new ProductList
-        $shoppinglist->name =  $validatedData['name'];
-        $shoppinglist->save();
+        $productlist->name =  $validatedData['name'];
+        $productlist->save();
 
         // Prepare data for attaching products
         $productData = [];
@@ -133,42 +130,26 @@ class ShoppinglistController extends Controller
             $productData[$productId] = ['quantity' => $quantity];
         }
         // Attach products with quantities
-        $shoppinglist->products()->sync($productData);
+        $productlist->products()->sync($productData);
 
-         // Step 3: Retrieve the updated shopping list with related products, brands, and categories
-        $shoppinglist->load(['products.brand', 'products.category']);
+         // Step 3: Retrieve the updated product list with related products, brands, and categories
+        $productlist->load(['products.brand', 'products.category']);
 
          // Redirect with success message
-        return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
+       
       }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Shoppinglist $shoppinglist)
+    public function destroy(Productlist $productlist)
     {
         // Detach all associated tags
-       $shoppinglist->products()->detach();
+       $productlist->products()->detach();
 
        // Delete the news item
-       $shoppinglist->delete();
+       $productlist->delete();
 
-       return redirect()->route('shoppinglist.index');
-    }
-
-    public function filter(Request $request)
-    {
-        // Get the sort option from the request
-        $sort = $request->input('sort', 'title'); // Default sort by title
-
-        // Fetch shopping lists based on the selected sort option
-        switch ($sort) {
-            case 'last_added':
-                return Shoppinglist::orderBy('created_at', 'desc')->get();
-            case 'last_updated':
-                return Shoppinglist::orderBy('updated_at', 'desc')->get();
-            default:
-                return Shoppinglist::orderBy('name')->get(); // Sort by name by default
-        }
+       return redirect()->route('lists.index');
     }
 }

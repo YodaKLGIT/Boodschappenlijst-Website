@@ -3,11 +3,13 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShoppinglistController;
+use App\Http\Controllers\ListController;
 use Illuminate\Support\Facades\Route;
 
 // home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/lists', [ListController:: class, 'index']);
 Route::resource('/shoppinglist', ShoppinglistController::class);
 
 Route::get('/dashboard', function () {

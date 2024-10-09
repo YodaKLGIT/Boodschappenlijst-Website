@@ -1,3 +1,4 @@
+
 <x-app-layout>
     <h3 class="text-2xl font-medium text-yellow mb-4 text-center">Shopping List: {{ $shoppinglist->name }}</h3>
 

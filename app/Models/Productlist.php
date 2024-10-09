@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Shoppinglist extends Model
+class Productlist extends Model
 {
     use HasFactory;
 
@@ -23,10 +23,5 @@ class Shoppinglist extends Model
     {
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
                     ->withPivot('quantity');
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
     }
 }

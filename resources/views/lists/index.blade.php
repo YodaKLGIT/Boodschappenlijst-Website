@@ -1,6 +1,4 @@
 <x-app-layout>
-   
-
     @if($shoppinglists->isEmpty())
         <div class="max-w-sm mx-auto mt-4">
             <div role="alert" id="notification" class="rounded-xl bg-white p-4 dark:bg-gray-900">
@@ -42,7 +40,7 @@
                 <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
                     <div class="bg-gray-100 p-6 rounded-lg h-full flex flex-col justify-end">
                         <div class="mt-8">
-                            <form action="{{ route('shoppinglist.index') }}" method="GET">
+                            <form action="{{ route('lists.index') }}" method="GET">
                                 <label for="sort" class="block mb-2 text-sm font-semibold text-gray-900">Sort By</label>
                                 <select id="sort" name="sort" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" onchange="this.form.submit()">
                                     <option value="title" {{ request('sort') === 'title' ? 'selected' : '' }}>Name</option>
