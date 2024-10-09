@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Productlist;
+use App\Http\Requests\Auth\ProductlistRequestForm;
 
 class ProductlistController extends Controller
 {
@@ -45,17 +46,10 @@ class ProductlistController extends Controller
      */
     
 
-     public function store(Request $request)
+     public function store(ProductlistRequestForm $request)
      {
          // Validate the request data
-         $validatedData = $request->validate([
-             'name' => 'required|string|max:255',
-             'product_ids' => 'nullable|array|max:255',
-             'product_ids.*' => 'exists:products,id',
-             'quantities' => 'nullable|array',
-             'quantities.*' => 'nullable|integer|min:1',
-             'list_id' => 'nullable|exists:product_lists,id',
-         ]);
+         $validatedData = $request->validate();
      
          // Create a new ProductList
          $productlist = Productlist::create([
@@ -106,17 +100,10 @@ class ProductlistController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Productlist $productlist)
+    public function update(ProductlistRequestForm $request, Productlist $productlist)
     {
-          // Validate the request data
-          $validatedData = $request->validate([
-             'name' => 'required|string|max:255',
-             'product_ids' => 'nullable|array|max:255',
-             'product_ids.*' => 'exists:products,id',
-             'quantities' => 'nullable|array',
-             'quantities.*' => 'nullable|integer|min:1',
-             'list_id' => 'nullable|exists:product_lists,id',
-        ]);
+        // Validate the request data
+        $validatedData = $request->validate();
 
         // Create a new ProductList
         $productlist->name =  $validatedData['name'];
