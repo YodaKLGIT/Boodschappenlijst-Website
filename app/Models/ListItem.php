@@ -11,12 +11,11 @@ class ListItem extends Model
 
     protected $fillable = ['name'];
 
-
-    protected $table = 'lists';  // Specify the correct table name
+    protected $table = 'lists';  // Consider renaming the model to 'List' if this is correct
 
     public function notes()
     {
-        return $this->hasMany(User::class, 'note_id');
+        return $this->hasMany(Note::class);
     }
 
     public function products()
