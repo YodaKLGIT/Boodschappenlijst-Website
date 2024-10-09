@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\ProductlistRequestForm;
 use App\Models\Product;
-use App\Models\Shoppinglist;
-use App\Http\Requests\Auth\ShoppinglistRequestForm;
+use App\Models\Productlist;
 
 class ShoppinglistController extends Controller
 {
@@ -15,10 +14,10 @@ class ShoppinglistController extends Controller
     public function index()
     {
         
-        $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
+        $productlists = Productlist::with(['products.brand', 'products.category'])->get();
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
    
-        return view('shoppinglist.index', compact('shoppinglists'));
+        return view('productlist.index', compact('productlists'));
     }
 
     /**
@@ -33,7 +32,7 @@ class ShoppinglistController extends Controller
        $groupedProducts = $products->groupBy('category.name');
 
        // Return the view to create a new shopping list with grouped products
-       return view('shoppinglist.create', compact('groupedProducts'));
+       return view('productlist.create', compact('groupedProducts'));
     }
 
 
@@ -50,7 +49,7 @@ class ShoppinglistController extends Controller
          $validatedData = $request->validate();
      
          // Create a new ShoppingList
-         $shoppinglist = Shoppinglist::create([
+         $productlist = Productlist::create([
              'name' => $validatedData['name'],
          ]);
      
@@ -63,36 +62,36 @@ class ShoppinglistController extends Controller
          }
      
          // Attach products with quantities
-         $shoppinglist->products()->attach($productData);
+         $productlist->products()->attach($productData);
      
          // Redirect with success message
-         return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
+         return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
      }
      
 
     /**
      * Display the specified resource.
      */
-    public function show(Shopping $shoppinglist)
+    public function show(Productlist $productlist)
     {
-        $products = $shoppinglist->products()->with(['brand', 'category'])->get();
+            $products = $productlist->products()->with(['brand', 'category'])->get();
 
-        return view('shoppinglist.show', compact('shoppinglist', 'products'));
+        return view('productlist.show', compact('productlist', 'products'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Shoppinglist $shoppinglist)
+    public function edit(Productlist $productlist)
     {  
        $products = Product::with(['brand', 'category'])->get(); 
 
-       $shoppinglist = $shoppinglist->load(['products.brand', 'products.category']);
+       $productlist = $productlist->load(['products.brand', 'products.category']);
 
        // Group products by category name 
        $groupedProducts = $products->groupBy('category.name');
 
-       return view('shoppinglist.edit', compact('shoppinglist', 'products', 'groupedProducts'));
+       return view('productlist.edit', compact('productlist', 'products', 'groupedProducts'));
     }
 
     /**
@@ -104,10 +103,8 @@ class ShoppinglistController extends Controller
         $validatedData = $request->validate();
 
         // Create a new ProductList
-        $shoppinglist->name =  $validatedData['name'];
-        $shoppinglist->save();
-
-        $shoppinglist = Shoppinglist::create($request->only('name'));
+        $productlist->name =  $validatedData['name'];
+        $productlist->save();
 
         // Prepare data for attaching products
         $productData = [];
@@ -117,26 +114,26 @@ class ShoppinglistController extends Controller
             $productData[$productId] = ['quantity' => $quantity];
         }
         // Attach products with quantities
-        $shoppinglist->products()->sync($productData);
+        $productlist->products()->sync($productData);
 
          // Step 3: Retrieve the updated shopping list with related products, brands, and categories
-        $shoppinglist->load(['products.brand', 'products.category']);
+        $productlist->load(['products.brand', 'products.category']);
 
          // Redirect with success message
-        return redirect()->route('shoppinglist.index')->with('success', 'Product List created successfully.');
+        return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
       }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Shoppinglist $shoppinglist)
+    public function destroy(Productlist $productlist)
     {
         // Detach all associated tags
-       $shoppinglist->products()->detach();
+       $productlist->products()->detach();
 
        // Delete the news item
-       $shoppinglist->delete();
+       $productlist->delete();
 
-       return redirect()->route('shoppinglist.index');
+       return redirect()->route('productlist.index');
     }
 }
