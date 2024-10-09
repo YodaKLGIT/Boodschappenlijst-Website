@@ -15,7 +15,7 @@ class ProductlistController extends Controller
     public function index(Request $request)
     {
         
-        $Productlists = Productlist::with(['products.brand', 'products.category'])->get();
+        $productlists = Productlist::with(['products.brand', 'products.category'])->get();
 
         
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
