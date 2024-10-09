@@ -35,6 +35,7 @@
                                 </div>
                             @else
                                 <ul class="space-y-2 p-2">
+                                
                                     @foreach($products as $product)
                                         <li class="flex items-center justify-between p-3 hover:bg-gray-100 dark:hover:bg-gray-600 transition">
                                             <div class="flex items-center">
