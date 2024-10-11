@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Productlist;
 use App\Http\Requests\Auth\ProductlistRequestForm;
 
+use Illuminate\Validation\ValidationException;
+
 class ProductlistController extends Controller
 {
     /**
@@ -49,23 +51,27 @@ class ProductlistController extends Controller
      public function store(ProductlistRequestForm $request)
      {
          // Validate the request data
-         $validatedData = $request->validated();
+         $validated = $request->validated();
+
+         // Check for uniqueness
+         if (Productlist::where('name', $validated['name'])->exists()) {
+             throw ValidationException::withMessages([
+                 'name' => ['A product list with this name already exists.'],
+             ]);
+         }
 
          // Create a new ProductList
-         $productlist = Productlist::create([
-             'name' => $validatedData['name'],
-         ]);
+         $productlist = Productlist::create(['name' => $validated['name']]);
 
          // Prepare data for attaching products
-         $productData = [];
-         foreach ($validatedData['product_ids'] as $productId) {
-             // Check if quantity is set for this productId, if not set it to null
-             $quantity = $validatedData['quantities'][$productId] ?? null;
-             $productData[$productId] = ['quantity' => $quantity];
+         $productsData = [];
+         foreach ($validated['product_ids'] as $productId) {
+             // Check if quantity is set for this productId, if not set it to 0
+             $productsData[$productId] = ['quantity' => $validated['quantities'][$productId] ?? 0];
          }
 
          // Attach products with quantities
-         $productlist->products()->attach($productData);
+         $productlist->products()->attach($productsData);
 
          // Redirect with success message
          return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
@@ -103,10 +109,19 @@ class ProductlistController extends Controller
     public function update(ProductlistRequestForm $request, Productlist $productlist)
     {
         // Validate the request data
-        $validatedData = $request->validate();
+        $validatedData = $request->validated();
 
-        // Create a new ProductList
-        $productlist->name =  $validatedData['name'];
+        // Check for uniqueness, excluding the current product list
+        if (Productlist::where('name', $validatedData['name'])
+                       ->where('id', '!=', $productlist->id)
+                       ->exists()) {
+            throw ValidationException::withMessages([
+                'name' => ['A product list with this name already exists.'],
+            ]);
+        }
+
+        // Update the ProductList
+        $productlist->name = $validatedData['name'];
         $productlist->save();
 
         // Prepare data for attaching products

@@ -22,7 +22,7 @@ class ProductlistRequestForm extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:lists,name',  // Add the unique rule
             'product_ids' => 'required|array|min:1',
             'product_ids.*' => 'exists:products,id',
             'quantities' => 'array',
