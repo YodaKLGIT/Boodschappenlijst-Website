@@ -23,11 +23,10 @@ class ProductlistRequestForm extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'product_ids' => 'nullable|array|max:255',
-            'product_ids.*' => 'etxiss:products,id',
-            'quantities' => 'nullable|array',
-            'quantities.*' => 'nullable|integer|min:1',
-            'list_id' => 'nullable|exists:product_lists,id',
+            'product_ids' => 'required|array|min:1',
+            'product_ids.*' => 'exists:products,id',
+            'quantities' => 'array',
+            'quantities.*' => 'nullable|integer|min:0',
         ];
     }
 }

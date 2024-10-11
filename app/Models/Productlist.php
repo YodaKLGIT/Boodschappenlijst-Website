@@ -11,26 +11,11 @@ class Productlist extends Model
 
     protected $fillable = ['name'];
 
-
     protected $table = 'lists';  
-
-    public function notes()
-    {
-        return $this->hasMany(User::class, 'note_id');
-        return $this->hasMany(User::class, 'note_id');
-    }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
-    }
-
-
-
-    public function users()
-
-    {
-        return $this->belongsToMany(User::class);
-    }
-    
+        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
+                    ->withPivot('quantity');
+    }   
 }

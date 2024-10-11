@@ -20,7 +20,7 @@ class ProductlistController extends Controller
         
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
    
-        return view('productlist.index', compact('productlists', 'groupedProducts'));
+        return view('lists.index', compact('productlists', 'groupedProducts'));
     }
 
     /**
@@ -49,24 +49,24 @@ class ProductlistController extends Controller
      public function store(ProductlistRequestForm $request)
      {
          // Validate the request data
-         $validatedData = $request->validate();
-     
+         $validatedData = $request->validated();
+
          // Create a new ProductList
          $productlist = Productlist::create([
              'name' => $validatedData['name'],
          ]);
-     
+
          // Prepare data for attaching products
          $productData = [];
          foreach ($validatedData['product_ids'] as $productId) {
-             // Check if quantity is set for this productId, if not set it to null or a default value
-             $quantity = isset($validatedData['quantities'][$productId]) ? $validatedData['quantities'][$productId] : null;
+             // Check if quantity is set for this productId, if not set it to null
+             $quantity = $validatedData['quantities'][$productId] ?? null;
              $productData[$productId] = ['quantity' => $quantity];
          }
-     
+
          // Attach products with quantities
          $productlist->products()->attach($productData);
-     
+
          // Redirect with success message
          return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
      }
