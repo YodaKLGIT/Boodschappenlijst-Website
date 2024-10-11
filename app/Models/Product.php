@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Productlist;
-
+use App\Models\ProductList;
 
 class Product extends Model
 {
@@ -32,8 +31,8 @@ class Product extends Model
     public function productList()
     {
 
-        return $this->belongsToMany(Productlist::class)->withPivot('quantity');
 
+        return $this->belongsToMany(Productlist::class)->withPivot('quantity');
     }
     
 
