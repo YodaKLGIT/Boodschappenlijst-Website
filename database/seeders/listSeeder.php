@@ -12,6 +12,7 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
+
         // Step 1: Create a product list
         $productList = [
             'name' => 'Wekelijkse Boodschappen', // Name of the product list

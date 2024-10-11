@@ -10,6 +10,7 @@ class ProductlistSeeder extends Seeder
 {
     public function run()
     {
+
         // Get all product lists and products
         $productLists = ProductList::all();
         $products = Product::all();
@@ -27,6 +28,6 @@ class ProductlistSeeder extends Seeder
 
                 $productList->products()->attach($product->id, ['quantity' => $quantity]);
             }
-        }
-    }
+              
+    }  
 }

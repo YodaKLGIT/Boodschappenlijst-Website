@@ -12,6 +12,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBrand'])->name('products.filterByBrand');
 
 
 Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
