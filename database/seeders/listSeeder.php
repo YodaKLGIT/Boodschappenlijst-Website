@@ -3,10 +3,12 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Note;
 use App\Models\ProductList; // Zorg ervoor dat de naam correct is
+
 
 class ListSeeder extends Seeder
 {
@@ -15,21 +17,7 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
-        // Voeg enkele gebruikers toe
-        $users = [
-            ['name' => 'Alice', 'email' => 'alice@example.com', 'password' => bcrypt('password'), 'role' => 'admin'],
-            ['name' => 'Bob', 'email' => 'bob@example.com', 'password' => bcrypt('password'), 'role' => 'user'],
-        ];
 
-        foreach ($users as $userData) {
-            User::create($userData);
-        }
-
-        // Voeg enkele notities toe
-        $notes = [
-            ['name' => 'Buy groceries'],
-            ['name' => 'Prepare for party'],
-        ];
 
         foreach ($notes as $noteData) {
             Note::create($noteData);
@@ -58,5 +46,12 @@ class ListSeeder extends Seeder
                 2 => ['quantity' => 3], // Voorbeeld: 3 stuks van product met ID 2
             ]);
         }
+
+        // Step 1: Create a product list
+        $productList = [
+            'name' => 'Wekelijkse Boodschappen', // Name of the product list
+        ];
+
+        ProductList::insert($productList);
     }
 }
