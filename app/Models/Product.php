@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Productlist;
+
+
 class Product extends Model
 {
     use HasFactory;
@@ -26,7 +31,9 @@ class Product extends Model
     // Define the many-to-many relationship with the ShoppingList model
     public function productList()
     {
-        return $this->belongsToMany(ShoppingList::class)->withPivot('quantity'); // Use PascalCase for ShoppingList
+
+        return $this->belongsToMany(Productlist::class)->withPivot('quantity');
+
     }
     
 

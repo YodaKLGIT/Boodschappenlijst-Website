@@ -5,27 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Shoppinglist extends Model
+class ListItem extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name'];
 
-
-    protected $table = 'lists';  
+    protected $table = 'lists';  // Consider renaming the model to 'List' if this is correct
 
     public function notes()
     {
-        return $this->hasMany(User::class, 'note_id');
+        return $this->hasMany(Note::class);
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_list')->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
+                    ->withPivot('quantity');
     }
+
     public function users()
     {
         return $this->belongsToMany(User::class);
     }
-    
 }
