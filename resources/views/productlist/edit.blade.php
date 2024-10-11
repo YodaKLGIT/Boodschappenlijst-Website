@@ -14,14 +14,14 @@
                     </div>
                 @endif
 
-                <form action="{{ route('shoppinglist.update', $shoppinglist->id) }}" method="POST" class="space-y-2">
+                <form action="{{ route('productlist.update', $productlist->id) }}" method="POST" class="space-y-2">
                     @csrf
                     @method('PUT')
 
                     {{-- Title Input --}}
                     <div class="mb-3">
                         <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" id="name" name="name" value="{{ old('name', $shoppinglist->name) }}"
+                        <input type="text" id="name" name="name" value="{{ old('name', $productlist->name) }}"
                             class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             required>
                     </div>
@@ -46,12 +46,12 @@
                                             <li class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200">
                                                 <input id="product-{{ $product->id }}" type="checkbox" name="product_ids[]" value="{{ $product->id }}" 
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-600 dark:border-gray-500" 
-                                                    {{ $shoppinglist->products->contains($product) ? 'checked' : '' }}>
+                                                    {{ $productlist->products->contains($product) ? 'checked' : '' }}>
                                                 <label for="product-{{ $product->id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     {{ $product->brand->name }} - {{ $product->name }}
                                                 </label>
                                                 <input type="number" name="quantities[{{ $product->id }}]" min="0" placeholder="Optional" class="ml-1 w-12 text-gray-900 dark:text-gray-300" 
-                                                    value="{{ optional($shoppinglist->products->find($product->id))->pivot->quantity ?? '' }}">
+                                                    value="{{ optional($productlist->products->find($product->id))->pivot->quantity ?? '' }}">
                                             </li>
                                         @endforeach
                                     @endforeach
@@ -62,13 +62,13 @@
 
                     {{-- Buttons --}}
                     <div class="flex justify-between mt-4">
-                        <a href="{{ route('shoppinglist.index') }}" 
+                        <a href="{{ route('productlist.index') }}" 
                             class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
                             Go Back
                         </a>
                         <button type="submit" 
                             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Update Shopping List
+                                Update Product List
                         </button>
                     </div>
                 </form>

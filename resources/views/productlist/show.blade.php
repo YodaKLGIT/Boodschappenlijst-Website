@@ -1,6 +1,6 @@
 
 <x-app-layout>
-    <h3 class="text-2xl font-medium text-yellow mb-4 text-center">Shopping List: {{ $shoppinglist->name }}</h3>
+        <h3 class="text-2xl font-medium text-yellow mb-4 text-center">Product List: {{ $productlist->name }}</h3>
 
     <div class="max-w-sm mx-auto mt-4">
         <article class="rounded-xl border border-gray-700 bg-gray-800 p-4">
@@ -21,10 +21,10 @@
                                 <div id="dropdownInformation" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
                                         <li>
-                                            <a href="{{ route('shoppinglist.edit', $shoppinglist->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit List</a>
+                                            <a href="{{ route('productlist.edit', $productlist->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit List</a>
                                         </li>
                                         <li>
-                                            <form action="{{ route('shoppinglist.destroy', $shoppinglist->id) }}" method="POST" class="block px-4 py-2">
+                                            <form action="{{ route('productlist.destroy', $productlist->id) }}" method="POST" class="block px-4 py-2">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="w-full text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete List</button>
