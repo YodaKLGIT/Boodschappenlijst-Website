@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateNotesTable extends Migration
+class CreateNotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +16,10 @@ class CreateNotesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('description'); 
+            $table->string('title');
+            $table->string('description'); 
             $table->timestamps();
-            $table->string("description");
+            $table->foreignId('list_id')->nullable()->constrained()->onDelete('cascade');
         });
     }
 
@@ -27,4 +30,5 @@ class CreateNotesTable extends Migration
     {
         Schema::dropIfExists('notes');
     }
+}
 }

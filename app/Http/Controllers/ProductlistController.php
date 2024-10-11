@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\ProductlistRequestForm;
+use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Productlist;
+use App\Http\Requests\Auth\ProductlistRequestForm;
 
-class ShoppinglistController extends Controller
+class ProductlistController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         
         $productlists = Productlist::with(['products.brand', 'products.category'])->get();
+
+        
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
    
-        return view('productlist.index', compact('productlists'));
+        return view('lists.index', compact('productlists', 'groupedProducts'));
     }
 
     /**
@@ -31,7 +34,7 @@ class ShoppinglistController extends Controller
        // Group products by category name 
        $groupedProducts = $products->groupBy('category.name');
 
-       // Return the view to create a new shopping list with grouped products
+       // Return the view to create a new product list with grouped products
        return view('productlist.create', compact('groupedProducts'));
     }
 
@@ -46,24 +49,24 @@ class ShoppinglistController extends Controller
      public function store(ProductlistRequestForm $request)
      {
          // Validate the request data
-         $validatedData = $request->validate();
-     
-         // Create a new ShoppingList
+         $validatedData = $request->validated();
+
+         // Create a new ProductList
          $productlist = Productlist::create([
              'name' => $validatedData['name'],
          ]);
-     
+
          // Prepare data for attaching products
          $productData = [];
          foreach ($validatedData['product_ids'] as $productId) {
-             // Check if quantity is set for this productId, if not set it to null or a default value
-             $quantity = isset($validatedData['quantities'][$productId]) ? $validatedData['quantities'][$productId] : null;
+             // Check if quantity is set for this productId, if not set it to null
+             $quantity = $validatedData['quantities'][$productId] ?? null;
              $productData[$productId] = ['quantity' => $quantity];
          }
-     
+
          // Attach products with quantities
          $productlist->products()->attach($productData);
-     
+
          // Redirect with success message
          return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
      }
@@ -74,7 +77,7 @@ class ShoppinglistController extends Controller
      */
     public function show(Productlist $productlist)
     {
-            $products = $productlist->products()->with(['brand', 'category'])->get();
+        $products = $productlist->products()->with(['brand', 'category'])->get();
 
         return view('productlist.show', compact('productlist', 'products'));
     }
@@ -91,7 +94,7 @@ class ShoppinglistController extends Controller
        // Group products by category name 
        $groupedProducts = $products->groupBy('category.name');
 
-       return view('productlist.edit', compact('productlist', 'products', 'groupedProducts'));
+       return view('product.edit', compact('productlist', 'products', 'groupedProducts'));
     }
 
     /**
@@ -116,11 +119,11 @@ class ShoppinglistController extends Controller
         // Attach products with quantities
         $productlist->products()->sync($productData);
 
-         // Step 3: Retrieve the updated shopping list with related products, brands, and categories
+         // Step 3: Retrieve the updated product list with related products, brands, and categories
         $productlist->load(['products.brand', 'products.category']);
 
          // Redirect with success message
-        return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
+       
       }
 
     /**
@@ -134,6 +137,6 @@ class ShoppinglistController extends Controller
        // Delete the news item
        $productlist->delete();
 
-       return redirect()->route('productlist.index');
+       return redirect()->route('lists.index');
     }
 }

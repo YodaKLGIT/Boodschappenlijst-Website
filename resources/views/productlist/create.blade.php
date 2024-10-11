@@ -14,7 +14,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('shoppinglist.store') }}" method="POST" class="space-y-2">
+                <form action="{{ route('productlist.store') }}" method="POST" class="space-y-2">
                     @csrf
 
                     {{-- Title Input --}}
@@ -37,7 +37,6 @@
                             </summary>
                             <div class="bg-white dark:bg-gray-700 max-h-40 overflow-y-auto rounded-lg shadow w-full">
                                 <ul class="text-sm text-gray-700 dark:text-gray-200">
-                                
                                     @foreach ($groupedProducts as $category => $products)
                                         <li class="font-bold text-gray-900 dark:text-white p-2 border-b border-gray-200 dark:border-gray-600">
                                             {{ $category }}
@@ -62,13 +61,13 @@
 
                     {{-- Buttons --}}
                     <div class="flex justify-between mt-4">
-                        <a href="{{ route('shoppinglist.index') }}" 
+                        <a href="{{ route('productlist.index') }}" 
                             class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
                             Go Back
                         </a>
                         <button type="submit" 
                             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Create Shopping List
+                            Create Product List
                         </button>
                     </div>
                 </form>

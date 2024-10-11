@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Shoppinglist;
+use App\Models\Productlist;
 
 class Product extends Model
 {
@@ -26,7 +26,7 @@ class Product extends Model
 
     public function Productlist()
     {
-        return $this->belongsToMany(Shoppinglist::class)->withPivot('quantity');
+        return $this->belongsToMany(Productlist::class)->withPivot('quantity');
     }
     
 
