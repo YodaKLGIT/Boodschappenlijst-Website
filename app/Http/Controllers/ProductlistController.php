@@ -51,9 +51,11 @@ class ProductlistController extends Controller
          // Validate the request data
          $validatedData = $request->validate();
      
-         // Create a new ProductList
+         // Create a new ProductList with timestamps
          $productlist = Productlist::create([
              'name' => $validatedData['name'],
+             'created_at' => now(),
+             'updated_at' => now(),
          ]);
      
          // Prepare data for attaching products
@@ -105,8 +107,9 @@ class ProductlistController extends Controller
         // Validate the request data
         $validatedData = $request->validate();
 
-        // Create a new ProductList
-        $productlist->name =  $validatedData['name'];
+        // Update the ProductList
+        $productlist->name = $validatedData['name'];
+        $productlist->updated_at = now();
         $productlist->save();
 
         // Prepare data for attaching products
@@ -119,12 +122,12 @@ class ProductlistController extends Controller
         // Attach products with quantities
         $productlist->products()->sync($productData);
 
-         // Step 3: Retrieve the updated product list with related products, brands, and categories
+        // Retrieve the updated product list with related products, brands, and categories
         $productlist->load(['products.brand', 'products.category']);
 
-         // Redirect with success message
-       
-      }
+        // Redirect with success message
+        return redirect()->route('productlist.index')->with('success', 'Product List updated successfully.');
+    }
 
     /**
      * Remove the specified resource from storage.

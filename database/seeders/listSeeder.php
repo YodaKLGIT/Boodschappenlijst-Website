@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Note;
-use App\Models\ShoppingList; // Zorg ervoor dat de naam correct is
+use App\Models\ProductList; // Zorg ervoor dat de naam correct is
 
 class ListSeeder extends Seeder
 {
@@ -36,13 +36,13 @@ class ListSeeder extends Seeder
         }
 
         // Voeg enkele shopping lists toe
-        $shoppingLists = [
+        $productLists = [
             ['name' => 'Weekly Groceries', 'date' => '2024-09-01'],
             ['name' => 'Party Supplies', 'date' => '2024-09-10'],
         ];
 
-        foreach ($shoppingLists as $listData) {
-            $list = ShoppingList::create($listData);
+        foreach ($productLists as $listData) {
+            $list = ProductList::create($listData);
 
             // Koppel de eerste gebruiker aan de shopping list
             $list->users()->attach(1); // Koppel Alice aan de eerste shopping list
