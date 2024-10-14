@@ -73,8 +73,3 @@
     padding-bottom: 0;
 }
 /* end lists styling */
-
-/* Add this new style for the date element */
-#date-[id] {
-    transition: opacity 0.3s ease-in-out;
-}

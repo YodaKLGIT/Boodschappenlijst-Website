@@ -3,12 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
-use App\Models\Product;
 use App\Models\User;
-use App\Models\Note;
-use App\Models\ProductList; // Zorg ervoor dat de naam correct is
-
+use App\Models\ListItem;
+use App\Models\Product;
 
 class ListSeeder extends Seeder
 {
@@ -17,41 +14,32 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get a random user
+        $user = User::inRandomOrder()->first();
 
-
-        foreach ($notes as $noteData) {
-            Note::create($noteData);
+        if (!$user) {
+            $this->command->info('No users found. Please run UserSeeder first.');
+            return;
         }
 
-        // Voeg enkele shopping lists toe
-        $productLists = [
-            ['name' => 'Weekly Groceries', 'date' => '2024-09-01'],
-            ['name' => 'Party Supplies', 'date' => '2024-09-10'],
-        ];
+        // Create a single ListItem with a random user
+        $listItem = ListItem::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
-        foreach ($productLists as $listData) {
-            $list = ProductList::create($listData);
+        // Get some random existing products
+        $products = Product::inRandomOrder()->limit(3)->get();
 
-            // Koppel de eerste gebruiker aan de shopping list
-            $list->users()->attach(1); // Koppel Alice aan de eerste shopping list
-            $list->users()->attach(2); // Koppel Bob aan de tweede shopping list
-
-            // Koppel notities aan de shopping list
-            $noteIds = Note::pluck('id')->toArray(); // Haal alle notitie-ID's op
-            $list->notes()->createMany(array_map(fn($id) => ['name' => "Note for list $id"], $noteIds));
-
-            // Koppel producten aan de shopping list
-            $list->products()->attach([
-                1 => ['quantity' => 5], // Voorbeeld: 5 stuks van product met ID 1
-                2 => ['quantity' => 3], // Voorbeeld: 3 stuks van product met ID 2
-            ]);
+        if ($products->isEmpty()) {
+            $this->command->info('No products found. Please run ProductSeeder first.');
+            return;
         }
 
-        // Step 1: Create a product list
-        $productList = [
-            'name' => 'Wekelijkse Boodschappen', // Name of the product list
-        ];
+        // Attach the products to the ListItem
+        $listItem->products()->attach($products->pluck('id')->toArray(), [
+            'quantity' => fn() => rand(1, 5)
+        ]);
 
-        ProductList::insert($productList);
+        $this->command->info('ListItem seeded and associated with existing products successfully.');
     }
 }
