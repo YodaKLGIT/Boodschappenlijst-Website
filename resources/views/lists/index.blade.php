@@ -51,7 +51,7 @@
                                                 <span class="bg-gray-800 text-white text-sm font-bold px-3 py-1 rounded-full">{{ $productlist->products->count() }}</span>
                                             </div>
                                             <span id="date-{{ $productlist->id }}" class="text-xs text-white mt-1 transition-opacity duration-300">
-                                                {{ $productlist->last_updated ? $productlist->last_updated->format('M d, Y') : 'Not updated' }}
+                                                {{ $productlist->updated_at->format('M d, Y')}}
                                             </span>
                                         </div>
                                         <div id="products-{{ $productlist->id }}" class="products bg-white overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;">
@@ -61,10 +61,10 @@
                                                         <h4 class="font-medium text-gray-700 mb-2">{{ $category }}</h4>
                                                         <ul class="space-y-2">
                                                             @foreach ($products as $product)
-                                                                <li class="flex justify-between items-center text-sm bg-gray-50 p-2 rounded hover:bg-gray-100 transition-colors duration-200 cursor-pointer" onclick="goToProduct('{{ $product->id }}')">
-                                                                    <span class="text-gray-600 truncate flex-1">
+                                                                <li class="flex justify-between items-center text-sm bg-gray-50 p-2 rounded hover:bg-gray-100 transition-colors duration-200">
+                                                                    <a href="{{ route('products.index', $product->id) }}" class="text-gray-600 truncate flex-1 hover:text-pink-600 transition-colors duration-200">
                                                                         {{ $product->brand->name }} {{ $product->name }}
-                                                                    </span>
+                                                                    </a>
                                                                     <span class="text-gray-500 ml-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
                                                                 </li>
                                                             @endforeach

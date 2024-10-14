@@ -34,6 +34,10 @@ class ListController extends Controller
             case 'last_updated':
                 $query->orderBy('updated_at', 'desc');
                 break;
+            case 'product_count':
+                $query->withCount('products')
+                      ->orderBy('products_count', 'desc');
+                break;
             default:
                 $query->orderBy('name');
         }

@@ -15,8 +15,10 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBrand'])->name('products.filterByBrand');
 
 
-Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
-Route::resource('/productlist', ProductlistController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+    Route::resource('/productlist', ProductlistController::class);
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
