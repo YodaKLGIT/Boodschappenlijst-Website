@@ -30,12 +30,11 @@ class Product extends Model
     // Define the many-to-many relationship with the ShoppingList model
     public function productList()
     {
-
-
         return $this->belongsToMany(Productlist::class)->withPivot('quantity');
     }
-    
 
+    public function productListItem()
+    {
+        return $this->belongsToMany(ListItem::class)->withPivot('quantity');
+    }
 }
-
-
