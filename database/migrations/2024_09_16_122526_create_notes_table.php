@@ -29,4 +29,4 @@ class CreateNotesTable extends Migration
         Schema::dropIfExists('notes');
     }
 }
-}
+
