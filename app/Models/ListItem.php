@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Database\Factories\ListFactory;
 
 class ListItem extends Model
 {
@@ -12,6 +13,11 @@ class ListItem extends Model
     protected $fillable = ['name'];
 
     protected $table = 'lists';  // Consider renaming the model to 'List' if this is correct
+
+    protected static function newFactory()
+    {
+        return ListFactory::new();
+    }
 
     public function notes()
     {
@@ -26,6 +32,6 @@ class ListItem extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
     }
 }

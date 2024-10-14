@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+
 use App\Models\ListItem;
 use App\Models\Product;
+use App\Models\User;
 
 class ListSeeder extends Seeder
 {
@@ -14,18 +15,23 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get a random user
-        $user = User::inRandomOrder()->first();
+        // Create 5 ListItems with unique names
+        $listItems = ListItem::factory()
+            ->count(5)
+            ->create();
 
-        if (!$user) {
+        // Get all users
+        $users = User::inRandomOrder()->limit(3)->get();
+
+        if ($users->isEmpty()) {
             $this->command->info('No users found. Please run UserSeeder first.');
             return;
         }
 
-        // Create a single ListItem with a random user
-        $listItem = ListItem::factory()->create([
-            'user_id' => $user->id,
-        ]);
+        // Attach users to each ListItem
+        foreach ($listItems as $listItem) {
+            $listItem->users()->attach($users->pluck('id'));
+        }
 
         // Get some random existing products
         $products = Product::inRandomOrder()->limit(3)->get();
@@ -35,11 +41,15 @@ class ListSeeder extends Seeder
             return;
         }
 
-        // Attach the products to the ListItem
-        $listItem->products()->attach($products->pluck('id')->toArray(), [
-            'quantity' => fn() => rand(1, 5)
-        ]);
+        // Attach products to each ListItem
+        foreach ($listItems as $listItem) {
+            $productData = $products->mapWithKeys(function ($product) {
+                return [$product->id => ['quantity' => rand(1, 5)]] ;
+            })->toArray();
 
-        $this->command->info('ListItem seeded and associated with existing products successfully.');
+            $listItem->products()->attach($productData);
+        }
+
+        $this->command->info('5 ListItems created with unique names, linked with users, and associated with existing products successfully.');
     }
 }
