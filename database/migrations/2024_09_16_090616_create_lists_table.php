@@ -6,25 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('lists', function (Blueprint $table) {
+        Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
-            $table->string("name");
-            $table->date("date");
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
-        
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('list');
+        Schema::dropIfExists('shopping_lists');
     }
 };

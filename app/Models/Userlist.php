@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Userlist extends Model
+class UserList extends Model
 {
     use HasFactory;
 
-    protected $table = 'lists';  
+    protected $table = 'user_lists';  
 
     public function users()
     {

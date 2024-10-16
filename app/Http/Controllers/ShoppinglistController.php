@@ -4,142 +4,170 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Note;
+use App\Models\User;
 use App\Models\Product;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Shoppinglist;
+use App\Http\Requests\Auth\ShoppinglistRequest;
+use Illuminate\Support\Facades\Gate;
+use App\Policies\ShoppinglistPolicy;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class ShoppinglistController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(Request $request)
     {
+
+        $user = Auth::user();
         
-        $shoppinglists = Shoppinglist::with(['products.brand', 'products.category'])->get();
-        return view('shoppinglist.index', compact('shoppinglists'));
+        $shoppinglists = Shoppinglist::accessibleBy($user)
+            ->with(['products.brand', 'products.category'])
+            ->get();
+
+        $shoppinglists = $this->filter($request, $shoppinglists);
+        
+        $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
+   
+        return view('shoppinglist.index', compact('shoppinglists', 'groupedProducts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function filter(Request $request, $shoppinglists)
     {
-       // You can retrieve all products to pass to the view, if needed
-       $products = Product::all();
+        $sort = $request->input('sort', 'title');
 
-       // Return the view to create a new shopping list
-      return view('shoppinglist.create', compact('products'));
-    }
-
-    
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-          // Validate the request data
-          $validatedData = $request->validate([
-              'name' => 'required|string|max:255',
-              'product_ids' => 'nullable|string|max:255',
-              'product_ids.*' => 'exists:products,id',
-              'quantities' => 'nullable|array',
-              'quantities.*' => 'integer|min:1',
-              'list_id' => 'nullable|exists:product_lists,id',
-          ]);
-
-          // Create a new ProductList
-          $shoppinglist = Shoppinglist::create([
-              'name' => $validatedData['name'],
-          ]);
-
-          // Prepare data for attaching products
-          $productData = [];
-            foreach ($validatedData['product_ids'] as $index => $productId) {
-              $productData[$productId] = ['quantity' => $validatedData['quantities'][$index] ?? 1];
-
-          // Attach products with quantities
-          $shoppinglist->products()->attach($productData);
-
-           // Redirect with success message
-          return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
+        switch ($sort) {
+            case 'last_added':
+                return $shoppinglists->sortByDesc('created_at');
+            case 'last_updated':
+                return $shoppinglists->sortByDesc('updated_at');
+            default:
+                return $shoppinglists->sortBy('name');
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    public function addNote(Request $request, Shoppinglist $shoppinglist)
+    {
+        $this->authorize('update', $shoppinglist);
+        
+        $validatedData = $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        $note = new Note([
+            'content' => $validatedData['content'],
+            'user_id' => Auth::id(),
+        ]);
+
+        $shoppinglist->notes()->save($note);
+
+        return redirect()->route('shoppinglists.show', $shoppinglist)
+            ->with('success', 'Note added successfully');
+    }
+
+    public function create()
+    {
+        $users = User::where('id', '!=', Auth::id())->get();
+        $products = Product::with('category', 'brand')->get();
+        $groupedProducts = $products->groupBy('category.name');
+
+        return view('shoppinglist.create', compact('users', 'groupedProducts'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'user_ids' => 'array',
+            'user_ids.*' => 'exists:users,id',
+            'product_ids' => 'array',
+            'product_ids.*' => 'exists:products,id',
+            'quantities' => 'array',
+            'quantities.*' => 'nullable|integer|min:0',
+        ]);
+
+        $shoppingList = Shoppinglist::create([
+            'name' => $validatedData['name'],
+            'user_id' => Auth::id(),
+        ]);
+
+        // Attach the current user and selected users to the shopping list
+        $userIds = $validatedData['user_ids'] ?? [];
+        $userIds[] = Auth::id();
+        $shoppingList->users()->attach(array_unique($userIds));
+
+        // Attach products with quantities
+        $productData = [];
+        foreach ($validatedData['product_ids'] ?? [] as $productId) {
+            $quantity = $validatedData['quantities'][$productId] ?? null;
+            $productData[$productId] = ['quantity' => $quantity];
+        }
+        $shoppingList->products()->attach($productData);
+
+        return redirect()->route('shoppinglist.index')->with('success', 'Shopping list created successfully.');
+    }
+
     public function show(Shoppinglist $shoppinglist)
     {
-        $products = $shoppinglist->products;
+        $this->authorize('view', $shoppinglist);
+        $products = $shoppinglist->products()->with(['brand', 'category'])->get();
 
         return view('shoppinglist.show', compact('shoppinglist', 'products'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    public function viewProducts(Shoppinglist $shoppinglist)
+    {
+        $this->authorize('view', $shoppinglist);
+        $shoppinglist->load(['products.brand', 'products.category']);
+    
+        return view('shoppinglist.shoppinglist', compact('shoppinglist'));
+    }
+
     public function edit(Shoppinglist $shoppinglist)
     {
-          // Step 1: You already have the shopping list injected, no need to find it again
+        $this->authorize('update', $shoppinglist);
+        $products = Product::with(['brand', 'category'])->get(); 
+        $shoppinglist = $shoppinglist->load(['products.brand', 'products.category']);
+        $groupedProducts = $products->groupBy('category.name');
 
-         // Step 2: Retrieve all products to display in the view (for selection or updating)
-        $products = $shoppinglist->products;
-
-        // Step 3: Retrieve the existing related products, brands, and categories
-       $shoppinglistWithDetails = $shoppinglist->load(['products.brand', 'products.category']);
-
-       // Step 4: Pass the data to the edit view (including the shopping list and available products)
-       return view('edit', compact('shoppinglistWithDetails', 'products'));
+        return view('shoppinglist.edit', compact('shoppinglist', 'products', 'groupedProducts'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Shoppinglist $shoppinglist)
+    public function update(ShoppinglistRequest $request, Shoppinglist $shoppinglist)
     {
-          // Validate the request data
-          $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'product_ids' => 'nullable|string|max:255',
-            'product_ids.*' => 'exists:products,id',
-            'quantities' => 'nullable|array',
-            'quantities.*' => 'integer|min:1',
-            'list_id' => 'nullable|exists:product_lists,id',
+        $this->authorize('update', $shoppinglist);
+        $validatedData = $request->validated();
+
+        $shoppinglist->update([
+            'name' => $validatedData['name'],
         ]);
 
-        // Create a new ProductList
-        $shoppinglist->name =  $validatedData['name'];
-        $shoppinglist->save();
-
-        // Prepare data for attaching products
         $productData = [];
-          foreach ($validatedData['product_ids'] as $index => $productId) {
-            $productData[$productId] = ['quantity' => $validatedData['quantities'][$index] ?? 1];
-
-        // Attach products with quantities
+        foreach ($validatedData['product_ids'] ?? [] as $productId) {
+            $quantity = $validatedData['quantities'][$productId] ?? null;
+            $productData[$productId] = ['quantity' => $quantity];
+        }
         $shoppinglist->products()->sync($productData);
 
-         // Step 3: Retrieve the updated shopping list with related products, brands, and categories
-         $shoppinglistWithDetails = $shoppinglist->load(['products.brand', 'products.category']);
+        $userIds = $validatedData['user_ids'] ?? [];
+        $userIds[] = Auth::id();
+        $shoppinglist->users()->sync(array_unique($userIds));
 
-         // Redirect with success message
-        return redirect()->route('productlist.index')->with('success', 'Product List created successfully.');
-      }
+        $shoppinglist->load(['products.brand', 'products.category']);
+
+        return redirect()->route('shoppinglist.index')->with('success', 'Shopping list updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Shoppinglist $shoppinglist)
     {
-        // Detach all associated tags
-       $shoppinglist->products()->detach();
+        $this->authorize('delete', $shoppinglist);
+        $shoppinglist->products()->detach();
+        $shoppinglist->users()->detach();
+        $shoppinglist->delete();
 
-       // Delete the news item
-       $shoppinglist->delete();
-
-       return redirect()->route('shoppinglist.index');
+        return redirect()->route('shoppinglist.index')->with('success', 'Shopping list deleted successfully.');
     }
 }

@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Shoppinglist extends Model
+class ShoppingList extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
-
+    protected $fillable = ['name', 'user_id'];
 
     protected $table = 'lists';  
 
@@ -21,14 +20,12 @@ class Shoppinglist extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
-                    ->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'product_lists', 'shoppinglist_id', 'product_id')->withPivot('quantity');
     }
 
-
-    public function users() 
+    public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_lists', 'shoppinglist_id', 'user_id');
     }
     
 }
