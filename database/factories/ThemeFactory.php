@@ -26,6 +26,7 @@ class BrandFactory extends Factory
             'name' => $this->faker->unique()->words(3, true),
             'strap_color' => $this->faker->hexColor,
             'body_color' => $this->faker->hexColor,
+            'count_circle_color' => $this->faker->hexColor,
         ];
     }
 }

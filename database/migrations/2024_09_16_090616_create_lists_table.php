@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('lists', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string("name")->unique();  // Add the unique constraint
+            $table->foreignId('theme_id')->nullable()->default(null)->constrained()->onDelete('set null');
+            $table->timestamps();
         });
         
     }

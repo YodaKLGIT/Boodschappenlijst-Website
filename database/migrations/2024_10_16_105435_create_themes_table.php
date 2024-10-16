@@ -10,9 +10,12 @@ return new class extends Migration
     {
         Schema::create('themes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('strap_color');
-            $table->string('body_color');
+            $table->string('name')->unique();
+            $table->string('strap_color')->default('bg-black-800');
+            $table->string('body_color')->default('bg-pink-100');
+            $table->string('content_bg_color')->default('bg-white'); 
+            $table->string('hover_color')->default('bg-pink-200');
+            $table->string('count_circle_color')->default('bg-gray-800');
             $table->timestamps();
         });
     }
