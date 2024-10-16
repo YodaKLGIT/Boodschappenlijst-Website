@@ -45,7 +45,9 @@
                             <div class="w-full">
                                 <div class="shopping-list-wrapper">
                                     <article class="rounded-xl bg-white shadow-md overflow-hidden h-auto">
-                                        <div class="bg-pink-600 p-3 flex flex-col cursor-pointer" onclick="toggleProducts(event, '{{ $productlist->id }}')">
+                                        <div class="p-3 flex flex-col cursor-pointer" 
+                                             onclick="toggleProducts(event, '{{ $productlist->id }}')"
+                                             style="background-color: {{ $productlist->themes->first()->strap_color ?? '#FFA500' }};">
                                             <div class="flex items-center justify-between">
                                                 <h3 class="text-lg font-semibold text-white truncate pr-2">{{ $productlist->name }}</h3>
                                                 <span class="bg-gray-800 text-white text-sm font-bold px-3 py-1 rounded-full">{{ $productlist->products->count() }}</span>
@@ -54,7 +56,8 @@
                                                 {{ $productlist->updated_at->format('M d, Y')}}
                                             </span>
                                         </div>
-                                        <div id="products-{{ $productlist->id }}" class="products bg-white overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;">
+                                        <div id="products-{{ $productlist->id }}" class="products overflow-hidden transition-all duration-300 ease-in-out" 
+                                             style="max-height: 0; opacity: 0; background-color: {{ $productlist->themes->first()->body_color ?? '#FFFFFF' }};">
                                             <div class="p-4 space-y-4">
                                                 @foreach ($productlist->products->groupBy('category.name') as $category => $products)
                                                     <div class="category-section pb-4 border-b border-gray-200 last:border-b-0 last:pb-0">
