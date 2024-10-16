@@ -65,7 +65,20 @@
                                                                     <a href="{{ route('products.index', $product->id) }}" class="text-gray-600 truncate flex-1 hover:text-pink-600 transition-colors duration-200">
                                                                         {{ $product->brand->name }} {{ $product->name }}
                                                                     </a>
-                                                                    <span class="text-gray-500 ml-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
+                                                                    <div class="flex items-center">
+                                                                        <span class="text-gray-500 mr-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
+                                                                        {{-- Commented out delete form
+                                                                        <form action="{{ route('productlists.products.destroy', [$productlist->id, $product->id]) }}" method="POST" class="inline">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                                </svg>
+                                                                            </button>
+                                                                        </form>
+                                                                        --}}
+                                                                    </div>
                                                                 </li>
                                                             @endforeach
                                                         </ul>
