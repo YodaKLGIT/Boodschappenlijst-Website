@@ -16,11 +16,6 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create 5 ListItems with unique names
-        $listItems = ListItem::factory()
-            ->count(5)
-            ->create();
-
         // Get all users
         $users = User::inRandomOrder()->limit(3)->get();
 
@@ -32,8 +27,8 @@ class ListSeeder extends Seeder
         // Get all themes
         $themes = Theme::all();
 
-        if ($themes->isEmpty()) {
-            $this->command->info('No themes found. Please run ThemeSeeder first.');
+        if ($themes->count() < 1) {
+            $this->command->info('Not enough themes found. Please run ThemeSeeder first.');
             return;
         }
 
@@ -45,22 +40,25 @@ class ListSeeder extends Seeder
             return;
         }
 
-        // Attach users, themes, and products to each ListItem
-        foreach ($listItems as $listItem) {
-            // Attach users
-            $listItem->users()->attach($users->pluck('id'));
+        // Create 5 ListItems with unique names
+        ListItem::factory()
+            ->count(5)
+            ->create()
+            ->each(function ($listItem) use ($users, $themes, $products) {
+                // Attach users
+                $listItem->users()->attach($users->pluck('id'));
 
-            // Attach a random theme
-            $randomTheme = $themes->random();
-            $listItem->themes()->attach($randomTheme->id);
+                // Assign a random theme
+                $listItem->theme()->associate($themes->random());
+                $listItem->save();
 
-            // Attach products
-            $productData = $products->mapWithKeys(function ($product) {
-                return [$product->id => ['quantity' => rand(1, 5)]];
-            })->toArray();
+                // Attach products
+                $productData = $products->mapWithKeys(function ($product) {
+                    return [$product->id => ['quantity' => rand(1, 5)]];
+                })->toArray();
 
-            $listItem->products()->attach($productData);
-        }
+                $listItem->products()->attach($productData);
+            });
 
         $this->command->info('5 ListItems created with unique names, linked with users, associated with existing products, and assigned random themes successfully.');
     }
