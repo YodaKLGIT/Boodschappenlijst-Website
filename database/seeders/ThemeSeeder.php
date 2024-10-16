@@ -12,13 +12,14 @@ class ThemeSeeder extends Seeder
      */
     public function run(): void
     {
-        $themes = [
+        $predefinedThemes = [
             [
                 'name' => 'Ocean Blue',
                 'strap_color' => '#0077BE',
                 'body_color' => '#E0F7FA',
                 'hover_color' => '#B3E5FC',
                 'count_circle_color' => '#005588',
+                'content_bg_color' => '#FFFFFF',
             ],
             [
                 'name' => 'Forest Green',
@@ -26,6 +27,7 @@ class ThemeSeeder extends Seeder
                 'body_color' => '#E8F5E9',
                 'hover_color' => '#C8E6C9',
                 'count_circle_color' => '#1B5E20',
+                'content_bg_color' => '#FFFFFF',
             ],
             [
                 'name' => 'Sunset Orange',
@@ -33,6 +35,7 @@ class ThemeSeeder extends Seeder
                 'body_color' => '#FFF3E0',
                 'hover_color' => '#FFE0B2',
                 'count_circle_color' => '#D84315',
+                'content_bg_color' => '#FFFFFF',
             ],
             [
                 'name' => 'Lavender Dream',
@@ -40,6 +43,7 @@ class ThemeSeeder extends Seeder
                 'body_color' => '#F3E5F5',
                 'hover_color' => '#E1BEE7',
                 'count_circle_color' => '#6A1B9A',
+                'content_bg_color' => '#FFFFFF',
             ],
             [
                 'name' => 'Mint Breeze',
@@ -47,10 +51,11 @@ class ThemeSeeder extends Seeder
                 'body_color' => '#E0FFF0',
                 'hover_color' => '#B2DFDB',
                 'count_circle_color' => '#2D8B6D',
+                'content_bg_color' => '#FFFFFF',
             ],
         ];
 
-        foreach ($themes as $theme) {
+        foreach ($predefinedThemes as $theme) {
             Theme::create($theme);
         }
     }

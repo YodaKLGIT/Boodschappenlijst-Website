@@ -27,8 +27,8 @@ class ListSeeder extends Seeder
         // Get all themes
         $themes = Theme::all();
 
-        if ($themes->isEmpty()) {
-            $this->command->info('No themes found. Please run ThemeSeeder first.');
+        if ($themes->count() < 1) {
+            $this->command->info('Not enough themes found. Please run ThemeSeeder first.');
             return;
         }
 

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ListItem;
+use App\Models\Theme;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ListFactory extends Factory
@@ -22,7 +23,8 @@ class ListFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->words(3, true)
+            'name' => $this->faker->unique()->words(3, true),
+            'theme_id' => Theme::factory(),
         ];
     }
 }
