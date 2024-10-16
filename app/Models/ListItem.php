@@ -34,4 +34,9 @@ class ListItem extends Model
     {
         return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
     }
+
+    public function themes()
+    {
+        return $this->belongsToMany(Theme::class, 'lists_themes', 'list_id', 'theme_id');
+    }
 }
