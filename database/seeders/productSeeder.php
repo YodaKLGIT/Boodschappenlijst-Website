@@ -39,9 +39,5 @@ class ProductSeeder extends Seeder
         }
 
         // Create additional random products
-        Product::factory()->count(15)->create([
-            'brand_id' => fn() => $brands->random()->id,
-            'category_id' => fn() => $categories->random()->id,
-        ]);
     }
 }
