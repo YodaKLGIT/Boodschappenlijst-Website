@@ -15,6 +15,11 @@ class ThemeFactory extends Factory
     protected $model = Theme::class;
 
     /**
+     * Define a common set of valid Tailwind CSS hover colors
+     */
+   
+
+    /**
      * Define the model's default state.
      *
      * @return array
@@ -26,7 +31,7 @@ class ThemeFactory extends Factory
             'strap_color' => $this->faker->hexColor(), // Random hex color
             'body_color' => $this->faker->hexColor(),  // Random hex color
             'content_bg_color' => $this->faker->hexColor(), // Random hex color
-            'hover_color' => $this->faker->randomElement(['blue-700', 'green-700', 'red-700', 'pink-700', 'purple-700']), // Random Tailwind color class
+            'hover_color' => $this->faker->hexColor(), // Use the common colors
             'count_circle_color' => $this->faker->hexColor(), // Random hex color
         ];
     }
@@ -36,15 +41,4 @@ class ThemeFactory extends Factory
      *
      * @return array
      */
-    public function defaultTheme(): array
-    {
-        return [
-            'name' => 'Default Theme',
-            'strap_color' => '#0077BE', // Example default color
-            'body_color' => '#E0F7FA', // Example default color
-            'content_bg_color' => '#FFFFFF', // Example default color
-            'hover_color' => 'blue-700', // Example default Tailwind color class
-            'count_circle_color' => '#005588', // Example default color
-        ];
-    }
 }
