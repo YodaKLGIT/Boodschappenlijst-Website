@@ -26,7 +26,7 @@ class ThemeFactory extends Factory
             'strap_color' => $this->faker->hexColor() ?? 'bg-black-800',
             'body_color' => $this->faker->hexColor() ?? 'bg-pink-100',
             'content_bg_color' => $this->faker->hexColor() ?? 'bg-white',
-            'hover_color' => $this->faker->hexColor() ?? 'bg-pink-200',
+            'hover_color' => $this->faker->hexColor() ?? 'pink-200',
             'count_circle_color' => $this->faker->hexColor() ?? 'bg-gray-800',
         ];
     }
