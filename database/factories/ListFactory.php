@@ -24,7 +24,6 @@ class ListFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->words(3, true),
-            'theme_id' => Theme::factory(),
         ];
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('strap_color')->default('bg-black-800');
             $table->string('body_color')->default('bg-pink-100');
             $table->string('content_bg_color')->default('bg-white'); 
-            $table->string('hover_color')->default('bg-pink-200');
+            $table->string('hover_color')->default('pink-600');
             $table->string('count_circle_color')->default('bg-gray-800');
             $table->timestamps();
         });
