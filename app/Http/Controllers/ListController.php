@@ -14,9 +14,10 @@ class ListController extends Controller
      */
     public function index(Request $request)
     {
+        // Assuming you have a method to filter product lists
         $productlists = $this->filter($request);
-        $productlists->load(['products.brand', 'products.category']);
         
+        // Group products by category
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
 
         return view('lists.index', compact('productlists', 'groupedProducts'));

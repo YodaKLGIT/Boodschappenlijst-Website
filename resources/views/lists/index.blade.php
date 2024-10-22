@@ -80,7 +80,7 @@
                                                                     <li class="flex justify-between items-center text-sm p-2 rounded transition-colors duration-200"
                                                                         style="background-color: {{ $productlist->theme->body_color }};">
                                                                         <a href="{{ route('products.index', $product->id) }}" 
-                                                                           class="text-gray-600 truncate flex-1 hover:text-blue-700 transition-colors duration-200">
+                                                                           class="text-gray-600 truncate flex-1 hover:text-{{$productlist->theme->hover_color}} duration-200">
                                                                             {{ $product->brand->name }} {{ $product->name }}
                                                                         </a>
                                                                         <span class="text-gray-500 ml-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
