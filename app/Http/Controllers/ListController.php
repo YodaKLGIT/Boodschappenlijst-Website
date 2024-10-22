@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ListItem;
+use Illuminate\Support\Facades\Log;
 
 class ListController extends Controller
 {
@@ -43,5 +44,18 @@ class ListController extends Controller
         }
 
         return $query->get();
+    }
+
+    /**
+     * Detach a product from the list.
+     */
+    public function removeProductFromList(ListItem $list, $productId)
+    {
+        // Detach the specified product
+        $list->products()->detach($productId);
+
+        // Redirect back with a success message
+        return redirect()->route('lists.index', [$list->id])
+            ->with('success', 'Product detached successfully.');
     }
 }
