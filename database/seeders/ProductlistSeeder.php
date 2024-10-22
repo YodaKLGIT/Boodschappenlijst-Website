@@ -29,5 +29,6 @@ class ProductlistSeeder extends Seeder
                 $productList->products()->attach($product->id, ['quantity' => $quantity]);
             }
               
-    }  
-}
+            }
+        }
+    }
