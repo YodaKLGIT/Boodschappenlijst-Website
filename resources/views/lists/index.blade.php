@@ -21,7 +21,14 @@
                 </a>
             </div>
         @else
+
+         <form action="{{ route('lists.index') }}" method="GET" class="mb-4">
+                <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" class="border rounded-md p-2 w-full lg:w-1/3" />
+            </form>
             <div class="flex flex-col lg:flex-row">
+
+                 <!-- Search Bar Above Product Lists -->
+           
                 <!-- Filter Section -->
                 <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
                     <div class="bg-white rounded-lg shadow-md p-4 sticky top-4">
@@ -47,11 +54,13 @@
                                     <article class="rounded-xl bg-white shadow-md overflow-hidden h-auto">
                                         <div class="p-3 flex flex-col cursor-pointer" 
                                              onclick="toggleProducts(event, '{{ $productlist->id }}')"
+
                                              style="background-color: {{ $productlist->theme->strap_color }};">
                                             <div class="flex items-center justify-between">
                                                 <h3 class="text-lg font-semibold text-white truncate pr-2">{{ $productlist->name }}</h3>
                                                 <span class="text-white text-sm font-bold px-3 py-1 rounded-full" 
                                                       style="background-color: {{ $productlist->theme->count_circle_color }}">
+
                                                     {{ $productlist->products->count() }}
                                                 </span>
                                             </div>
@@ -60,7 +69,9 @@
                                             </span>
                                         </div>
                                         <div id="products-{{ $productlist->id }}" class="products overflow-hidden transition-all duration-300 ease-in-out flex-grow" 
+
                                              style="max-height: 0; opacity: 0; background-color: {{ $productlist->theme->content_bg_color }};">
+
                                             <div class="p-4 space-y-4">
                                                 @foreach ($productlist->products->groupBy('category.name') as $category => $products)
                                                     <div class="category-section pb-4 border-b border-gray-200 last:border-b-0 last:pb-0">
@@ -68,9 +79,12 @@
                                                         <ul class="space-y-2">
                                                             @foreach ($products as $product)
                                                                 <li class="flex justify-between items-center text-sm p-2 rounded transition-colors duration-200"
+
+
                                                                     style="background-color: {{ $productlist->theme->body_color }};">
                                                                     <a href="{{ route('products.index', $product->id) }}" 
                                                                        class="text-gray-600 truncate flex-1 hover:text-{{ $productlist->theme->hover_color }} transition-colors duration-200">
+
                                                                         {{ $product->brand->name }} {{ $product->name }}
                                                                     </a>
                                                                     <span class="text-gray-500 ml-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
