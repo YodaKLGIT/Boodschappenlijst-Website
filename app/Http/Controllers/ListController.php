@@ -34,6 +34,7 @@ class ListController extends Controller
             $query->where('name', 'like', '%' . $search . '%'); // Adjust the field name as necessary
         }
 
+        // Apply sorting based on the selected option
         switch ($sort) {
             case 'last_added':
                 $query->orderBy('created_at', 'desc');
@@ -49,7 +50,19 @@ class ListController extends Controller
                 $query->orderBy('name');
         }
 
-        return $query->get();
+        // Fetch the product lists
+        $productlists = $query->get();
+
+        // Check if there are no results and redirect back if necessary
+        if ($productlists->isEmpty() && $search) {
+            return redirect()->route('lists.index')->with('message', 'No product lists found for "' . $search . '".');
+        }
+
+        // Pass the product lists and search term to the view
+        return view('lists.index', [
+            'productlists' => $productlists,
+            'search' => $search,
+        ]);
     }
 
     /**
