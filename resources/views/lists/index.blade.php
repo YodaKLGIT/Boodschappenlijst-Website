@@ -10,26 +10,29 @@
     </div>
 
     <div class="container mx-auto px-4 py-8 mb-16">
+        <form action="{{ route('lists.index') }}" method="GET" class="mb-4">
+            <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" class="border rounded-md p-2 w-full lg:w-1/3" />
+        </form>
+
         @if($productlists->isEmpty())
-            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
-                <p class="text-gray-600 mb-4">No product lists available.</p>
-                <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
-                    <span class="text-sm">Create a new list</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                </a>
-            </div>
+            @if(request('search'))
+                <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                    <p class="text-gray-600 mb-4">No product lists found for "<strong>{{ request('search') }}</strong>".</p>
+                </div>
+            @else
+                <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                    <p class="text-gray-600 mb-4">No product lists available.</p>
+                    <!-- Only show the create button if there are no product lists and no search term -->
+                    <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
+                        <span class="text-sm">Create a new list</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    </a>
+                </div>
+            @endif
         @else
-
-         <form action="{{ route('lists.index') }}" method="GET" class="mb-4">
-                <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" class="border rounded-md p-2 w-full lg:w-1/3" />
-            </form>
             <div class="flex flex-col lg:flex-row">
-
-                 <!-- Search Bar Above Product Lists -->
-           
-                <!-- Filter Section -->
                 <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
                     <div class="bg-white rounded-lg shadow-md p-4 sticky top-4">
                         <h2 class="font-semibold text-lg mb-4">Filters</h2>
