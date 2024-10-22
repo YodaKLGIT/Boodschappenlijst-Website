@@ -21,7 +21,14 @@
                 </a>
             </div>
         @else
+
+         <form action="{{ route('lists.index') }}" method="GET" class="mb-4">
+                <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}" class="border rounded-md p-2 w-full lg:w-1/3" />
+            </form>
             <div class="flex flex-col lg:flex-row">
+
+                 <!-- Search Bar Above Product Lists -->
+           
                 <!-- Filter Section -->
                 <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
                     <div class="bg-white rounded-lg shadow-md p-4 sticky top-4">
@@ -74,15 +81,6 @@
                                                                         {{ $product->brand->name }} {{ $product->name }}
                                                                     </a>
                                                                     <span class="text-gray-500 ml-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
-                                                                    <form action="{{ route('lists.products.remove', [$productlist->id, $product->id]) }}" method="POST" class="inline">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none ml-2" title="Remove Product">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                                            </svg>
-                                                                        </button>
-                                                                    </form>
                                                                 </li>
                                                             @endforeach
                                                         </ul>

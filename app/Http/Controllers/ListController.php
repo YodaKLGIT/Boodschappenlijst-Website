@@ -25,8 +25,14 @@ class ListController extends Controller
     public function filter(Request $request)
     {
         $sort = $request->input('sort', 'title');
+        $search = $request->input('search');
 
         $query = ListItem::query();
+
+        // Add search functionality
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%'); // Adjust the field name as necessary
+        }
 
         switch ($sort) {
             case 'last_added':
