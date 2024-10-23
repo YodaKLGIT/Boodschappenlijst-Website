@@ -9,24 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('product_list', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->integer('quantity')->default(0);
-            
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade'); // Must reference 'lists'
+            $table->foreignId('list_id')->constrained('shoppinglists')->onDelete('cascade');
+            $table->integer('quantity')->default(0);
+            $table->timestamps();
         });
-        
-        
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('product_list');
     }
