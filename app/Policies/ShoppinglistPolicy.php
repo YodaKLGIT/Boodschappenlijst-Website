@@ -9,8 +9,7 @@ class ShoppinglistPolicy
 {
     public function view(User $user, Shoppinglist $shoppinglist)
     {
-        return $user->shoppinglists()->where('shoppinglist_id', $shoppinglist->id)->exists() ||
-               $user->hasPermissionTo('view-any-shoppinglist');
+        return $user->id === $shoppinglist->user_id || $shoppinglist->sharedUsers->contains($user);
     }
 
     public function create(User $user)
@@ -20,16 +19,12 @@ class ShoppinglistPolicy
 
     public function update(User $user, Shoppinglist $shoppinglist)
     {
-        return $user->shoppinglists()->where('shoppinglist_id', $shoppinglist->id)
-                    ->wherePivotIn('permissions', ['edit', 'all'])
-                    ->exists() ||
-               $user->hasPermissionTo('edit-any-shoppinglist');
+        return $user->id === $shoppinglist->user_id || $shoppinglist->sharedUsers->contains($user);
     }
 
     public function delete(User $user, Shoppinglist $shoppinglist)
     {
-        return $user->ownedShoppinglists()->where('shoppinglist_id', $shoppinglist->id)->exists() ||
-               $user->hasPermissionTo('delete-any-shoppinglist');
+        return $user->id === $shoppinglist->user_id;
     }
 
     public function share(User $user, Shoppinglist $shoppinglist)
