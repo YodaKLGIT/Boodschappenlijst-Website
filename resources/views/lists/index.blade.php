@@ -43,7 +43,6 @@
                                 <option value="last_added" {{ request('sort') === 'last_added' ? 'selected' : '' }}>Last Added</option>
                                 <option value="last_updated" {{ request('sort') === 'last_updated' ? 'selected' : '' }}>Last Updated</option>
                                 <option value="product_count" {{ request('sort') === 'product_count' ? 'selected' : '' }}>Product Count</option>
-                                <option value="product_name" {{ request('sort') === 'product_name' ? 'selected' : '' }}>Product Name</option>
                                 <option value="brand" {{ request('sort') === 'brand' ? 'selected' : '' }}>Brand</option>
                                 <option value="category" {{ request('sort') === 'category' ? 'selected' : '' }}>Category</option>
                             </select>
