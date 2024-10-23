@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Note;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable, HasFactory;
 
     protected $fillable = [
         'name',
@@ -34,10 +35,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class, 'user_id');
     }
-
-    public function shoppingLists()
+    
+    public function shoppinglists()
     {
-        return $this->belongsToMany(ShoppingList::class, 'user_lists', 'user_id', 'shoppinglist_id');
+        return $this->belongsToMany(Shoppinglist::class, 'user_lists', 'user_id', 'list_id')
+            ->withTimestamps();
     }
 
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class, 'recipient_id', 'id');
+    }
 }

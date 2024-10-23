@@ -2,30 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ShoppingList extends Model
+class Shoppinglist extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['name', 'user_id'];
 
-    protected $table = 'lists';  
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function sharedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_lists', 'list_id', 'user_id')->withTimestamps();
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
+
+    public function scopeAccessibleBy($query, $user)
+    {
+        return $query->where('user_id', $user->id)
+                     ->orWhereHas('sharedUsers', function ($query) use ($user) {
+                         $query->where('users.id', $user->id);
+                     });
+    }
 
     public function notes()
-    {
-        return $this->hasMany(User::class, 'note_id');
-    }
-
-    public function products()
-    {
-        return $this->belongsToMany(Product::class, 'product_lists', 'shoppinglist_id', 'product_id')->withPivot('quantity');
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_lists', 'shoppinglist_id', 'user_id');
-    }
-    
+{
+    return $this->hasMany(Note::class, 'list_id');
+}
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Shoppinglist;
@@ -14,20 +15,20 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'category_id', 'brand_id'];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
-
     public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->belongsTo(Brand::class);
     }
 
-    public function Productlist()
+    public function category()
     {
-        return $this->belongsToMany(Shoppinglist::class)->withPivot('quantity');
+        return $this->belongsTo(Category::class);
     }
-    
 
+    public function shoppinglists()
+    {
+        return $this->belongsToMany(Shoppinglist::class, 'product_list', 'product_id', 'list_id')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
 }
