@@ -25,7 +25,7 @@ class NoteController extends Controller
 
     $note->save();
 
-    return redirect()->route('shoppinglist.view_products', $shoppinglist)
+    return redirect()->route('shoppinglist.show', $shoppinglist)
                      ->with('success', 'Note added successfully.');
 }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ShoppingListInvitation;
 use App\Models\Invitation;
 use App\Models\Shoppinglist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
+use Illuminate\Support\Facades\Mail;
 
 class InvitationController extends Controller
 {
@@ -35,30 +36,38 @@ class InvitationController extends Controller
         ->with('success', 'Invitations sent successfully.');
 }
 
-    public function accept(Invitation $invitation)
+    public function accept($id)
     {
-        $this->authorize('respond', $invitation);
-        
-        $invitation->update(['status' => 'accepted']);
-        
-        if ($invitation->shoppinglist) {
-            $invitation->shoppinglist->users()->attach($invitation->recipient_id);
-        } else {
-            // Handle the case where the shopping list doesn't exist
-            return redirect()->route('dashboard')->with('error', 'The associated shopping list no longer exists.');
-        }
+        $invitation = Invitation::findOrFail($id);
+        $invitation->status = 'accepted'; // Update the status
+        $invitation->save();
 
-        return redirect()->route('shoppinglist.show', $invitation->shoppinglist)
-            ->with('success', 'Invitation accepted.');
+        // Attach the user to the shopping list
+        $shoppinglist = $invitation->shoppinglist;
+        $shoppinglist->sharedUsers()->attach(Auth::id());
+
+        return redirect()->route('shoppinglist.show', $shoppinglist)
+            ->with('success', 'You have accepted the invitation.');
     }
 
-    public function decline(Invitation $invitation)
+    public function decline($id)
     {
-        $this->authorize('respond', $invitation);
-        
-        $invitation->update(['status' => 'declined']);
+        $invitation = Invitation::findOrFail($id);
+        $invitation->status = 'declined'; // Update the status
+        $invitation->save();
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Invitation declined.');
+        return redirect()->back()->with('success', 'You have declined the invitation.');
+    }
+
+
+    public function mail()
+    {
+
+        $shoppinglist = new Shoppinglist();
+        Mail::to('test@test.com')->send(new ShoppingListInvitation($shoppinglist));
+
+        return view('emails.shoppinglist-invitation');
+
+ 
     }
 }
