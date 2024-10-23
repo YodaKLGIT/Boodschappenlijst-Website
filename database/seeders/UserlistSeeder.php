@@ -21,12 +21,13 @@ class UserlistSeeder extends Seeder
             return;
         }
 
-        // Assign each user to a random shopping list
+        // Assign each user to 1 or more random shopping lists
         foreach ($users as $user) {
-            // Attach the user to 1 or more shopping lists (randomly)
-            $user->shoppingLists()->attach(
-                $shoppingLists->random(rand(1, $shoppingLists->count()))->pluck('id')->toArray()
-            );
+            // Randomly choose a number of shopping lists to attach
+            $randomLists = $shoppingLists->random(rand(1, 3))->pluck('id')->toArray();
+
+            // Attach the user to the selected shopping lists
+            $user->shoppingLists()->attach($randomLists);
         }
     }
 }
