@@ -37,28 +37,15 @@
                                 <input type="text" name="search" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." value="{{ request('search') }}">
                             </div>
 
-                            <label for="brand" class="block mb-2 text-sm font-medium text-gray-700">Brand</label>
-                            <select id="brand" name="brand" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:border-gray-300" onchange="this.form.submit()">
-                                <option value="">All Brands</option>
-                                @foreach ($brands as $brand)
-                                    <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
-                                @endforeach
-                        </select>
-
-                            <label for="category" class="block mb-2 text-sm font-medium text-gray-700 mt-4">Category</label>
-                            <select id="category" name="category" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:border-gray-300" onchange="this.form.submit()">
-                                <option value="">All Categories</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-
                             <label for="sort" class="block mb-2 text-sm font-medium text-gray-700 mt-4">Order By</label>
                             <select id="sort" name="sort" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:border-gray-300" onchange="this.form.submit()">
                                 <option value="title" {{ request('sort') === 'title' ? 'selected' : '' }}>Name</option>
                                 <option value="last_added" {{ request('sort') === 'last_added' ? 'selected' : '' }}>Last Added</option>
                                 <option value="last_updated" {{ request('sort') === 'last_updated' ? 'selected' : '' }}>Last Updated</option>
                                 <option value="product_count" {{ request('sort') === 'product_count' ? 'selected' : '' }}>Product Count</option>
+                                <option value="product_name" {{ request('sort') === 'product_name' ? 'selected' : '' }}>Product Name</option>
+                                <option value="brand" {{ request('sort') === 'brand' ? 'selected' : '' }}>Brand</option>
+                                <option value="category" {{ request('sort') === 'category' ? 'selected' : '' }}>Category</option>
                             </select>
                         </form>
                     </div>

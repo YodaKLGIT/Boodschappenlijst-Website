@@ -69,6 +69,12 @@ class ListController extends Controller
                 $query->withCount('products')
                       ->orderBy('products_count', 'desc');
                 break;
+            case 'brand':
+                $query->orderBy('brand_id', 'asc'); // Adjust this if necessary based on your database structure
+                break;
+            case 'category':
+                $query->orderBy('category_id', 'asc'); // Adjust this if necessary based on your database structure
+                break;
             default:
                 $query->orderBy('name');
         }
