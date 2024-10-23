@@ -1,89 +1,146 @@
 <x-app-layout>
-    <div class="flex max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8">
-        <div class="w-3/4 pr-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
-                <div class="p-6 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $shoppinglist->name }}</h2>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Created: {{ $shoppinglist->created_at->format('M d, Y') }}</span>
-                    </div>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Shopping List Details -->
+            <div class="w-full md:w-2/3">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
+                    <div class="p-6 space-y-4">
+                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ $shoppinglist->name }}</h2>
 
-                    @if($shoppinglist->products->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-400 text-center py-4">No products in this shopping list.</p>
-                    @else
-                        <div class="space-y-6">
-                            @foreach($shoppinglist->products->groupBy('category.name') as $category => $products)
-                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-3">{{ $category }}</h3>
-                                    <ul class="space-y-2">
-                                        @foreach($products as $product)
-                                            <li class="flex justify-between items-center bg-white dark:bg-gray-600 p-3 rounded-md shadow-sm">
-                                                <div>
-                                                    <span class="text-gray-800 dark:text-gray-200 font-medium">{{ $product->name }}</span>
-                                                    <span class="text-gray-600 dark:text-gray-400 text-sm ml-2">{{ $product->brand->name }}</span>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <span class="text-gray-600 dark:text-gray-400 mr-4">
-                                                        Qty: {{ $product->pivot->quantity ?? 'Not specified' }}
+                        {{-- Owner Information --}}
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-900 dark:text-white">Owner</label>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">{{ $shoppinglist->user->name }}</p>
+                        </div>
+
+                        {{-- Shared Users --}}
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-900 dark:text-white">Shared with</label>
+                            @if ($shoppinglist->sharedUsers->isNotEmpty())
+                                <ul class="mt-1 space-y-2">
+                                    @foreach ($shoppinglist->sharedUsers as $user)
+                                        <li class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-2 rounded">
+                                            <span class="text-gray-800 dark:text-gray-200">{{ $user->name }}</span>
+                                            @if (Auth::id() === $shoppinglist->user_id)
+                                                <form action="{{ route('shoppinglist.removeUser', [$shoppinglist, $user]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                                                        Remove
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="mt-1 text-gray-600 dark:text-gray-400">Not shared with anyone</p>
+                            @endif
+                        </div>
+
+                        {{-- Products List --}}
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Products</label>
+                            @if ($shoppinglist->products->isNotEmpty())
+                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
+                                    <ul class="divide-y divide-gray-200 dark:divide-gray-600">
+                                        @foreach ($shoppinglist->products as $product)
+                                            <li class="p-3 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
+                                                <div class="flex justify-between items-center">
+                                                    <span class="text-gray-900 dark:text-white">
+                                                        {{ $product->brand->name }} - {{ $product->name }}
+                                                    </span>
+                                                    <span class="text-gray-600 dark:text-gray-400">
+                                                        Quantity: {{ $product->pivot->quantity }}
                                                     </span>
                                                 </div>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                                    Category: {{ $product->category->name }}
+                                                </p>
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
-                            @endforeach
+                            @else
+                                <p class="mt-1 text-gray-600 dark:text-gray-400">No products in this list</p>
+                            @endif
                         </div>
-                    @endif
 
-                    <div class="mt-8 flex justify-between">
-                        <a href="{{ route('shoppinglist.index') }}" 
-                           class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Back to Lists
-                        </a>
-                        <a href="{{ route('shoppinglist.edit', $shoppinglist) }}" 
-                           class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Edit List
-                        </a>
+                        {{-- Invite Users Section (Only visible to owner) --}}
+                        @if (Auth::id() === $shoppinglist->user_id)
+                            <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Invite Users</h3>
+                                <form action="{{ route('shoppinglist.invite', $shoppinglist) }}" method="POST" class="space-y-2">
+                                    @csrf
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                        <input type="email" name="email" id="email" required
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                    </div>
+                                    <button type="submit" 
+                                        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                        Send Invitation
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+
+                        {{-- Buttons --}}
+                        <div class="flex justify-between mt-4">
+                            <a href="{{ route('shoppinglist.index') }}" 
+                                class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
+                                Back to Lists
+                            </a>
+                            <a href="{{ route('shoppinglist.edit', $shoppinglist) }}" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                Edit List
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="w-1/4">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
-                <div class="p-6 space-y-4">
-                    <h3 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Notes</h3>
-                    
-                    <!-- Note Creation Form -->
-                    <form action="{{ route('shoppinglist.add_note', $shoppinglist) }}" method="POST">
-                        @csrf
-                        <div class="mb-4">
-                            <input type="text" name="title" placeholder="Note Title" required
-                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div class="mb-4">
-                            <textarea name="description" placeholder="Note Description" required
-                                      class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white" rows="3"></textarea>
-                        </div>
-                        <button type="submit" 
-                                class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Add Note
-                        </button>
-                    </form>
-
-                    <!-- Display Notes -->
-                    <div class="mt-6 space-y-4">
-                        @forelse($shoppinglist->notes as $note)
-                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded">
-                                <h4 class="font-semibold text-gray-800 dark:text-white">{{ $note->title }}</h4>
-                                <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">{{ $note->description }}</p>
-                                <small class="text-gray-500 dark:text-gray-400 block mt-2">
-                                    By {{ $note->user->name }} on {{ $note->created_at->format('M d, Y H:i') }}
-                                </small>
+            <!-- Notes Section -->
+            <div class="w-full md:w-1/3">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
+                    <div class="p-6 space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
+                        
+                        {{-- Display existing notes --}}
+                        @if ($shoppinglist->notes->isNotEmpty())
+                            <div class="space-y-2 mb-4 max-h-96 overflow-y-auto">
+                                @foreach ($shoppinglist->notes as $note)
+                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                        <h4 class="font-semibold text-gray-900 dark:text-white">{{ $note->title }}</h4>
+                                        <p class="text-gray-600 dark:text-gray-400">{{ $note->description }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                                            By {{ $note->user->name }} on {{ $note->created_at->format('M d, Y H:i') }}
+                                        </p>
+                                    </div>
+                                @endforeach
                             </div>
-                        @empty
-                            <p class="text-gray-600 dark:text-gray-400">No notes yet.</p>
-                        @endforelse
+                        @else
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">No notes yet</p>
+                        @endif
+
+                        {{-- Add new note form --}}
+                        <form action="{{ route('notes.store', $shoppinglist) }}" method="POST" class="space-y-2">
+                            @csrf
+                            <div>
+                                <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">Title</label>
+                                <input type="text" name="title" id="title" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                <textarea name="description" id="description" rows="3" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                            </div>
+                            <button type="submit" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                Add Note
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

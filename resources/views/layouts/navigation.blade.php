@@ -45,7 +45,35 @@
         <!-- User dropdown or login link -->
         <div class="relative flex items-center z-50">
             @if(Auth::check())
-                <!-- If user is logged in, show the user dropdown -->
+                <!-- Notification dropdown -->
+                <div class="relative">
+                    <button id="notification-button" data-dropdown-toggle="notification-dropdown" class="flex items-center text-sm text-gray-500 rounded-full md:focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700" type="button" aria-expanded="false" aria-haspopup="true">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.002 2.002 0 0018 15V10a6 6 0 00-12 0v5a2.002 2.002 0 00-.595 1.595L5 17h5m4 0a2 2 0 11-4 0m4 0H9" />
+                        </svg>
+                    </button>
+                    <div class="hidden z-50 my-0 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="notification-dropdown">
+                        <div class="px-4 py-3">
+                            <span class="block text-sm text-gray-900 dark:text-white">Notifications</span>
+                        </div>
+                        <ul class="py-2" aria-labelledby="notification-button">
+                            @foreach($invitations as $invitation)
+                                <li class="px-4 py-2">
+                                    <a href="{{ route('invitations.accept', $invitation->id) }}" class="block text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                        You have been invited to join the shopping list "{{ $invitation->shoppinglist->name }}". Accept?
+                                    </a>
+                                    <form action="{{ route('invitation.decline', $invitation->id) }}" method="POST" class="mt-1">
+                                        @csrf
+                                        <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                                            Decline
+                                        </button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                <!-- User dropdown -->
                 <button id="user-menu-button" data-dropdown-toggle="user-dropdown" class="flex items-center text-sm text-gray-500 rounded-full md:focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700" type="button" aria-expanded="false" aria-haspopup="true">
                     <img class="w-8 h-8 rounded-full" src="images/user.png">
                     <span class="hidden md:inline-flex ml-2">{{ Auth::user()->name }}</span>
@@ -71,7 +99,6 @@
                     </ul>
                 </div>
             @else
-                <!-- If user is not logged in, show the login link -->
                 <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-700 dark:text-gray-200 dark:hover:text-white">Login</a>
             @endif
         </div>

@@ -21,7 +21,7 @@ Route::middleware(['auth'])->group(function () {
     // Shopping List routes
     Route::resource('shoppinglist', ShoppinglistController::class);
     Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
-    
+
     // Note routes
     Route::post('/shoppinglist/{shoppinglist}/add-note', [NoteController::class, 'store'])->name('shoppinglist.add_note');
 
@@ -43,7 +43,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/shoppinglist/{shoppinglist}/invite', [InvitationController::class, 'store'])->name('invitation.store');
     Route::post('/invitation/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitation.accept');
     Route::post('/invitation/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitation.decline');
+
+    Route::post('/shoppinglists/{shoppinglist}/notes', [NoteController::class, 'store'])->name('notes.store');
+
+    Route::post('/shoppinglists/{shoppinglist}/invite', [ShoppinglistController::class, 'invite'])->name('shoppinglist.invite');
+    
+    Route::resource('shoppinglist', ShoppinglistController::class)->middleware(['auth']);
+
+    Route::get('/mail', [InvitationController::class, 'mail']);
+
+    Route::delete('/shoppinglists/{shoppinglist}/users/{user}', [ShoppinglistController::class, 'removeUser'])->name('shoppinglist.removeUser');
 });
 
 // Include authentication routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
