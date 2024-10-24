@@ -22,15 +22,15 @@
         </div>
 
         <!-- Search bar on the right -->
-        <div class="relative hidden md:block">
+        <form action="{{ route('products.index') }}" method="GET" class="relative hidden md:block">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
                 <span class="sr-only">Search icon</span>
             </div>
-            <input type="text" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search...">
-        </div>
+            <input type="text" name="search" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." value="{{ request('search') }}">
+        </form>
 
         <!-- Search button for mobile -->
         <div class="flex md:hidden">
@@ -75,7 +75,7 @@
 
                 <!-- User dropdown -->
                 <button id="user-menu-button" data-dropdown-toggle="user-dropdown" class="flex items-center text-sm text-gray-500 rounded-full md:focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700" type="button" aria-expanded="false" aria-haspopup="true">
-                    <img class="w-8 h-8 rounded-full" src="images/user.png">
+                    <img class="w-8 h-8 rounded-full" src="{{ asset('images/user.png') }}">
                     <span class="hidden md:inline-flex ml-2">{{ Auth::user()->name }}</span>
                 </button>
                 <div class="hidden z-50 my-0 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">

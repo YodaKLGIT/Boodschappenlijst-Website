@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 use Illuminate\Database\Seeder;
 use App\Models\Category;
 
@@ -13,17 +12,20 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
+        // Create specific categories
+        $specificCategories = [
             [
                 'name' => 'Daily',
-                'description' => '...',
+                'description' => 'Everyday essentials',
             ],
             [
-                'name' => 'Vegatables',
-                'description' => '...',
+                'name' => 'Vegetables',
+                'description' => 'Fresh produce and greens',
             ],
         ];
-            // Insert posts into the database using the Post model
-            Category::insert($categories);
+
+        foreach ($specificCategories as $categoryData) {
+            Category::factory()->create($categoryData);
+        }
     }
 }

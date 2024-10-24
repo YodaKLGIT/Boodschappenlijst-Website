@@ -57,6 +57,19 @@
     transition: all 0.3s ease; /* Optional: smooth transition */
 }
 
+
+/* lists styling */
 .products {
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transition for height and opacity */
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
+    overflow: hidden;
 }
+
+.products-content {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.products.closed {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+/* end lists styling */

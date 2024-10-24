@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-
 use Illuminate\Database\Seeder;
 use App\Models\Brand;
+
 class BrandSeeder extends Seeder
 {
     /**
@@ -12,7 +12,8 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
-        $brands = [
+        // Create specific brands
+        $specificBrands = [
             [
                 'name' => 'Heinz',
                 'description' => 'Thick & Rich ketchup made from red ripe tomatoes',
@@ -22,7 +23,9 @@ class BrandSeeder extends Seeder
                 'description' => 'Unox is a leading manufacturer of commercial ovens',
             ],
         ];
-        // Insert posts into the database using the Post model
-        Brand::insert($brands);
+
+        foreach ($specificBrands as $brandData) {
+            Brand::factory()->create($brandData);
+        }
     }
 }

@@ -1,23 +1,36 @@
 // custom.js
 
-// Function to toggle product visibility
-function toggleProducts(event) {
-    event.preventDefault(); // Prevent the default anchor behavior
-    const productsDiv = event.target.closest('li').querySelector('.products');
 
-    if (productsDiv) {
-        const isVisible = productsDiv.style.maxHeight !== '0px';
-        
-        // If it's currently visible, hide it
-        if (isVisible) {
-            productsDiv.style.maxHeight = '0'; // Start collapsing
-            productsDiv.style.opacity = '0'; // Fade out
-        } else {
-            productsDiv.style.maxHeight = `${productsDiv.scrollHeight}px`; // Expand to full height
-            productsDiv.style.opacity = '1'; // Fade in
-        }
+function toggleProducts(event, shoppingListId) {
+    event.preventDefault();
+    const productSection = document.getElementById('products-' + shoppingListId);
+    
+    // Toggle max-height and opacity
+    if (productSection.style.maxHeight === '0px' || productSection.style.maxHeight === '') {
+        productSection.style.maxHeight = productSection.scrollHeight + 'px';
+        productSection.style.opacity = '1';
+    } else {
+        productSection.style.maxHeight = '0px';
+        productSection.style.opacity = '0';
     }
 }
+
+
+// Add this new function
+function goToProduct(productId) {
+    // Implement the logic to navigate to the product page
+    console.log('Navigating to product:', productId);
+    // You can use window.location.href = '/products/' + productId; to navigate
+}
+
+
+
+
+
+
+
+
+
 
 
 // Function to dismiss notification
