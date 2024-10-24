@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invitation::class, 'recipient_id', 'id');
     }
+    
+    public function userList()
+    {
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+    }
 }
