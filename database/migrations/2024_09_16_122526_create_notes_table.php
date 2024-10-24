@@ -6,27 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateNotesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('list_id')->constrained('shoppinglists')->onDelete('cascade');
             $table->string('title');
-            $table->string('description'); 
+            $table->text('description');
             $table->timestamps();
-            $table->foreignId('list_id')->nullable()->constrained()->onDelete('cascade');
-
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('notes');
     }
 }
-

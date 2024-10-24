@@ -6,23 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
-        Schema::create('user_lists', function (Blueprint $table) {
+        Schema::create('shoppinglists', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('list_id')->constrained('shoppinglists')->onDelete('cascade');
             $table->timestamps();
-
-            $table->unique(['user_id', 'list_id']);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('user_lists');
+        Schema::dropIfExists('shoppinglists');
     }
 };
