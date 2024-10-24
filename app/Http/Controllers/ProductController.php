@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\ListItem;
+use App\Models\Productlist;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -13,29 +15,44 @@ class ProductController extends Controller
     {
         // Fetch all categories
         $categories = Category::all();
-        
+
         // Fetch all brands
         $brands = Brand::all();
 
+        // Fetch all product lists
+
+        // Get all available product lists
+        $lists = ListItem::all();
+
         // Fetch products with optional search and filters
-        $products = Product::when($request->search, function ($query, $search) {
-            return $query->where('name', 'like', "%{$search}%");
-        })->when($request->category, function ($query, $categoryId) {
-            return $query->where('category_id', $categoryId);
-        })->when($request->brand, function ($query, $brandId) {
-            return $query->where('brand_id', $brandId);
-        });
+        $products = Product::query();
+
+        // Apply search filter if specified
+        if ($request->search) {
+            $products->where('name', 'like', "%{$request->search}%");
+        }
+
+        // Apply category filter if specified
+        if ($request->category) {
+            $products->where('category_id', $request->category);
+        }
+
+        // Apply brand filter if specified
+        if ($request->brand) {
+            $products->where('brand_id', $request->brand);
+        }
 
         // Apply sorting if specified
         if ($request->sort === 'asc') {
-            $products = $products->orderBy('name', 'asc');
+            $products->orderBy('name', 'asc');
         } elseif ($request->sort === 'desc') {
-            $products = $products->orderBy('name', 'desc');
+            $products->orderBy('name', 'desc');
         }
 
+        // Get all filtered and sorted products
         $products = $products->get();
 
-        // Return the products view with the fetched products, categories, brands, and request
-        return view('products.index', compact('products', 'categories', 'brands', 'request'));
+        // Pass data to the view
+        return view('products.index', compact('products', 'categories', 'brands', 'request', 'lists'));
     }
 }

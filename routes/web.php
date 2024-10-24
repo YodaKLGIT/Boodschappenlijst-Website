@@ -7,13 +7,19 @@ use App\Http\Controllers\ListController;
 use App\Http\Controllers\ProductlistController;
 use Illuminate\Support\Facades\Route;
 
+
 // home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::resource('productlist', ProductlistController::class);
 
 // products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBrand'])->name('products.filterByBrand');
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/productlist/add', [ProductlistController::class, 'add'])->name('productlist.add');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
@@ -30,4 +36,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

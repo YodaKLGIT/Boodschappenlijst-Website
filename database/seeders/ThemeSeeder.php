@@ -33,11 +33,11 @@ class ThemeSeeder extends Seeder
                 'strap_color' => '#8E4585',
                 'body_color' => '#F3E5F5',
             ],
-            [
-                'name' => 'Midnight Black',
-                'strap_color' => '#000000',
-                'body_color' => '#303030',
-            ],
+            // [
+            //     'name' => 'Midnight Black',
+            //     'strap_color' => '#000000',
+            //     'body_color' => '#303030',
+            // ],
         ];
 
         foreach ($themes as $theme) {
