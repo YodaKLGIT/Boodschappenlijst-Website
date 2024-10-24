@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('lists', function (Blueprint $table) {
             $table->id();
+            $table->string("name")->unique(); 
+            $table->foreignId('theme_id')->nullable()->constrained()->onDelete('cascade'); // Make theme_id nullable
+            $table->boolean('is_favorite')->default(false); 
             $table->timestamps();
-            $table->string("name");
-
+             // Add the unique constraint
         });
         
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('list');
+        Schema::dropIfExists('lists');  // Changed 'list' to 'lists' to match the create method
     }
 };

@@ -3,28 +3,33 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ListController;
+use App\Http\Controllers\ProductlistController;
 use App\Http\Controllers\ShoppinglistController;
 use App\Http\Controllers\UserShoppingListController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
 // Home route
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Authentication required routes
-Route::middleware(['auth'])->group(function () {
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+// products
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBrand'])->name('products.filterByBrand');
 
     // Shopping List routes
     Route::resource('shoppinglist', ShoppinglistController::class);
     Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
 
-    // Note routes
-    Route::post('/shoppinglist/{shoppinglist}/add-note', [NoteController::class, 'store'])->name('shoppinglist.add_note');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+    
+    // Custom route for removing a product from a list
+    Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
+        ->name('lists.products.remove');
+    Route::get('/lists', [ListController::class, 'filter'])->name('lists.index');
+    Route::resource('/productlist', ProductlistController::class);
 
     // User Shopping List Management routes
     Route::get('/users/{userId}/shopping-lists', [UserShoppingListController::class, 'index'])->name('users.shoppinglists.index');
@@ -49,13 +54,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/shoppinglists/{shoppinglist}/invite', [ShoppinglistController::class, 'invite'])->name('shoppinglist.invite');
     
-    Route::resource('shoppinglist', ShoppinglistController::class)->middleware(['auth']);
-
-    Route::get('/mail', [InvitationController::class, 'mail']);
-
     Route::delete('/shoppinglists/{shoppinglist}/users/{user}', [ShoppinglistController::class, 'removeUser'])->name('shoppinglist.removeUser');
 });
 
 // Include authentication routes
 require __DIR__ . '/auth.php';
-

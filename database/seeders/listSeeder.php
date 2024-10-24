@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\ShoppingList;
+
+use App\Models\ListItem;
+use App\Models\Product;
 use App\Models\User;
+use App\Models\Theme;
 
 class ListSeeder extends Seeder
 {
@@ -13,18 +16,50 @@ class ListSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get a user (you might want to create a specific user for this or get a random one)
-        $user = User::first();
+        // Get all users
+        $users = User::inRandomOrder()->limit(3)->get();
 
-        if (!$user) {
-            // If no user exists, create one
-            $user = User::factory()->create();
+        if ($users->isEmpty()) {
+            $this->command->info('No users found. Please run UserSeeder first.');
+            return;
         }
 
-        // Create a shopping list
-        ShoppingList::create([
-            'name' => 'Wekelijkse Boodschappen', // Name of the shopping list
-            'user_id' => $user->id, // Assign the user_id
-        ]);
+        // Get all themes
+        $themes = Theme::all();
+
+        if ($themes->count() < 1) {
+            $this->command->info('Not enough themes found. Please run ThemeSeeder first.');
+            return;
+        }
+
+        // Get some random existing products
+        $products = Product::inRandomOrder()->limit(3)->get();
+
+        if ($products->isEmpty()) {
+            $this->command->info('No products found. Please run ProductSeeder first.');
+            return;
+        }
+
+        // Create 5 ListItems with unique names
+        ListItem::factory()
+            ->count(5)
+            ->create()
+            ->each(function ($listItem) use ($users, $themes, $products) {
+                // Attach users
+                $listItem->users()->attach($users->pluck('id'));
+
+                // Assign a random theme
+                $listItem->theme()->associate($themes->random());
+                $listItem->save();
+
+                // Attach products
+                $productData = $products->mapWithKeys(function ($product) {
+                    return [$product->id => ['quantity' => rand(1, 5)]];
+                })->toArray();
+
+                $listItem->products()->attach($productData);
+            });
+
+        $this->command->info('5 ListItems created with unique names, linked with users, associated with existing products, and assigned random themes successfully.');
     }
 }
