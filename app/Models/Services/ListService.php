@@ -4,10 +4,11 @@ namespace App\Models\Services; // Ensure this is the correct namespace
 
 use App\Models\ListItem; 
 use App\Models\Brand; 
-use App\Models\Category; 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ListFilterService
+class ListService
 {
     /**
      * Filter and sort ListItems based on the request parameters.
@@ -69,6 +70,16 @@ class ListFilterService
         // Fetch the product lists with eager loading
         return $query->with(['products.brand', 'products.category', 'theme'])->get(); // Return the filtered product lists
     }
+
+    public function removeProductFromList(ListItem $list, $productId)
+    {
+        // Detach the specified product
+       $list->products()->detach($productId);
+    
+       // Optionally return a success message or boolean
+       return 'Product detached successfully.';
+    }
+
 
     /**
      * Get all brands for filtering.

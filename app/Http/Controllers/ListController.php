@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Services\ListFilterService;
+use App\Models\Services\ListService;
+
 use App\Models\Product;
 use App\Models\ListItem;
 use App\Models\Brand; 
@@ -11,17 +12,18 @@ use Illuminate\Http\Request;
 
 class ListController extends Controller
 {
-    protected $listFilterService;
+    protected $listService;
 
-    public function __construct(ListFilterService $listFilterService)
+    // Type-hinting ListService in the constructor
+    public function __construct(ListService $listService) 
     {
-        $this->listFilterService = $listFilterService;
+        $this->listService = $listService;
     }
     
     public function index(Request $request)
     {
-        // Use the ListFilterService to filter product lists based on request parameters
-        $productlists = $this->listFilterService->filter($request);
+        // Use the ListService to filter product lists based on request parameters
+        $productlists = $this->listService->filter($request); // Fixed casing
         
         // Get all brands and categories for filtering
         $brands = Brand::all(); // Retrieve all brands
@@ -33,16 +35,14 @@ class ListController extends Controller
         return view('lists.index', compact('productlists', 'groupedProducts', 'brands', 'categories'));
     }
 
-    /**
-     * Detach a product from the list.
-     */
     public function removeProductFromList(ListItem $list, $productId)
     {
-        // Detach the specified product
-        $list->products()->detach($productId);
+        // Call the service method to remove the product
+        $message = $this->listService->removeProductFromList($list, $productId);
 
-        // Redirect back with a success message
-        return redirect()->route('lists.index', [$list->id])
-            ->with('success', 'Product detached successfully.');
-    }
+       // Redirect back with a success message
+       return redirect()->route('lists.index', [$list->id])
+        ->with('success', $message);
+    } 
 }
+
