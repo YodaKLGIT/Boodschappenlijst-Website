@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Note;
-use App\Models\Shoppinglist;
+use App\Models\ListItem;
 use App\Models\User;
 
 class NoteSeeder extends Seeder
 {
     public function run()
     {
-        $shoppinglists = Shoppinglist::all();
+        $shoppinglists = ListItem::all();
         $users = User::all();
 
         foreach ($shoppinglists as $shoppinglist) {
