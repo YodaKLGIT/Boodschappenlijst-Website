@@ -35,7 +35,7 @@ class ListController extends Controller
         return view('lists.index', compact('productlists', 'groupedProducts', 'brands', 'categories'));
     }
 
-    public function removeProductFromList(ListItem $list, $productId)
+    public function removeProductFromList(ListItem $list, Product $productId)
     {
         // Call the service method to remove the product
         $message = $this->listService->removeProductFromList($list, $productId);
