@@ -16,7 +16,7 @@ Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBran
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+    Route::resource('/lists', ListController::class)->except(['create', 'edit']); // If you don't need create/edit pages
     
     // Custom route for removing a product from a list
     Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])

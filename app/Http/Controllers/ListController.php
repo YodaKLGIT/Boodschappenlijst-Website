@@ -44,5 +44,16 @@ class ListController extends Controller
        return redirect()->route('lists.index', [$list->id])
         ->with('success', $message);
     } 
+
+    public function destroy(ListItem $productlist)
+    {
+        // Detach all associated tags
+       $productlist->products()->detach();
+
+       // Delete the news item
+       $productlist->delete();
+
+       return redirect()->route('lists.index');
+    }
 }
 
