@@ -11,7 +11,11 @@ use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
-// Home route
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // products
