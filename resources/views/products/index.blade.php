@@ -11,24 +11,17 @@
                 selectListButton.addEventListener('click', function(event) {
                     event.stopPropagation(); // Prevent click from bubbling up
                     dropdownMenu.classList.toggle('hidden'); // Toggle visibility
-                    console.log('Dropdown toggled'); // Debug log
                 });
-            } else {
-                console.log('Select list button not found'); // Debug log
             }
 
             // Handle list selection
             document.querySelectorAll('.list-option').forEach(button => {
                 button.addEventListener('click', function() {
                     selectedListId = this.getAttribute('data-list-id');
-                    dropdownMenu.classList.add('hidden'); // Hide dropdown after selection
-                    selectListButton.innerText = this.innerText; // Update button text
-                    console.log("Selected List ID:", selectedListId); // Debugging log
+                    dropdownMenu.classList.add('hidden');
+                    selectListButton.innerText = this.innerText;
 
-                    // Update hidden input value
                     document.querySelector('input[name="list_id"]').value = selectedListId;
-
-                    // Store selected list ID in session storage
                     sessionStorage.setItem('selectedListId', selectedListId);
                     sessionStorage.setItem('selectedListName', this.innerText);
                 });
@@ -41,22 +34,12 @@
 
                     if (!selectedListId) {
                         alert('Please select a list first.');
-                        console.log('No list selected'); // Debug log
                         return;
                     }
 
-                    // Update hidden input value
                     document.querySelector('input[name="product_id"]').value = productId;
-
-                    // Submit the form
                     document.querySelector('#add-product-form').submit();
                 });
-            });
-
-            // Close dropdowns when clicking outside
-            window.addEventListener('click', function() {
-                dropdownMenu.classList.add('hidden'); // Hide the dropdown
-                console.log('Dropdown closed'); // Debug log
             });
 
             // Restore selected list from session storage
@@ -65,10 +48,34 @@
                 selectListButton.innerText = sessionStorage.getItem('selectedListName');
             }
 
-            // Show toast notification if product was added
-            @if(session('success'))
-                showToast("{{ session('success') }}");
-            @endif
+            // Toggle dropdown visibility for brand filter
+            const brandButton = document.querySelector('.brand-button');
+            const brandDropdown = document.querySelector('.brand-dropdown');
+
+            if (brandButton) {
+                brandButton.addEventListener('click', function(event) {
+                    event.stopPropagation(); // Prevent click from bubbling up
+                    brandDropdown.classList.toggle('hidden'); // Toggle visibility
+                });
+            }
+
+            // Toggle dropdown visibility for sort filter
+            const sortButton = document.querySelector('.sort-button');
+            const sortDropdown = document.querySelector('.sort-dropdown');
+
+            if (sortButton) {
+                sortButton.addEventListener('click', function(event) {
+                    event.stopPropagation(); // Prevent click from bubbling up
+                    sortDropdown.classList.toggle('hidden'); // Toggle visibility
+                });
+            }
+
+            // Close dropdowns when clicking outside
+            window.addEventListener('click', function() {
+                dropdownMenu.classList.add('hidden'); // Hide the list dropdown
+                brandDropdown.classList.add('hidden'); // Hide the brand dropdown
+                sortDropdown.classList.add('hidden'); // Hide the sort dropdown
+            });
         });
 
         function showToast(message) {
@@ -86,71 +93,157 @@
         }
     </script>
 
-    <div class="text-center p-10">
-        <h1 class="font-bold text-4xl mb-4">Products</h1>
-    </div>
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 h-screen p-6 bg-gray-100 border-r">
+            <h2 class="font-bold text-xl mb-4">Filters</h2>
 
-    <div class="flex justify-center items-center space-x-4 mb-10">
-        <!-- Product List Filter -->
-        <div class="relative">
-            <button class="border rounded-lg p-2 flex items-center select-list-button">
-                Select List
-                <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-            <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10">
-                <ul class="py-1">
-                    @foreach ($lists as $list)
-                        <li>
-                            <button class="list-option block px-4 py-2 hover:bg-gray-200 w-full text-left"
-                                data-list-id="{{ $list->id }}">
-                                {{ $list->name }}
-                            </button>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
+            <!-- Select List Dropdown -->
+            <h3 class="font-semibold text-lg mb-2">Select list</h3>
 
-    <!-- Hidden Form for Adding Product to List -->
-    <form id="add-product-form" action="{{ route('productlist.add') }}" method="POST" style="display: none;">
-        @csrf
-        <input type="hidden" name="list_id" value="">
-        <input type="hidden" name="product_id" value="">
-    </form>
-
-    <!-- Product Cards Section -->
-    <section id="Products" class="w-full mx-auto px-0 mb-5">
-        <div class="container mx-auto py-8 p-0">
-            <div class="flex justify-center">
-                <div class="max-w-screen-xl">
-                    <div class="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @foreach ($products as $product)
-                            <div class="product-card w-64 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl"
-                                data-product-id="{{ $product->id }}">
-                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                    class="h-64 w-full object-cover rounded-t-xl" />
-                                <div class="px-4 py-3">
-                                    <span class="text-gray-400 mr-3 uppercase text-xs">
-                                        {{ $product->brand->name ?? 'Brand' }}
-                                    </span>
-                                    <p class="text-lg font-bold text-black truncate block capitalize">
-                                        {{ $product->name }}
-                                    </p>
-                                    <p class="text-sm text-gray-600 truncate">{{ $product->description }}</p>
-                                    <div class="flex items-center mt-2">
-                                        <p class="text-lg font-semibold text-black cursor-auto my-3">
-                                            {{ $product->price ?? 'N/A' }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="relative mb-4">
+                <button
+                    class="w-full border rounded-lg p-2 flex items-center select-list-button bg-blue-500 text-white hover:bg-blue-600">
+                    Select List
+                    <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10 w-full">
+                    <ul class="py-1">
+                        @foreach ($lists as $list)
+                            <li>
+                                <button
+                                    class="list-option block px-4 py-2 hover:bg-gray-200 w-full text-left text-gray-700"
+                                    data-list-id="{{ $list->id }}">
+                                    {{ $list->name }}
+                                </button>
+                            </li>
                         @endforeach
-                    </div>
+                    </ul>
                 </div>
             </div>
+
+            <!-- Category Filter -->
+            <h3 class="font-semibold text-lg mb-2">Category</h3>
+            <div class="flex flex-col space-y-2 mb-4">
+                @foreach ($categories as $category)
+                    <a href="?category={{ $category->id }}" class="block border p-2 rounded-lg hover:bg-gray-200">
+                        {{ $category->name }}
+                    </a>
+                @endforeach
+            </div>
+
+            <!-- Brand Filter Dropdown -->
+            <h3 class="font-semibold text-lg mb-2">Brand</h3>
+            <div class="relative mb-4">
+                <button
+                    class="w-full border rounded-lg p-2 flex items-center brand-button bg-blue-500 text-white hover:bg-blue-600">
+                    Brand
+                    <span
+                        class="ml-1 text-gray-600">{{ request()->brand ? $brands->find(request()->brand)->name : 'Select a brand' }}</span>
+                    <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10 w-full brand-dropdown">
+                    <ul class="py-1">
+                        <li>
+                            <a href="{{ request()->fullUrlWithQuery(['brand' => null]) }}"
+                                class="block px-4 py-2 hover:bg-gray-200">All Brands</a>
+                        </li>
+                        @foreach ($brands as $brand)
+                            <li>
+                                <a href="{{ request()->fullUrlWithQuery(['brand' => $brand->id]) }}"
+                                    class="block px-4 py-2 hover:bg-gray-200">
+                                    {{ $brand->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sorting Options Dropdown -->
+            <h3 class="font-semibold text-lg mb-2">Sort By</h3>
+            <div class="relative mb-4">
+                <button
+                    class="w-full border rounded-lg p-2 flex items-center sort-button bg-blue-500 text-white hover:bg-blue-600">
+                    Sort
+                    <span
+                        class="ml-1 text-gray-600">{{ request()->sort ? (request()->sort == 'asc' ? 'Name (A-Z)' : 'Name (Z-A)') : 'Select Sorting' }}</span>
+                    <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10 w-full sort-dropdown">
+                    <ul class="py-1">
+                        <li>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'asc']) }}"
+                                class="block px-4 py-2 hover:bg-gray-200">Sort by Asc</a>
+                        </li>
+                        <li>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'desc']) }}"
+                                class="block px-4 py-2 hover:bg-gray-200">Sort by Desc</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Reset Filters Button -->
+            <div class="mt-4">
+                <a href="{{ url()->current() }}"
+                    class="block w-full text-center border rounded-lg p-2 bg-red-500 text-white hover:bg-red-600">
+                    Reset Filters
+                </a>
+            </div>
         </div>
-    </section>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10">
+            <div class="text-center p-10">
+                <h1 class="font-bold text-4xl mb-4">Products</h1>
+            </div>
+
+            <!-- Hidden Form for Adding Product to List -->
+            <form id="add-product-form" action="{{ route('productlist.add') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="list_id" value="">
+                <input type="hidden" name="product_id" value="">
+            </form>
+
+            <!-- Product Cards Section -->
+            <section id="Products" class="w-full mx-auto px-0 mb-5">
+                <div class="container mx-auto py-8 p-0">
+                    <div class="flex justify-center">
+                        <div class="max-w-screen-xl">
+                            <div class="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                @foreach ($products as $product)
+                                    <div class="product-card w-64 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl"
+                                        data-product-id="{{ $product->id }}">
+                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                            class="h-64 w-full object-cover rounded-t-xl" />
+                                        <div class="px-4 py-3">
+                                            <span class="text-gray-400 mr-3 uppercase text-xs">
+                                                {{ $product->brand->name ?? 'Brand' }}
+                                            </span>
+                                            <p class="text-lg font-bold text-black truncate block capitalize">
+                                                {{ $product->name }}
+                                            </p>
+                                            <p class="text-sm text-gray-600 truncate">{{ $product->description }}</p>
+                                            <div class="flex items-center mt-2">
+                                                <p class="text-lg font-semibold text-black cursor-auto my-3">
+                                                    {{ $product->price ?? 'N/A' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </x-app-layout>

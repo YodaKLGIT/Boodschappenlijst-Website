@@ -122,8 +122,8 @@ class ProductlistController extends Controller
      * Add a product to the list.
      */
     public function add(Request $request)
-    {
-        // try {
+{
+    // try {
         // Validate the request data
         $request->validate([
             'list_id' => 'required|exists:lists,id',
@@ -134,6 +134,9 @@ class ProductlistController extends Controller
         $productListEntry = ProductList::where('list_id', $request->list_id)
             ->where('product_id', $request->product_id)
             ->first();
+
+        // Find the product
+        $product = Product::find($request->product_id);
 
         if ($productListEntry) {
             // If the product is already in the list, update the quantity
@@ -150,15 +153,15 @@ class ProductlistController extends Controller
             Log::info('Product added to the list successfully.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
         }
 
-        return redirect()->back()->with('success', 'Product added to the list successfully.');
-        // } catch (\Exception $e) {
-        //     Log::error('Failed to add product to the list.', [
-        //         'error' => $e->getMessage(),
-        //         'trace' => $e->getTraceAsString()
-        //     ]);
-        //     return redirect()->back()->with('error', 'Failed to add product to the list.');
-        // }
-    }
+        return redirect()->back()->with('success', 'Successfully added ' . $product->name . ' to the list.');
+    // } catch (\Exception $e) {
+    //     Log::error('Failed to add product to the list.', [
+    //         'error' => $e->getMessage(),
+    //         'trace' => $e->getTraceAsString()
+    //     ]);
+    //     return redirect()->back()->with('error', 'Failed to add product to the list.');
+    // }
+}
 
 
     /**
