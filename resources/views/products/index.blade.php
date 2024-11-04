@@ -93,17 +93,15 @@
         }
     </script>
 
-    <div class="flex">
+    <div class="flex justify-center p-10">
         <!-- Sidebar -->
-        <div class="w-64 h-screen p-6 bg-gray-100 border-r">
+        <div class="w-64 p-6 bg-white border-r border-gray-200">
             <h2 class="font-bold text-xl mb-4">Filters</h2>
 
             <!-- Select List Dropdown -->
             <h3 class="font-semibold text-lg mb-2">Select list</h3>
-
             <div class="relative mb-4">
-                <button
-                    class="w-full border rounded-lg p-2 flex items-center select-list-button bg-blue-500 text-white hover:bg-blue-600">
+                <button class="w-full border rounded-lg p-2 flex items-center select-list-button bg-blue-500 text-white hover:bg-blue-600">
                     Select List
                     <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -113,8 +111,7 @@
                     <ul class="py-1">
                         @foreach ($lists as $list)
                             <li>
-                                <button
-                                    class="list-option block px-4 py-2 hover:bg-gray-200 w-full text-left text-gray-700"
+                                <button class="list-option block px-4 py-2 hover:bg-gray-200 w-full text-left text-gray-700"
                                     data-list-id="{{ $list->id }}">
                                     {{ $list->name }}
                                 </button>
@@ -137,11 +134,9 @@
             <!-- Brand Filter Dropdown -->
             <h3 class="font-semibold text-lg mb-2">Brand</h3>
             <div class="relative mb-4">
-                <button
-                    class="w-full border rounded-lg p-2 flex items-center brand-button bg-blue-500 text-white hover:bg-blue-600">
+                <button class="w-full border rounded-lg p-2 flex items-center brand-button bg-blue-500 text-white hover:bg-blue-600">
                     Brand
-                    <span
-                        class="ml-1 text-gray-600">{{ request()->brand ? $brands->find(request()->brand)->name : 'Select a brand' }}</span>
+                    <span class="ml-1 text-gray-600">{{ request()->brand ? $brands->find(request()->brand)->name : 'Select a brand' }}</span>
                     <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -149,13 +144,11 @@
                 <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10 w-full brand-dropdown">
                     <ul class="py-1">
                         <li>
-                            <a href="{{ request()->fullUrlWithQuery(['brand' => null]) }}"
-                                class="block px-4 py-2 hover:bg-gray-200">All Brands</a>
+                            <a href="{{ request()->fullUrlWithQuery(['brand' => null]) }}" class="block px-4 py-2 hover:bg-gray-200">All Brands</a>
                         </li>
                         @foreach ($brands as $brand)
                             <li>
-                                <a href="{{ request()->fullUrlWithQuery(['brand' => $brand->id]) }}"
-                                    class="block px-4 py-2 hover:bg-gray-200">
+                                <a href="{{ request()->fullUrlWithQuery(['brand' => $brand->id]) }}" class="block px-4 py-2 hover:bg-gray-200">
                                     {{ $brand->name }}
                                 </a>
                             </li>
@@ -167,11 +160,9 @@
             <!-- Sorting Options Dropdown -->
             <h3 class="font-semibold text-lg mb-2">Sort By</h3>
             <div class="relative mb-4">
-                <button
-                    class="w-full border rounded-lg p-2 flex items-center sort-button bg-blue-500 text-white hover:bg-blue-600">
+                <button class="w-full border rounded-lg p-2 flex items-center sort-button bg-blue-500 text-white hover:bg-blue-600">
                     Sort
-                    <span
-                        class="ml-1 text-gray-600">{{ request()->sort ? (request()->sort == 'asc' ? 'Name (A-Z)' : 'Name (Z-A)') : 'Select Sorting' }}</span>
+                    <span class="ml-1 text-gray-600">{{ request()->sort ? (request()->sort == 'asc' ? 'Name (A-Z)' : 'Name (Z-A)') : 'Select Sorting' }}</span>
                     <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -180,11 +171,11 @@
                     <ul class="py-1">
                         <li>
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'asc']) }}"
-                                class="block px-4 py-2 hover:bg-gray-200">Sort by Asc</a>
+                               class="block px-4 py-2 hover:bg-gray-200">Sort by Asc</a>
                         </li>
                         <li>
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'desc']) }}"
-                                class="block px-4 py-2 hover:bg-gray-200">Sort by Desc</a>
+                               class="block px-4 py-2 hover:bg-gray-200">Sort by Desc</a>
                         </li>
                     </ul>
                 </div>
@@ -192,8 +183,7 @@
 
             <!-- Reset Filters Button -->
             <div class="mt-4">
-                <a href="{{ url()->current() }}"
-                    class="block w-full text-center border rounded-lg p-2 bg-red-500 text-white hover:bg-red-600">
+                <a href="{{ url()->current() }}" class="block w-full text-center border rounded-lg p-2 bg-red-500 text-white hover:bg-red-600">
                     Reset Filters
                 </a>
             </div>
@@ -205,16 +195,9 @@
                 <h1 class="font-bold text-4xl mb-4">Products</h1>
             </div>
 
-            <!-- Hidden Form for Adding Product to List -->
-            <form id="add-product-form" action="{{ route('productlist.add') }}" method="POST" style="display: none;">
-                @csrf
-                <input type="hidden" name="list_id" value="">
-                <input type="hidden" name="product_id" value="">
-            </form>
-
             <!-- Product Cards Section -->
             <section id="Products" class="w-full mx-auto px-0 mb-5">
-                <div class="container mx-auto py-8 p-0">
+                <div class="container mx-auto py-8 p-0 -ml-10">
                     <div class="flex justify-center">
                         <div class="max-w-screen-xl">
                             <div class="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -246,4 +229,11 @@
             </section>
         </div>
     </div>
+
+    <!-- Hidden Form for Adding Product to List -->
+    <form id="add-product-form" action="{{ route('productlist.add') }}" method="POST" style="display: none;">
+        @csrf
+        <input type="hidden" name="list_id" value="">
+        <input type="hidden" name="product_id" value="">
+    </form>
 </x-app-layout>
