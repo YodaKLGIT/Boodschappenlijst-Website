@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
+
 class ListService
 {
     /**
@@ -79,6 +81,43 @@ class ListService
        // Optionally return a success message or boolean
        return 'Product detached successfully.';
     }
+
+    public function editName(ListItem $list_id)
+    {
+        return ListItem::find($list_id);
+    }
+
+    public function updateName(ListItem $listItem, Request $request)
+{
+    // Validate the incoming request
+    $request->validate([
+        'name' => 'required|string|max:255', // Validate the name
+        'theme_id' => 'nullable|exists:themes,id', // Validate theme_id, if provided
+    ]);
+
+    // Update the name
+    $listItem->name = $request->name;
+
+    // If a theme_id is provided, update it; otherwise, retain the existing value
+    if ($request->has('theme_id')) {
+        $listItem->theme_id = $request->theme_id;
+    }
+
+    if ($listItem->save()) {
+        Log::info('ListItem updated successfully', [
+            'id' => $listItem->id, 
+            'name' => $listItem->name, 
+            'theme_id' => $listItem->theme_id // Log the theme_id for debugging
+        ]);
+    } else {
+        Log::error('Failed to update ListItem', ['id' => $listItem->id]);
+    }
+
+    return true; // Indicate success
+}
+
+
+
 
 
     /**

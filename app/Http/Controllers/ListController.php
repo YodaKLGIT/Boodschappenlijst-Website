@@ -45,6 +45,22 @@ class ListController extends Controller
         ->with('success', $message);
     } 
 
+    public function edit(ListItem $listItem)
+    {
+        // Use the service to get the ListItem for editing
+        return view('lists.edit', compact('listItem'));
+    }
+    
+    public function update(Request $request, ListItem $listItem)
+    {
+        // Use the service to update the name
+        if ($this->listService->updateName($listItem, $request)) {
+            return response()->json(['success' => true, 'message' => 'List name updated successfully']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Failed to update list name'], 500);
+    }
+
     public function destroy(ListItem $productlist)
     {
         // Detach all associated tags
