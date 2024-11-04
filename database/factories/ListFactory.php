@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ListItem;
+use App\Models\Theme;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ListFactory extends Factory
@@ -24,7 +25,7 @@ class ListFactory extends Factory
         return [
             'name' => $this->faker->unique()->words(3, true),
             'is_favorite' => $this->faker->boolean(30),
-            'theme_id' => null, // You can set a random theme_id if needed
+            'theme_id' => Theme::all()->random()->id,
         ];
     }
 }

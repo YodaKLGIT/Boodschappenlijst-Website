@@ -48,10 +48,6 @@ class ListSeeder extends Seeder
                 // Attach users
                 $listItem->users()->attach($users->pluck('id'));
 
-                // Assign a random theme
-                $listItem->theme()->associate($themes->random());
-                $listItem->save();
-
                 // Attach products
                 $productData = $products->mapWithKeys(function ($product) {
                     return [$product->id => ['quantity' => rand(1, 5)]];
