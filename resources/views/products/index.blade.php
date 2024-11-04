@@ -190,14 +190,12 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 p-10">
-            <div class="text-center p-10">
-                <h1 class="font-bold text-4xl mb-4">Products</h1>
-            </div>
+        <div class="flex-1 p-10 pt-0">
+            <h1 class="font-bold text-4xl mb-4 text-center">Products</h1>
 
             <!-- Product Cards Section -->
             <section id="Products" class="w-full mx-auto px-0 mb-5">
-                <div class="container mx-auto py-8 p-0 -ml-10">
+                <div class="container mx-auto py-0 p-0">
                     <div class="flex justify-center">
                         <div class="max-w-screen-xl">
                             <div class="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
