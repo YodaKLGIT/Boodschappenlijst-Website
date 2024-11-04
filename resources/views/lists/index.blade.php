@@ -131,12 +131,25 @@
                                         <div class="p-3 flex flex-col cursor-pointer" 
                                              onclick="toggleProducts(event, '{{ $productlist->id }}')"
                                              style="background-color: {{ $productlist->theme->strap_color }};">
+                                            
+
                                             <div class="flex items-center justify-between">
-                                                <!-- Greyed-Out Star Before Name -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="lightgray" viewBox="0 0 24 24" class="w-4 h-4 mr-1">
+                                                <!-- Gold Star or Greyed-Out Star Before Name -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $productlist->is_favorite ? 'gold' : 'lightgray' }}" 
+                                                     viewBox="0 0 24 24" class="w-4 h-4 mr-1"
+                                                     onclick="event.stopPropagation()">
                                                     <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
                                                 </svg>
-                                                <h3 class="text-lg font-semibold text-white truncate pr-2">{{ $productlist->name }}</h3>
+                                                <input type="hidden" id="theme-id-{{ $productlist->id }}" value="{{ $productlist->theme_id }}">
+                                                <h3 id="product-name-{{ $productlist->id }}" class="text-lg font-semibold text-white truncate pr-2" 
+                                                    onclick="startEditing('{{ $productlist->id }}'); event.stopPropagation();" 
+                                                    onblur="stopEditing('{{ $productlist->id }}')" 
+                                                    onkeydown="handleKey(event, '{{ $productlist->id }}')"
+                                                    contenteditable="false">
+                                                    {{ $productlist->name }}
+                                                </h3>
+                                                
+                                                
                                                 <span class="text-white text-sm font-bold px-3 py-1 rounded-full" 
                                                       style="background-color: {{ $productlist->theme->count_circle_color }};">
                                                     {{ $productlist->products->count() }}
