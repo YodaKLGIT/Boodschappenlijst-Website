@@ -44,7 +44,7 @@ class ListSeeder extends Seeder
         ListItem::factory()
             ->count(5)
             ->create()
-            ->each(function ($listItem) use ($users, $themes, $products) {
+            ->each(function ($listItem) use ($users, $products) {
                 // Attach users
                 $listItem->users()->attach($users->pluck('id'));
 

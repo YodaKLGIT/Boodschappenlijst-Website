@@ -95,9 +95,10 @@ class ProductlistController extends Controller
      */
     public function show(Productlist $productlist)
     {
-        $products = $productlist->products()->with(['brand', 'category'])->get();
+        // Eager load the products along with their brand and category, and the theme for the product list
+        $productlist->load(['products.brand', 'products.category', 'theme']);
 
-        return view('productlist.show', compact('productlist', 'products'));
+        return view('productlist.show', compact('productlist'));
     }
 
     /**

@@ -140,14 +140,22 @@
                                                      onclick="event.stopPropagation()">
                                                     <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
                                                 </svg>
-                                                <input type="hidden" id="theme-id-{{ $productlist->id }}" value="{{ $productlist->theme_id }}">
-                                                <h3 id="product-name-{{ $productlist->id }}" class="text-lg font-semibold text-white truncate pr-2" 
-                                                    onclick="startEditing('{{ $productlist->id }}'); event.stopPropagation();" 
-                                                    onblur="stopEditing('{{ $productlist->id }}')" 
-                                                    onkeydown="handleKey(event, '{{ $productlist->id }}')"
-                                                    contenteditable="false">
-                                                    {{ $productlist->name }}
-                                                </h3>
+                                                
+                                                <a href="{{ route('productlist.show', [$productlist->id]) }}" 
+                                                    id="product-link-{{ $productlist->id }}" 
+                                                    class="text-lg font-semibold text-white truncate pr-2"
+                                                    onclick="event.stopPropagation();">
+                                                     <h3 class="text-lg font-semibold text-white truncate">
+                                                         {{ $productlist->name }}
+                                                     </h3>
+                                                 </a>
+                                                 
+
+                                                 
+                                                 
+                                                 
+                                                
+                                                 
                                                 
                                                 
                                                 <span class="text-white text-sm font-bold px-3 py-1 rounded-full" 

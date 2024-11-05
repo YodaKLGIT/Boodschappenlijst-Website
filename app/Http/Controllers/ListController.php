@@ -47,8 +47,10 @@ class ListController extends Controller
 
     public function edit(ListItem $listItem)
     {
-        // Use the service to get the ListItem for editing
-        return view('lists.edit', compact('listItem'));
+        if ($this->listService->editName($listItem)) {
+            return response()->json(['success' => true, 'message' => 'List name updated successfully']);
+        }
+      
     }
     
     public function update(Request $request, ListItem $listItem)

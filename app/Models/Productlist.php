@@ -18,4 +18,10 @@ class Productlist extends Model
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
                     ->withPivot('quantity');
     }   
+
+    // Add the theme relationship
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
 }
