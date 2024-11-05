@@ -82,13 +82,9 @@ class ListService
        return 'Product detached successfully.';
     }
 
-    public function editName(ListItem $list_id)
-    {
-        return ListItem::find($list_id);
-    }
 
-    public function updateName(ListItem $listItem, Request $request)
-{
+    public function updateName(Request $request, ListItem $listItem, )
+    {
     // Validate the incoming request
     $request->validate([
         'name' => 'required|string|max:255', // Validate the name
@@ -114,11 +110,11 @@ class ListService
     }
 
     return true; // Indicate success
-}
+    }
 
     
     public function toggleFavorite(Request $request, ListItem $listItem)
-{
+    {
     // Validate the incoming request
     $request->validate([
         'is_favorite' => 'required|boolean',
@@ -135,7 +131,7 @@ class ListService
             'is_favorite' => $listItem->is_favorite,
         ]);
     }
-}
+    }
 
 
 

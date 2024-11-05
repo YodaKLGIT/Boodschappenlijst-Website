@@ -46,23 +46,22 @@ class ListController extends Controller
         ->with('success', $message);
     } 
 
-    public function edit(ListItem $listItem)
+    public function updateName(Request $request, ListItem $listItem)
     {
-        if ($this->listService->editName($listItem)) {
-            return response()->json(['success' => true, 'message' => 'List name updated successfully']);
+        if($this->listService->updateName($request, $listItem ))
+        {
+            return redirect()->back()->with('success', 'Favorite status updated successfully.');
         }
-      
+        else 
+        {
+            return redirect()->back()->withErrors(['message' => 'Failed to update favorite status.']);
+        }
     }
-    
-    public function update(Request $request, ListItem $listItem)
-    {
-        // Use the service to update the name
-        if ($this->listService->updateName($listItem, $request)) {
-            return response()->json(['success' => true, 'message' => 'List name updated successfully']);
-        }
 
-        return response()->json(['success' => false, 'message' => 'Failed to update list name'], 500);
-    }
+
+   
+    
+    
     
 
     public function toggleFavorite(Request $request, ListItem $listItem)
