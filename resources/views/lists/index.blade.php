@@ -76,7 +76,16 @@
                                                         </svg>
                                                     </button>
                                                 </form>
-                                                <h3 class="text-lg font-semibold text-white truncate pr-2">{{ $productlist->name }}</h3>
+                                                
+                                                <a href="{{ route('productlist.show', [$productlist->id]) }}" 
+                                                    id="product-link-{{ $productlist->id }}" 
+                                                    class="text-lg font-semibold text-white truncate pr-2"
+                                                    onclick="event.stopPropagation();">
+                                                     <h3 class="text-lg font-semibold text-white truncate">
+                                                         {{ $productlist->name }}
+                                                     </h3>
+                                                 </a>
+
                                                 <span class="text-white text-sm font-bold px-3 py-1 rounded-full" 
                                                       style="background-color: {{ $productlist->theme->count_circle_color }};">
                                                     {{ $productlist->products->count() }}
