@@ -26,12 +26,12 @@
             <h2 class="text-3xl font-bold mb-8">Categories</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Shop All Option -->
-                <a href="{{ route('products.index') }}" class="block p-6 bg-white rounded-lg shadow hover:bg-gray-100">
+                <a href="{{ route('products.index') }}" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                     <h3 class="text-xl font-semibold mb-2">Shop All</h3>
                     <p class="text-gray-600">Browse all products</p>
                 </a>
                 @foreach ($categories as $category)
-                    <a href="{{ route('products.index', ['category' => $category->id]) }}" class="block p-6 bg-white rounded-lg shadow hover:bg-gray-100">
+                    <a href="{{ route('products.index', ['category' => $category->id]) }}" class="block p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                         <h3 class="text-xl font-semibold mb-2">{{ $category->name }}</h3>
                         <p class="text-gray-600">{{ $category->description }}</p>
                     </a>
