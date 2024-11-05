@@ -13,8 +13,9 @@
                 <li>
                     <a href="/products" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">Products</a>
                 </li>
-                <li>
+                <li class="relative">
                     <a href="/lists" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">Lists</a>
+                    <span id="notification-icon" class="hidden absolute top-0 right-0 inline-block w-2.5 h-2.5 bg-red-500 rounded-full"></span>
                 </li>
             </ul>
         </div>
@@ -77,3 +78,12 @@
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Show notification icon if a product was added
+        if (sessionStorage.getItem('productAdded') === 'true') {
+            document.getElementById('notification-icon').classList.remove('hidden');
+        }
+    });
+</script>
