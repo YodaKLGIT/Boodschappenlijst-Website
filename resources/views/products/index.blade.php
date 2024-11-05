@@ -38,6 +38,7 @@
                     }
 
                     document.querySelector('input[name="product_id"]').value = productId;
+                    sessionStorage.setItem('productAdded', 'true');
                     document.querySelector('#add-product-form').submit();
                 });
             });
@@ -46,6 +47,12 @@
             if (selectedListId) {
                 document.querySelector('input[name="list_id"]').value = selectedListId;
                 selectListButton.innerText = sessionStorage.getItem('selectedListName');
+            }
+
+            // Show toast notification if a product was added
+            if (sessionStorage.getItem('productAdded') === 'true') {
+                showToast('Product added to the list successfully!');
+                sessionStorage.removeItem('productAdded');
             }
 
             // Toggle dropdown visibility for brand filter
