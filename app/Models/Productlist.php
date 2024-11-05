@@ -23,10 +23,15 @@ class Productlist extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
-            ->withPivot('quantity')
-            ->withTimestamps();
-    }
+                    ->withPivot('quantity');
+    }   
 
+    // Add the theme relationship
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
+    
     public function scopeAccessibleBy($query, $user)
     {
         return $query->where('user_id', $user->id)
@@ -36,7 +41,7 @@ class Productlist extends Model
     }
 
     public function notes()
-{
-    return $this->hasMany(Note::class, 'list_id');
-}
+    {
+       return $this->hasMany(Note::class, 'list_id');
+    }
 }

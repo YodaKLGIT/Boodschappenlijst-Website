@@ -27,12 +27,12 @@ Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBran
     Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+    Route::resource('/lists', ListController::class)->except(['create, destroy']); // If you don't need create/edit pages
     
     // Custom route for removing a product from a list
     Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
-    Route::get('/lists', [ListController::class, 'filter'])->name('lists.index');
+    
     Route::resource('/productlist', ProductlistController::class);
 
     // User Shopping List Management routes
