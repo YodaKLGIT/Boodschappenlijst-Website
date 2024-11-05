@@ -9,6 +9,7 @@ use App\Models\ListItem;
 use App\Models\Brand; 
 use App\Models\Category; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ListController extends Controller
 {
@@ -62,6 +63,22 @@ class ListController extends Controller
 
         return response()->json(['success' => false, 'message' => 'Failed to update list name'], 500);
     }
+    
+
+    public function toggleFavorite(Request $request, ListItem $listItem)
+    {
+
+        if($this->listService->toggleFavorite($request, $listItem ))
+        {
+            return redirect()->back()->with('success', 'Favorite status updated successfully.');
+        }
+        else 
+        {
+            return redirect()->back()->withErrors(['message' => 'Failed to update favorite status.']);
+        }
+    }
+
+
 
     public function destroy(ListItem $productlist)
     {

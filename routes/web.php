@@ -21,6 +21,8 @@ Route::middleware(['auth'])->group(function () {
     // Custom route for removing a product from a list
     Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
+
+    Route::post('/lists/{listItem}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
     
     Route::resource('/productlist', ProductlistController::class);
 });

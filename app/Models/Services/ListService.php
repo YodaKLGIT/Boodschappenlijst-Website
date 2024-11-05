@@ -116,6 +116,27 @@ class ListService
     return true; // Indicate success
 }
 
+    
+    public function toggleFavorite(Request $request, ListItem $listItem)
+{
+    // Validate the incoming request
+    $request->validate([
+        'is_favorite' => 'required|boolean',
+    ]);
+
+    // Update the is_favorite status
+    $listItem->is_favorite = $request->is_favorite;
+
+    // Save the ListItem
+    if ($listItem->save()) {
+        // Log the action (optional)
+        Log::info('ListItem favorite status updated', [
+            'id' => $listItem->id,
+            'is_favorite' => $listItem->is_favorite,
+        ]);
+    }
+}
+
 
 
 
