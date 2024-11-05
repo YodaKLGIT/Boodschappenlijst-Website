@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('lists.products.remove');
 
     Route::post('/lists/{listItem}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
+    Route::post('/lists/{listItem}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
     
     Route::resource('/productlist', ProductlistController::class);
 });
