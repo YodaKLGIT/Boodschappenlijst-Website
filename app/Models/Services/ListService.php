@@ -73,22 +73,18 @@ class ListService
         return $query->with(['products.brand', 'products.category', 'theme'])->get(); // Return the filtered product lists
     }
 
-    public function removeProductFromList(ListItem $list, $productId)
+    public function removeProductFromList(ListItem $list, Product $product)
     {
         // Detach the specified product
-       $list->products()->detach($productId);
+       $list->products()->detach($product);
     
        // Optionally return a success message or boolean
        return 'Product detached successfully.';
     }
 
-    public function editName(ListItem $list_id)
-    {
-        return ListItem::find($list_id);
-    }
 
-    public function updateName(ListItem $listItem, Request $request)
-{
+    public function updateName(Request $request, ListItem $listItem, )
+    {
     // Validate the incoming request
     $request->validate([
         'name' => 'required|string|max:255', // Validate the name
@@ -114,7 +110,28 @@ class ListService
     }
 
     return true; // Indicate success
-}
+    }
+
+    
+    public function toggleFavorite(Request $request, ListItem $listItem)
+    {
+    // Validate the incoming request
+    $request->validate([
+        'is_favorite' => 'required|boolean',
+    ]);
+
+    // Update the is_favorite status
+    $listItem->is_favorite = $request->is_favorite;
+
+    // Save the ListItem
+    if ($listItem->save()) {
+        // Log the action (optional)
+        Log::info('ListItem favorite status updated', [
+            'id' => $listItem->id,
+            'is_favorite' => $listItem->is_favorite,
+        ]);
+    }
+    }
 
 
 

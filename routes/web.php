@@ -27,11 +27,14 @@ Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBran
     Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('/lists', ListController::class)->except(['create, destroy']); // If you don't need create/edit pages
-    
+    Route::resource('/lists', ListController::class); 
     // Custom route for removing a product from a list
     Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
+    // Custom route to toggle lists from favorite to unfavored, etc. 
+    Route::post('/lists/{listItem}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
+    // Custom route to update the name of the list
+    Route::post('/lists/{listItem}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
     
     Route::resource('/productlist', ProductlistController::class);
 
