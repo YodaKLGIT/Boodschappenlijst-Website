@@ -35,7 +35,6 @@ class ListItem extends Model
         return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
     }
 
-     // Add the theme relationship
     public function theme()
     {
         return $this->belongsTo(Theme::class);
