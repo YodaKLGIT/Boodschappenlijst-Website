@@ -59,6 +59,16 @@
                         </details>
                     </div>
 
+                    {{-- Users Dropdown --}}
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Share with Users</label>
+                        <select name="user_ids[]" multiple class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     {{-- Buttons --}}
                     <div class="flex justify-between mt-4">
                         <a href="{{ route('productlist.index') }}" 

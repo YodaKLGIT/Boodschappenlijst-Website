@@ -10,7 +10,7 @@ class ListItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'theme_id', 'is_favorite' ];
+    protected $fillable = ['name', 'theme_id', 'is_favorite'];
 
     protected $table = 'lists';
 
