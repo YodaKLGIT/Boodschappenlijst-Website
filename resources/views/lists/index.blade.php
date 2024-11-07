@@ -12,8 +12,8 @@
     <div class="container mx-auto px-4 py-8 mb-16">
         @if($productlists->isEmpty())
             <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
-                <p class="text-gray-600 mb-4">No product lists available.</p>
-                <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
+                <p class="text-gray-600 mb-4">No lists available.</p>
+                <a href="{{ route('list.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
                     <span class="text-sm">Create a new list</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -77,7 +77,7 @@
                                                     </button>
                                                 </form>
                                                 
-                                                <a href="{{ route('productlist.show', [$productlist->id]) }}" 
+                                                <a href="{{ route('lists.show', [$productlist->id]) }}" 
                                                     id="product-link-{{ $productlist->id }}" 
                                                     class="text-lg font-semibold text-white truncate pr-2"
                                                     onclick="event.stopPropagation();">
@@ -165,7 +165,7 @@
                                                 </form>
                                                 
                                                 
-                                                <a href="{{ route('productlist.show', [$productlist->id]) }}" 
+                                                <a href="{{ route('lists.show', [$productlist->id]) }}" 
                                                     id="product-link-{{ $productlist->id }}" 
                                                     class="text-lg font-semibold text-white truncate pr-2"
                                                     onclick="event.stopPropagation();">
@@ -173,17 +173,7 @@
                                                          {{ $productlist->name }}
                                                      </h3>
                                                  </a>
-
-                                             
-                                                 
-
-                                                 
-                                                 
-                                                 
-                                                
-                                                 
-                                                
-                                                
+                     
                                                 <span class="text-white text-sm font-bold px-3 py-1 rounded-full" 
                                                       style="background-color: {{ $productlist->theme->count_circle_color }};">
                                                     {{ $productlist->products->count() }}
