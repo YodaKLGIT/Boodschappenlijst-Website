@@ -106,7 +106,7 @@ class ListController extends Controller
        
         $productlist->load(['products.brand', 'products.category', 'theme']);
 
-        return view('productlist.show', compact('productlist')); 
+        return view('lists.show', compact('productlist')); 
         
     }
 
