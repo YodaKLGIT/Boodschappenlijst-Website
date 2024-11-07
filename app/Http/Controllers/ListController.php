@@ -53,8 +53,7 @@ class ListController extends Controller
         $message = $this->listService->removeProductFromList($list, $product);
 
        // Redirect back with a success message
-       return redirect()->route('lists.index', [$list->id])
-        ->with('success', $message);
+       return redirect()->back()->with('success', $message);
     } 
 
     public function updateName(Request $request, ListItem $list)
@@ -68,6 +67,19 @@ class ListController extends Controller
             return redirect()->back()->withErrors(['message' => 'Failed to update favorite status.']);
         }
     }
+
+    public function updateQuantity(Request $request, ListItem $listItem, Product $product)
+    {
+        if($this->listService->updateQuantity($request, $listItem, $product))
+        {
+            return redirect()->back()->with('success', 'Favorite status updated successfully.');
+        }
+        else 
+        {
+            return redirect()->back()->withErrors(['message' => 'Failed to update favorite status.']);
+        }
+    }
+    
 
 
     public function toggleFavorite(Request $request, ListItem $list)
@@ -83,4 +95,3 @@ class ListController extends Controller
         }
     } 
 }
-
