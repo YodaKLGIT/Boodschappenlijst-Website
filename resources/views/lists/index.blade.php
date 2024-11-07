@@ -77,7 +77,7 @@
                                                     </button>
                                                 </form>
                                                 
-                                                <a href="{{ route('productlist.show', [$productlist->id]) }}" 
+                                                <a href="{{ route('lists.show', [$productlist->id]) }}" 
                                                     id="product-link-{{ $productlist->id }}" 
                                                     class="text-lg font-semibold text-white truncate pr-2"
                                                     onclick="event.stopPropagation();">

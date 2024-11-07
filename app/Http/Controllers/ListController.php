@@ -36,6 +36,17 @@ class ListController extends Controller
         return view('lists.index', compact('productlists', 'groupedProducts', 'brands', 'categories'));
     }
 
+
+    public function show(ListItem $productlist)
+    {
+        // Eager load the products along with their brand and category, and the theme for the product list
+        $productlist->load(['products.brand', 'products.category', 'theme']);
+
+        return view('lists.show', compact('productlist'));
+    }
+
+
+
     public function removeProductFromList(ListItem $list, Product $product)
     {
         // Call the service method to remove the product
@@ -46,9 +57,9 @@ class ListController extends Controller
         ->with('success', $message);
     } 
 
-    public function updateName(Request $request, ListItem $listItem)
+    public function updateName(Request $request, ListItem $list)
     {
-        if($this->listService->updateName($request, $listItem ))
+        if($this->listService->updateName($request, $list))
         {
             return redirect()->back()->with('success', 'Favorite status updated successfully.');
         }
@@ -59,10 +70,10 @@ class ListController extends Controller
     }
 
 
-    public function toggleFavorite(Request $request, ListItem $listItem)
+    public function toggleFavorite(Request $request, ListItem $list)
     {
 
-        if($this->listService->toggleFavorite($request, $listItem ))
+        if($this->listService->toggleFavorite($request, $list))
         {
             return redirect()->back()->with('success', 'Favorite status updated successfully.');
         }
