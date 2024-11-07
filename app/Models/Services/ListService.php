@@ -73,10 +73,10 @@ class ListService
         return $query->with(['products.brand', 'products.category', 'theme'])->get(); // Return the filtered product lists
     }
 
-    public function removeProductFromList(ListItem $list, $productId)
+    public function removeProductFromList(ListItem $list, Product $product)
     {
         // Detach the specified product
-       $list->products()->detach($productId);
+       $list->products()->detach($product);
     
        // Optionally return a success message or boolean
        return 'Product detached successfully.';

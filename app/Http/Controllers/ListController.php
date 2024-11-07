@@ -183,10 +183,10 @@ class ListController extends Controller
     }
 
     /*  Additional functions */ 
-    public function removeProductFromList(ListItem $list, Product $productId)
+    public function removeProductFromList(ListItem $list, Product $product)
     {
         // Call the service method to remove the product
-        $message = $this->listService->removeProductFromList($list, $productId);
+        $message = $this->listService->removeProductFromList($list, $product);
 
        // Redirect back with a success message
        return redirect()->route('lists.index', [$list->id])
