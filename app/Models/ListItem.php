@@ -12,7 +12,7 @@ class ListItem extends Model
 
     protected $fillable = ['name', 'theme_id', 'is_favorite' ];
 
-    protected $table = 'lists';  // Consider renaming the model to 'List' if this is correct
+    protected $table = 'lists';
 
     protected static function newFactory()
     {
@@ -36,8 +36,8 @@ class ListItem extends Model
     }
 
      // Add the theme relationship
-     public function theme()
-     {
-         return $this->belongsTo(Theme::class);
-     }
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
 }
