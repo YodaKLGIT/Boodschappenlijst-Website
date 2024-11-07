@@ -102,9 +102,12 @@ class ListController extends Controller
     public function show(ListItem $productlist)
     {
         // Eager load the products along with their brand and category, and the theme for the product list
+        
+       
         $productlist->load(['products.brand', 'products.category', 'theme']);
 
-        return view('lists.show', compact('productlist'));
+        return view('productlist.show', compact('productlist')); 
+        
     }
 
     /**
