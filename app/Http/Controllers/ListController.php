@@ -36,10 +36,10 @@ class ListController extends Controller
         return view('lists.index', compact('productlists', 'groupedProducts', 'brands', 'categories'));
     }
 
-    public function removeProductFromList(ListItem $list, Product $productId)
+    public function removeProductFromList(ListItem $list, Product $product)
     {
         // Call the service method to remove the product
-        $message = $this->listService->removeProductFromList($list, $productId);
+        $message = $this->listService->removeProductFromList($list, $product);
 
        // Redirect back with a success message
        return redirect()->route('lists.index', [$list->id])
@@ -59,11 +59,6 @@ class ListController extends Controller
     }
 
 
-   
-    
-    
-    
-
     public function toggleFavorite(Request $request, ListItem $listItem)
     {
 
@@ -75,19 +70,6 @@ class ListController extends Controller
         {
             return redirect()->back()->withErrors(['message' => 'Failed to update favorite status.']);
         }
-    }
-
-
-
-    public function destroy(ListItem $productlist)
-    {
-        // Detach all associated tags
-       $productlist->products()->detach();
-
-       // Delete the news item
-       $productlist->delete();
-
-       return redirect()->route('lists.index');
-    }
+    } 
 }
 
