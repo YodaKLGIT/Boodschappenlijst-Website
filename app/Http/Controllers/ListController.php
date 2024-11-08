@@ -40,15 +40,18 @@ class ListController extends Controller
         return view('lists.index', compact('lists', 'groupedProducts', 'brands', 'categories'));
     }
 
-    public function removeProductFromList(ListItem $list, $productId)
+
+
+
+    public function removeProductFromList(ListItem $list, Product $product)
     {
-        // Detach the specified product
-        $list->products()->detach($productId);
+        // Call the service method to remove the product
+        $message = $this->listService->removeProductFromList($list, $product);
 
         // Redirect back with a success message
-        return redirect()->route('lists.index', [$list->id])
-            ->with('success', 'Product detached successfully.');
-    }
+        return redirect()->back()->with('success', $message);
+    } 
+
 
     public function updateName(Request $request, ListItem $list)
     {
@@ -85,3 +88,6 @@ class ListController extends Controller
         }
     } 
 }
+
+
+

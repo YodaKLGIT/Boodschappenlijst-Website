@@ -11,7 +11,10 @@ class NoteSeeder extends Seeder
 {
     public function run()
     {
+
         $productlists = ListItem::all();
+
+
         $users = User::all();
 
         foreach ($productlists as $productlist) {

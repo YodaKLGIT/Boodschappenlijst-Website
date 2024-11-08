@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('lists', function (Blueprint $table) {
             $table->id();
             $table->string("name")->unique(); 
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Add this line
             $table->foreignId('theme_id')->nullable()->constrained()->onDelete('cascade'); // Make theme_id nullable
             $table->boolean('is_favorite')->default(false); 
             $table->timestamps();
@@ -28,4 +27,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('lists');
     }
+
 };
+
+

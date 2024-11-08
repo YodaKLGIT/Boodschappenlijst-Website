@@ -13,11 +13,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
    class Productlist extends Model
    {
        use HasFactory;
-       // ...
+       
     protected $fillable = ['name', 'theme_id', 'is_favorite', 'user_id'];
 
     protected $table = 'lists';  // This should match the lists table
-
 
     public function notes()
     {
@@ -48,13 +47,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     public function sharedUsers()
 {
     return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
-}
-
-public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
+}        
+     
     public function scopeAccessibleBy($query, $user)
     {
         return $query->where('user_id', $user->id)
@@ -62,4 +56,6 @@ public function user(): BelongsTo
                          $query->where('users.id', $user->id);
                      });
     }
+    
+
 }
