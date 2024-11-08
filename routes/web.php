@@ -16,11 +16,14 @@ Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBran
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('/lists', ListController::class)->except(['create, destroy']); // If you don't need create/edit pages
+    Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+
     
     // Custom route for removing a product from a list
     Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
+    // Custom route for viewing favorite lists
+    Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
 
     Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
     Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');

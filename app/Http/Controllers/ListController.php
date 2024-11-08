@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Services\ListService;
+use Illuminate\Support\Facades\Auth; // Add this line
 
 use App\Models\Product;
 use App\Models\ListItem;
 use App\Models\Brand; 
 use App\Models\Category; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ListController extends Controller
 {
@@ -24,7 +24,11 @@ class ListController extends Controller
     public function index(Request $request)
     {
         // Use the ListService to filter product lists based on request parameters
-        $productlists = $this->listService->filter($request); // Fixed casing
+        $lists = $this->listService->filter($request); // Fixed casing
+
+        if (!$request->routeIs('lists.favorites')) {
+            $lists = $lists->where('is_favorite', false); // Exclude favorites on normal index
+        }
         
         // Get all brands and categories for filtering
         $brands = Brand::all(); // Retrieve all brands
@@ -33,27 +37,16 @@ class ListController extends Controller
         // Group products by category
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
 
-        return view('lists.index', compact('productlists', 'groupedProducts', 'brands', 'categories'));
+        return view('lists.index', compact('lists', 'groupedProducts', 'brands', 'categories'));
     }
-
-
-    public function show(ListItem $productlist)
-    {
-        // Eager load the products along with their brand and category, and the theme for the product list
-        $productlist->load(['products.brand', 'products.category', 'theme']);
-
-        return view('lists.show', compact('productlist'));
-    }
-
-
 
     public function removeProductFromList(ListItem $list, Product $product)
     {
         // Call the service method to remove the product
         $message = $this->listService->removeProductFromList($list, $product);
 
-       // Redirect back with a success message
-       return redirect()->back()->with('success', $message);
+        // Redirect back with a success message
+        return redirect()->back()->with('success', $message);
     } 
 
     public function updateName(Request $request, ListItem $list)
@@ -68,23 +61,19 @@ class ListController extends Controller
         }
     }
 
-    public function updateQuantity(Request $request, ListItem $listItem, Product $product)
+    public function ShowFavorites(Request $request)
     {
-        if($this->listService->updateQuantity($request, $listItem, $product))
-        {
-            return redirect()->back()->with('success', 'Favorite status updated successfully.');
-        }
-        else 
-        {
-            return redirect()->back()->withErrors(['message' => 'Failed to update favorite status.']);
-        }
-    }
-    
+        $user = Auth::user();  
 
+        // Fetch only favorite lists
+        $lists = ListItem::where('is_favorite', true)->get();
+
+        // Return the view with the filtered lists
+        return view('lists.index', compact('lists'));
+    }
 
     public function toggleFavorite(Request $request, ListItem $list)
     {
-
         if($this->listService->toggleFavorite($request, $list))
         {
             return redirect()->back()->with('success', 'Favorite status updated successfully.');
