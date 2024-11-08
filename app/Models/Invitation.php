@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Shoppinglist;
+use App\Models\Productlist;
+
 
 
 class Invitation extends Model
@@ -15,7 +16,7 @@ class Invitation extends Model
 
     public function shoppinglist()
     {
-        return $this->belongsTo(Shoppinglist::class, 'shoppinglist_id');
+        return $this->belongsTo(Productlist::class, 'shoppinglist_id');
     }
 
     public function sender()

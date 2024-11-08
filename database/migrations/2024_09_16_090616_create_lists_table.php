@@ -17,9 +17,7 @@ return new class extends Migration
             $table->foreignId('theme_id')->nullable()->constrained()->onDelete('cascade'); // Make theme_id nullable
             $table->boolean('is_favorite')->default(false); 
             $table->timestamps();
-             // Add the unique constraint
         });
-        
     }
 
     /**
@@ -27,8 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lists');  // Changed 'list' to 'lists' to match the create method
+        Schema::dropIfExists('lists');
     }
+
 };
 
 

@@ -1,42 +1,40 @@
 <x-app-layout>
 
-  <!-- Product Lists Header Section -->
-<div class="bg-gray-100 py-3">
-    <div class="container mx-auto px-6">
-        <div class="text-center">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-2">Product Lists</h1>
-            <!-- Updated image with border and shadow for a better look -->
-            <img src="{{ asset('images/list.png') }}" alt="Product Lists" class="mx-auto w-16 h-16 object-contain mb-2 rounded-lg shadow-md transition-transform transform hover:scale-105">
+    <!-- Product Lists Header Section -->
+    <div class="bg-gray-100 py-3">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <h1 class="text-2xl font-semibold text-gray-800 mb-2">Product Lists</h1>
+                <img src="{{ asset('images/list.png') }}" alt="Product Lists" class="mx-auto w-16 h-16 object-contain mb-2 rounded-lg shadow-md transition-transform transform hover:scale-105">
+            </div>
         </div>
     </div>
-</div>
 
-
-<!-- Navigation Section (Below the content) -->
-<div class="bg-white shadow-sm mb-6">
-    <div class="container mx-auto px-4 py-3">
-        <div class="flex space-x-4">
-            <a href="{{ route('lists.index') }}" class="text-sm font-semibold text-gray-700 hover:text-gray-900">All Lists</a>
-            <a href="{{ route('lists.favorites') }}" class="text-sm font-semibold text-gray-700 hover:text-gray-900">Favorites</a>
+    <!-- Navigation Section (Below the header) -->
+    <div class="bg-white shadow-sm mb-6">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex space-x-4">
+                <a href="{{ route('lists.index') }}" class="text-sm font-semibold text-gray-700 hover:text-gray-900">All Lists</a>
+                <a href="{{ route('lists.favorites') }}" class="text-sm font-semibold text-gray-700 hover:text-gray-900">Favorites</a>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- List of Lists -->
-
-<div class="container mx-auto px-4 py-8 mb-16">
-    @if($lists->isEmpty())
-        <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
-            <p class="text-gray-600 mb-4">No product lists available.</p>
-            <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
-                <span class="text-sm">Create a new list</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-            </a>
-        </div>
-@else
-           <div class="flex flex-col lg:flex-row">
+    <!-- Product Lists Content Section -->
+    <div class="container mx-auto px-4 py-8 mb-16">
+        @if($productlists->isEmpty())
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+                <p class="text-gray-600 mb-4">No product lists available.</p>
+                <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
+                    <span class="text-sm">Create a new list</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </a>
+            </div>
+        @else
+            <div class="flex flex-col lg:flex-row">
+                
                 <!-- Filter Section -->
                 <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
                     <div class="bg-white rounded-lg shadow-md p-4 sticky top-4">
@@ -49,7 +47,7 @@
                                     </svg>
                                     <span class="sr-only">Search icon</span>
                                 </div>
-                                <input type="text" name="search" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search..." value="{{ request('search') }}">
+                                <input type="text" name="search" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search..." value="{{ request('search') }}">
                             </div>
 
                             <label for="sort" class="block mb-2 text-sm font-medium text-gray-700 mt-4">Order By</label>
@@ -67,19 +65,25 @@
 
                 <!-- Cards Section -->
                 <div class="lg:w-4/5">
+                    <div class="mb-4">
+                        <h2 class="text-gray-700 text-lg">Favorite Lists</h2>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Render Favorite Lists -->
-                        @foreach ($lists->where('is_favorite', true) as $productlist) 
+                        @foreach ($productlists->where('is_favorite', true) as $productlist)
                             <x-product-list-card :productlist="$productlist" />
                         @endforeach
+                    </div>
 
-                        <!-- Render Non-Favorite Lists -->
-                        @foreach ($lists->where('is_favorite', false) as $productlist) 
+                    <div class="mt-4">
+                        <h2 class="text-gray-600 text-lg">Normal Lists</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach ($productlists->where('is_favorite', false) as $productlist)
                             <x-product-list-card :productlist="$productlist" />
                         @endforeach
                     </div>
                 </div>
             </div>
-        @endif <!-- Closing the if statement for checking if product lists are empty -->
+        @endif
     </div>
 </x-app-layout>

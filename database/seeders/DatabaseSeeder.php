@@ -20,8 +20,10 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             BrandSeeder::class,
             ProductSeeder::class,
-            ThemeSeeder:: class,
-            ListSeeder::class,     
+            ThemeSeeder::class,
+            ProductlistSeeder::class,
+            ListSeeder::class,    
+            NoteSeeder::class,
         ]);
     }
 }

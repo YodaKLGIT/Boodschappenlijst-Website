@@ -40,6 +40,9 @@ class ListController extends Controller
         return view('lists.index', compact('lists', 'groupedProducts', 'brands', 'categories'));
     }
 
+
+
+
     public function removeProductFromList(ListItem $list, Product $product)
     {
         // Call the service method to remove the product
@@ -48,6 +51,7 @@ class ListController extends Controller
         // Redirect back with a success message
         return redirect()->back()->with('success', $message);
     } 
+
 
     public function updateName(Request $request, ListItem $list)
     {
@@ -84,3 +88,6 @@ class ListController extends Controller
         }
     } 
 }
+
+
+

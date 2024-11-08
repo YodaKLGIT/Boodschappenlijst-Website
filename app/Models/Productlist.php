@@ -2,38 +2,53 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Database\Factories\ListFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Productlist extends Model
-{
-    protected $fillable = ['name', 'user_id'];
 
-    protected $table = 'lists';
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-    public function user(): BelongsTo
+   class Productlist extends Model
+   {
+       use HasFactory;
+       
+    protected $fillable = ['name', 'theme_id', 'is_favorite', 'user_id'];
+
+    protected $table = 'lists';  // This should match the lists table
+
+    public function notes()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Note::class, 'list_id');
     }
 
-    public function sharedUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'user_lists', 'list_id', 'user_id')->withTimestamps();
-    }
-
-    public function products(): BelongsToMany
+    public function products()
     {
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
                     ->withPivot('quantity');
-    }   
+    }
 
-    // Add the theme relationship
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
+    }
+
     public function theme()
     {
         return $this->belongsTo(Theme::class);
     }
-    
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function sharedUsers()
+{
+    return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
+}        
+     
     public function scopeAccessibleBy($query, $user)
     {
         return $query->where('user_id', $user->id)
@@ -41,9 +56,6 @@ class Productlist extends Model
                          $query->where('users.id', $user->id);
                      });
     }
+    
 
-    public function notes()
-    {
-       return $this->hasMany(Note::class, 'list_id');
-    }
 }

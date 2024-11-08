@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Note;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -36,10 +37,9 @@ class User extends Authenticatable
         return $this->hasMany(Note::class, 'user_id');
     }
     
-    public function shoppinglists()
+    public function shoppingLists()
     {
-        return $this->belongsToMany(Shoppinglist::class, 'user_lists', 'user_id', 'list_id')
-            ->withTimestamps();
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
     }
 
     public function invitations()
@@ -50,5 +50,19 @@ class User extends Authenticatable
     public function userList()
     {
         return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+    }
+    public function lists()
+    {
+        return $this->hasMany(ListItem::class, 'user_id');
+    }
+
+    public function sharedLists()
+    {
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+    }
+
+    public function productLists()
+    {
+        return $this->belongsToMany(Productlist::class, 'user_list', 'user_id', 'list_id');
     }
 }

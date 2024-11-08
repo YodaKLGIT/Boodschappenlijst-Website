@@ -32,4 +32,3 @@ class UserlistSeeder extends Seeder
         }
     }
 }
-

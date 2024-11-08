@@ -156,6 +156,8 @@ class ListService
     {
         return Category::all();
     }
+
 }
 
+}
 
