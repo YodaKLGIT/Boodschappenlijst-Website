@@ -13,17 +13,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Check if the test user already exists
-        if (!User::where('email', 'test@example.com')->exists()) {
-            User::factory()->create([
+        // Create or update the test user
+        User::updateOrCreate(
+            ['email' => 'test@example.com'], // Check for existing email
+            [
                 'name' => 'Test User',
-                'email' => 'test@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'user',
-            ]);
-        }
+            ]
+        );
 
-        // Create 10 random users with the role 'user'
+        // Create 10 random users with unique emails
         User::factory()->count(10)->create([
             'role' => 'user',
         ]);
