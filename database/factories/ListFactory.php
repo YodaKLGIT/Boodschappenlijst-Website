@@ -34,9 +34,7 @@ class ListFactory extends Factory
 
         return [
             'name' => $this->faker->unique()->words(3, true),
-            'user_id' => $user->id, // Ensure a user_id is set
             'is_favorite' => $this->faker->boolean(30),
-
             'theme_id' => Theme::all()->random()->id,
 
         ];
