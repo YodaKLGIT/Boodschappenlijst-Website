@@ -21,7 +21,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 
-Route::resource('/productlists', ProductlistController::class);
 
 // products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -48,7 +47,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/productlist/{productlist}/invite', [ProductlistController::class, 'invite'])->name('productlist.invite');
 
-    Route::get('/lists', [ListController::class, 'filter'])->name('lists.index');
     Route::resource('/productlist', ProductlistController::class);
 
     Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
@@ -57,11 +55,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
 
     // User Shopping List Management routes
-    Route::get('/users/{userId}/shoppinglists', [UserProductListController::class, 'index'])->name('users.shoppinglists.index');
-    Route::post('/users/{userId}/shoppinglists/attach', [UserProductListController::class, 'attachList'])->name('users.shoppinglists.attach');
-    Route::delete('/users/{userId}/shoppinglists/{listId}/detach', [UserProductListController::class, 'detachList'])->name('users.shoppinglists.detach');
-    Route::get('/shoppinglists/{listId}/users', [UserProductListController::class, 'listUsers'])->name('shoppinglists.users');
-    Route::get('/manage-user-lists', [UserProductListController::class, 'manageUserLists'])->name('user.shopping.lists.manage');
+    
 
 
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
