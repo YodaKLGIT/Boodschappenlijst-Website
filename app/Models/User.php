@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
     public function lists()
     {
-        return $this->hasMany(ListItem::class, 'user_id');
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
     }
 
     public function sharedLists()
