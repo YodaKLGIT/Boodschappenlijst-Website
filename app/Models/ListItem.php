@@ -10,9 +10,9 @@ class ListItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'theme_id', 'is_favorite' ];
+    protected $fillable = ['name', 'theme_id', 'is_favorite'];
 
-    protected $table = 'lists';  // Consider renaming the model to 'List' if this is correct
+    protected $table = 'lists';
 
     protected static function newFactory()
     {
@@ -35,9 +35,8 @@ class ListItem extends Model
         return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
     }
 
-     // Add the theme relationship
-     public function theme()
-     {
-         return $this->belongsTo(Theme::class);
-     }
+    public function theme()
+    {
+       return $this->belongsTo(Theme::class, 'theme_id');
+    }
 }

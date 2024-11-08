@@ -30,3 +30,5 @@ return new class extends Migration
         Schema::dropIfExists('lists');  // Changed 'list' to 'lists' to match the create method
     }
 };
+
+

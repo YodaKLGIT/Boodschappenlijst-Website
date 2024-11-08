@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth; // Add this line
 
 use App\Models\Product;
 use App\Models\ListItem;
-use App\Models\Brand; 
+use App\Models\Product;
+use App\Models\Brand;
 use App\Models\Category; 
 use Illuminate\Http\Request;
 

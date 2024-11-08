@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_list', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+           
 
             // Foreign key for the users table
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -22,7 +22,8 @@ return new class extends Migration
             $table->foreignId('list_id')->constrained()->onDelete('cascade');
 
             // Ensure the combination of user_id and list_id is unique
-            $table->unique(['user_id', 'list_id']);
+            $table->unique(['user_id', 'list_id']); 
+            $table->timestamps();
         });
     }
 

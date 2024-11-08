@@ -2,7 +2,7 @@
     <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 mt-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
             <div class="p-6 space-y-2" style="min-height: 300px;">
-                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Create Shopping List</h2>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Create List</h2>
 
                 @if ($errors->any())
                     <div class="mb-2 p-4 text-red-600 bg-red-100 border border-red-300 rounded-lg">
@@ -14,7 +14,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('productlist.store') }}" method="POST" class="space-y-2">
+                <form action="{{ route('lists.store') }}" method="POST" class="space-y-2">
                     @csrf
 
                     {{-- Title Input --}}
@@ -59,25 +59,15 @@
                         </details>
                     </div>
 
-                    {{-- Users Dropdown --}}
-                    <div class="mb-3">
-                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Share with Users</label>
-                        <select name="user_ids[]" multiple class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     {{-- Buttons --}}
                     <div class="flex justify-between mt-4">
-                        <a href="{{ route('productlist.index') }}" 
+                        <a href="{{ route('lists.index') }}" 
                             class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
                             Go Back
                         </a>
                         <button type="submit" 
                             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Create Product List
+                            Create List
                         </button>
                     </div>
                 </form>
