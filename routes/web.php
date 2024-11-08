@@ -6,10 +6,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\ProductlistController;
 use App\Http\Controllers\ShoppinglistController;
-use App\Http\Controllers\UserShoppingListController;
+use App\Http\Controllers\UserProductListController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/dashboard', function () {
@@ -18,48 +19,84 @@ Route::get('/dashboard', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+
+
+Route::resource('/productlists', ProductlistController::class);
+
 // products
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBrand'])->name('products.filterByBrand');
 
-    // Shopping List routes
-    Route::resource('shoppinglist', ShoppinglistController::class);
-    Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
-
+// Shopping List routes
+//Route::resource('shoppinglist', ShoppinglistController::class);
+    //Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
+    
 Route::middleware(['auth'])->group(function () {
     Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+    
+    Route::resource('/productlists', ProductlistController::class);
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/lists/{list}/notes', [NoteController::class, 'store'])->name('list.notes.store');
+        // Other routes that require authentication
+    });
     
     // Custom route for removing a product from a list
     Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
+
+        Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
+
+        Route::post('/productlist/{productlist}/invite', [ProductlistController::class, 'invite'])->name('productlist.invite');
+
     Route::get('/lists', [ListController::class, 'filter'])->name('lists.index');
     Route::resource('/productlist', ProductlistController::class);
 
-    // User Shopping List Management routes
-    Route::get('/users/{userId}/shopping-lists', [UserShoppingListController::class, 'index'])->name('users.shoppinglists.index');
-    Route::post('/users/{userId}/attach-list', [UserShoppingListController::class, 'attachList'])->name('users.shoppinglists.attach');
-    Route::post('/users/{userId}/detach-list/{listId}', [UserShoppingListController::class, 'detachList'])->name('users.shoppinglists.detach');
-    Route::get('/shopping-lists/{listId}/users', [UserShoppingListController::class, 'listUsers'])->name('lists.users.index');
-    Route::get('/manage-user-lists', [UserShoppingListController::class, 'manageUserLists'])->name('user.shopping.lists.manage');
-    Route::post('/update-user-lists', [UserShoppingListController::class, 'updateUserLists'])->name('user.shopping.lists.update');
-    Route::post('/shopping-lists/{listId}/detach-user', [UserShoppingListController::class, 'detachUser'])->name('lists.users.detach');
+    Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
 
+    Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
+    Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
+
+    // User Shopping List Management routes
+    Route::get('/users/{userId}/shoppinglists', [UserProductListController::class, 'index'])->name('users.shoppinglists.index');
+    Route::post('/users/{userId}/shoppinglists/attach', [UserProductListController::class, 'attachList'])->name('users.shoppinglists.attach');
+    Route::delete('/users/{userId}/shoppinglists/{listId}/detach', [UserProductListController::class, 'detachList'])->name('users.shoppinglists.detach');
+    Route::get('/shoppinglists/{listId}/users', [UserProductListController::class, 'listUsers'])->name('shoppinglists.users');
+    Route::get('/manage-user-lists', [UserProductListController::class, 'manageUserLists'])->name('user.shopping.lists.manage');
+
+
+    Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
     // Invitation routes
     Route::post('/shoppinglist/{shoppinglist}/invite', [InvitationController::class, 'store'])->name('invitation.store');
     Route::post('/invitation/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitation.accept');
     Route::post('/invitation/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitation.decline');
 
-    Route::post('/shoppinglists/{shoppinglist}/notes', [NoteController::class, 'store'])->name('notes.store');
-
+    Route::post('/productlist/{productlist}/notes', [ProductlistController::class, 'storeNote'])->name('notes.store');
+    
     Route::post('/shoppinglists/{shoppinglist}/invite', [ShoppinglistController::class, 'invite'])->name('shoppinglist.invite');
     
     Route::delete('/shoppinglists/{shoppinglist}/users/{user}', [ShoppinglistController::class, 'removeUser'])->name('shoppinglist.removeUser');
+
+    Route::get('/shoppinglist/{shoppinglist}', [ShoppinglistController::class, 'show'])->name('shoppinglist.show');
+
+    Route::get('/productlist/{productlist}', [ProductlistController::class, 'show'])->name('productlist.show');
+
+    Route::post('/lists/{listItem}/notes', [NoteController::class, 'store'])->name('notes.store');
+
+    Route::get('/productlist/{productlist}/edit', [ProductlistController::class, 'edit'])->name('productlist.edit');
+
+    Route::delete('/productlist/{id}', [ProductListController::class, 'destroy'])->name('productlist.destroy');
+
+    Route::delete('/productlist/{productlist}/remove-user/{user}', [ProductlistController::class, 'removeUser'])->name('productlist.removeUser');
+
 });
 
 // Include authentication routes
 require __DIR__ . '/auth.php';
+
+

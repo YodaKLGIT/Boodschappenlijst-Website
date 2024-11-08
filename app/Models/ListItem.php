@@ -5,23 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Database\Factories\ListFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ListItem extends Model
-{
-    use HasFactory;
 
-    protected $fillable = ['name', 'theme_id'];
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-    protected $table = 'lists';  // Consider renaming the model to 'List' if this is correct
+   class ListItem extends Model
+   {
+       use HasFactory;
+       // ...
+    protected $fillable = ['name', 'theme_id', 'is_favorite', 'user_id'];
+
+    protected $table = 'lists';  // This should match the lists table
 
     protected static function newFactory()
     {
         return ListFactory::new();
     }
 
+    
+
     public function notes()
     {
-        return $this->hasMany(Note::class);
+        return $this->hasMany(Note::class, 'list_id');
     }
 
     public function products()
@@ -35,9 +41,18 @@ class ListItem extends Model
         return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
     }
 
-     // Add the theme relationship
-     public function theme()
-     {
-         return $this->belongsTo(Theme::class);
-     }
+    public function theme()
+    {
+        return $this->belongsTo(Theme::class);
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function sharedUsers()
+{
+    return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
+}
 }

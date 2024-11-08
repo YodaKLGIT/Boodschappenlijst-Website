@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\ShoppingList;
+use App\Models\ListItem;
 use App\Models\User;
 
 
@@ -14,7 +15,7 @@ class UserlistSeeder extends Seeder
     {
         // Get all users and shopping lists
         $users = User::all();
-        $shoppingLists = ShoppingList::all();
+        $shoppingLists = ListItem::all();
 
         // Check if there are any users and shopping lists
         if ($users->isEmpty() || $shoppingLists->isEmpty()) {
@@ -31,4 +32,3 @@ class UserlistSeeder extends Seeder
         }
     }
 }
-

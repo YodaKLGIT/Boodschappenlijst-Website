@@ -16,4 +16,5 @@ class UserList extends Model
         return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id')
                     ->withTimestamps();
     }
+    
 }

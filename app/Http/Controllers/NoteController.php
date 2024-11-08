@@ -3,29 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
-use App\Models\Shoppinglist;
+use App\Models\ListItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
-    public function store(Request $request, Shoppinglist $shoppinglist)
-{
-    $request->validate([
-        'title' => 'required|max:255',
-        'description' => 'required',
-    ]);
+    public function store(Request $request, $list)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'list_id' => 'required|exists:lists,id',
+        ]);
 
-    $note = new Note([
-        'title' => $request->title,
-        'description' => $request->description,
-        'user_id' => Auth::id(),
-        'list_id' => $shoppinglist->id,
-    ]);
+        Note::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'list_id' => $list,
+            'user_id' => Auth::id(),
+        ]);
 
-    $note->save();
+        return redirect()->route('productlist.show', $list)->with('success', 'Note added successfully.');
+    }
+    public function destroy(Note $note)
+    {
+        // Ensure the user is authorized to delete the note
+        if (Auth::id() !== $note->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
-    return redirect()->route('shoppinglist.show', $shoppinglist)
-                     ->with('success', 'Note added successfully.');
-}
+        $note->delete();
+
+        return redirect()->back()->with('success', 'Note removed successfully.');
+    }
+    
 }

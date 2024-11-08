@@ -20,13 +20,16 @@ class ProductlistRequestForm extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:255|unique:lists,name',  // Add the unique rule
-            'product_ids' => 'required|array|min:1',
-            'product_ids.*' => 'exists:products,id',
-            'quantities' => 'array',
-            'quantities.*' => 'nullable|integer|min:0',
-        ];
-    }
+{
+    return [
+        'name' => 'required|string|max:255|unique:lists,name',
+        'product_ids' => 'required|array',
+        'product_ids.*' => 'exists:products,id',
+        'quantities' => 'nullable|array',
+        'quantities.*' => 'nullable|integer|min:0',
+        'theme_id' => 'nullable|exists:themes,id',
+        'user_ids' => 'nullable|array',
+        'user_ids.*' => 'exists:users,id',
+    ];
+}
 }

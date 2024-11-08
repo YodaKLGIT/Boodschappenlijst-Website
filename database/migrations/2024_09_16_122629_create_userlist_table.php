@@ -9,20 +9,28 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('user_lists', function (Blueprint $table) {
+        Schema::create('user_list', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('list_id')->constrained('shoppinglists')->onDelete('cascade');
-            $table->timestamps();
 
-            $table->unique(['user_id', 'list_id']);
+            // Foreign key for the users table
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+
+            // Foreign key for the lists table
+            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade');
+
+            // Ensure the combination of user_id and list_id is unique
+            $table->unique(['user_id', 'list_id']); 
+            $table->timestamps();
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('user_lists');
+        Schema::dropIfExists('user_list');
     }
 };
