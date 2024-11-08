@@ -50,10 +50,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
 }
 
-public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
+
 
     public function scopeAccessibleBy($query, $user)
     {

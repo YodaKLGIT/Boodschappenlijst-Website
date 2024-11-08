@@ -22,49 +22,7 @@ class ProductlistController extends Controller
 {
     
 
-    public function index(Request $request)
-    {
-        $userId = Auth::id();
-        Log::info('Current User ID: ' . $userId);
-
-        $productlists = Productlist::where('user_id', $userId)->get();
-        Log::info('Product Lists: ' . $productlists->toJson());
-
-        // Fetch all categories
-        $categories = Category::all();
-
-        // Fetch all brands
-        $brands = Brand::all();
-
-        // Fetch product lists created by the current authenticated user
-        $productlists = Productlist::with(['products.brand', 'products.category', 'theme', 'owner'])
-            ->where('user_id', Auth::id()) // Filter by the logged-in user's ID
-            ->when($request->search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%");
-            })
-            ->when($request->category, function ($query, $categoryId) {
-                return $query->whereHas('products', function ($q) use ($categoryId) {
-                    $q->where('category_id', $categoryId);
-                });
-            })
-            ->when($request->brand, function ($query, $brandId) {
-                return $query->whereHas('products', function ($q) use ($brandId) {
-                    $q->where('brand_id', $brandId);
-                });
-            });
-
-        // Apply sorting if specified
-        if ($request->sort === 'asc') {
-            $productlists = $productlists->orderBy('name', 'asc');
-        } elseif ($request->sort === 'desc') {
-            $productlists = $productlists->orderBy('name', 'desc');
-        }
-
-        $productlists = $productlists->get();
-
-        // Return the product lists view with the fetched product lists, categories, brands, and request
-        return view('lists.index', compact('productlists', 'categories', 'brands', 'request'));
-    }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -93,13 +51,11 @@ class ProductlistController extends Controller
 {
     $validatedData = $request->validated();
 
-    // Create a new ListItem and set the creator as the owner
-    $productlist = new Productlist([
+    $productlist = Productlist::create([
         'name' => $validatedData['name'],
-        'theme_id' => $validatedData['theme_id'] ?? null,
-        'user_id' => Auth::id(), // Set the logged-in user as the owner
+        'theme_id' => $validatedData['theme_id'] ?? null, // Ensure theme_id is set
+        'user_id' => Auth::id(),
     ]);
-    $productlist->save();
 
     // Attach products to the list
     if (!empty($validatedData['product_ids'])) {
