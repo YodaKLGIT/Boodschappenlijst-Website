@@ -69,6 +69,5 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
-    Route::get('/lists', [ProductlistController::class, 'index'])->name('lists.index');
 
 });

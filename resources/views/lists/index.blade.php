@@ -22,7 +22,7 @@
 
     <!-- Product Lists Content Section -->
     <div class="container mx-auto px-4 py-8 mb-16">
-        @if($productlists->isEmpty())
+        @if($lists->isEmpty())
             <div class="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
                 <p class="text-gray-600 mb-4">No product lists available.</p>
                 <a href="{{ route('productlist.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 transition-colors duration-300">
@@ -65,20 +65,16 @@
 
                 <!-- Cards Section -->
                 <div class="lg:w-4/5">
-                    <div class="mb-4">
-                        <h2 class="text-gray-700 text-lg">Favorite Lists</h2>
-                    </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach ($productlists->where('is_favorite', true) as $productlist)
+                        @foreach ($lists->where('is_favorite', true) as $productlist)
                             <x-product-list-card :productlist="$productlist" />
                         @endforeach
                     </div>
 
-                    <div class="mt-4">
-                        <h2 class="text-gray-600 text-lg">Normal Lists</h2>
-                    </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach ($productlists->where('is_favorite', false) as $productlist)
+                        @foreach ($lists->where('is_favorite', false) as $productlist)
                             <x-product-list-card :productlist="$productlist" />
                         @endforeach
                     </div>
