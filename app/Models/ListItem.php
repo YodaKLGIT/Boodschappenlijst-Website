@@ -14,9 +14,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
    {
        use HasFactory;
        
-    protected $fillable = ['name', 'theme_id', 'is_favorite', 'user_id'];
+    
 
-    protected $table = 'lists';  // This should match the lists table
+    protected $fillable = ['name', 'theme_id', 'is_favorite'];
+
+    protected $table = 'lists';
+
 
     protected static function newFactory()
     {
@@ -52,7 +55,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     }
 
     public function sharedUsers()
-{
+    {
     return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
+    }
+
 }
-}
+

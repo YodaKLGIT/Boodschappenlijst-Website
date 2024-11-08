@@ -32,6 +32,7 @@ Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBran
     
 Route::middleware(['auth'])->group(function () {
     Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
+
     
     Route::resource('/productlists', ProductlistController::class);
     Route::middleware(['auth'])->group(function () {
@@ -47,16 +48,20 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/productlist/{productlist}/invite', [ProductlistController::class, 'invite'])->name('productlist.invite');
 
+    Route::get('/lists', [ListController::class, 'filter'])->name('lists.index');
+
+    // Custom route for viewing favorite lists
+    Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
+
+    Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
+    Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
+    
     Route::resource('/productlist', ProductlistController::class);
 
     Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
 
     Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
     Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
-
-    // User Shopping List Management routes
-    
-
 
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     // Profile routes

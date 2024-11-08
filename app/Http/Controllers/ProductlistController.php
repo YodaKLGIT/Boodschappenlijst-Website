@@ -82,6 +82,7 @@ class ProductlistController extends Controller
      */
     public function show(Productlist $productlist)
     {
+
         $userId = Auth::id();
  
         // Check if the user is the owner or a shared user
@@ -90,7 +91,7 @@ class ProductlistController extends Controller
         }
  
         // Load the necessary relationships
-        $productlist->load(['owner', 'products.brand', 'products.category', 'notes', 'sharedUsers']);
+        $productlist->load(['owner', 'products.brand', 'products.category', 'notes', 'sharedUsers','theme']);
  
         // Get all users except the owner and already shared users
         $users = User::where('id', '!=', $productlist->user_id)
@@ -99,6 +100,7 @@ class ProductlistController extends Controller
  
         // Return the view with the productlist data
         return view('productlist.show', compact('productlist', 'users'));
+
     }
     /**
      * Show the form for editing the specified resource.

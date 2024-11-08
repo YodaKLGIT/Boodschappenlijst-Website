@@ -15,23 +15,12 @@ function toggleProducts(event, shoppingListId) {
     }
 }
 
-
 // Add this new function
 function goToProduct(productId) {
     // Implement the logic to navigate to the product page
     console.log('Navigating to product:', productId);
     // You can use window.location.href = '/products/' + productId; to navigate
 }
-
-
-
-
-
-
-
-
-
-
 
 // Function to dismiss notification
 function dismissNotification() {
@@ -40,4 +29,7 @@ function dismissNotification() {
         notification.remove(); 
     }
 }
+
+
+
 
