@@ -3,8 +3,8 @@
     <div class="bg-gray-100 py-4">
         <div class="container mx-auto px-4">
             <div class="flex flex-col items-center">
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">List</h1>
-                <img src="{{ asset('images/list.png') }}" alt="List" class="w-16 h-16 object-contain">
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">Product List</h1>
+                <img src="{{ asset('images/list.png') }}" alt="Product List" class="w-16 h-16 object-contain">
             </div>
         </div>
     </div>
@@ -33,10 +33,11 @@
                                         </form>
 
                                         <!-- Name Editing Form -->
-                                        <form action="{{ route('lists.updateName', $productlist->id) }}" method="POST" class="mt-2 flex-grow" onsubmit="event.preventDefault(); this.querySelector('input[name=name]').value = this.querySelector('input[name=name]').value.trim(); this.submit();">
+                                        <form action="{{ route('lists.updateName', $productlist->id) }}" method="POST" class="mt-2 flex-grow relative flex justify-center items-center">
                                             @csrf
                                             <input type="text" name="name" value="{{ $productlist->name }}" 
-                                                   class="border rounded p-1 w-full" 
+                                                   class="bg-transparent text-white focus:outline-none p-3 w-auto max-w-max border-2 border-transparent focus:border-blue-500 rounded-full text-center peer placeholder-black"
+                                                   placeholder="Enter list name"
                                                    required 
                                                    onkeydown="if(event.key === 'Enter'){ this.form.submit(); }">
                                         </form>
@@ -58,13 +59,5 @@
             </div>
         </div>
     </div>
-
-  
 </x-app-layout>
-
-
-
-    
-
-
 

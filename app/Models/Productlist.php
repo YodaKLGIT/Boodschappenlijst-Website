@@ -10,6 +10,8 @@ class Productlist extends Model
 {
     protected $fillable = ['name', 'user_id'];
 
+    protected $table = 'lists';
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
