@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             ThemeSeeder::class,
             ProductlistSeeder::class,
             ListSeeder::class,    
-            NoteSeeder::class,
+            NoteSeeder::class, 
         ]);
     }
 }

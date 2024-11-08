@@ -48,8 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/productlist/{productlist}/invite', [ProductlistController::class, 'invite'])->name('productlist.invite');
 
-    Route::get('/lists', [ListController::class, 'filter'])->name('lists.index');
-
+    
     // Custom route for viewing favorite lists
     Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
 

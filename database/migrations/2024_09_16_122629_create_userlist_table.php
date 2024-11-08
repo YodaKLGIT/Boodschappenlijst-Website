@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
 
             // Foreign key for the users table
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
             // Foreign key for the lists table
-            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade');
+            $table->foreignId('list_id')->constrained()->onDelete('cascade');
 
          
             // Ensure the combination of user_id and list_id is unique
