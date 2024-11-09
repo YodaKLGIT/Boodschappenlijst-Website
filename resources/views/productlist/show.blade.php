@@ -144,28 +144,28 @@
 
         <!-- Connected Users Section -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-            <h4 class="text-xl font-semibold text-gray-800 mb-4">Connected Users</h4>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                @if($productlist->sharedUsers->isEmpty())
-                    <p class="text-gray-500 text-center">No users connected to this list.</p>
-                @else
-                    <ul>
-                        @foreach($productlist->sharedUsers as $user)
-                            <li class="text-gray-800 flex justify-between items-center">
-                                <span>{{ $user->name }} ({{ $user->email }})</span>
-                                @if(Auth::id() === $productlist->user_id)
-                                    <form action="{{ route('productlist.removeUser', [$productlist->id, $user->id]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800">Remove</button>
-                                    </form>
-                                @endif
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-        </div>
+    <h4 class="text-xl font-semibold text-gray-800 mb-4">Connected Users</h4>
+    <div class="bg-gray-50 p-4 rounded-lg">
+        @if($productlist->sharedUsers->isEmpty())
+            <p class="text-gray-500 text-center">No users connected to this list.</p>
+        @else
+            <ul>
+                @foreach($productlist->sharedUsers as $user)
+                    <li class="text-gray-800 flex justify-between items-center">
+                        <span>{{ $user->name }} ({{ $user->email }})</span>
+                        @if($isOwner && $user->id !== $owner->id)
+                            <form action="{{ route('productlist.removeUser', [$productlist->id, $user->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800">Remove</button>
+                            </form>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+    </div>
+</div>
 
         <!-- Invite Users Section -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-8">
@@ -190,7 +190,7 @@
             <h4 class="text-xl font-semibold text-gray-800 mb-4">List Details</h4>
             <div class="bg-gray-50 p-4 rounded-lg">
                 <span class="text-xs text-gray-700 mt-1 transition-opacity duration-300">
-                    Created by: {{ $productlist->owner ? $productlist->owner->name : 'Unknown' }}
+                    Created by: {{ $owner->name ?? 'Unknown' }}
                 </span>
             </div>
         </div>
