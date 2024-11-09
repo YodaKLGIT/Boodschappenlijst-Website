@@ -23,9 +23,10 @@ class ProductlistController extends Controller
     
 
     
-    /**
-     * Show the form for creating a new resource.
-     */
+    
+
+
+    
     public function create()
     {
         // Retrieve all products
@@ -51,11 +52,14 @@ class ProductlistController extends Controller
 {
     $validatedData = $request->validated();
 
+    // Create the list
     $productlist = Productlist::create([
         'name' => $validatedData['name'],
-        'theme_id' => $validatedData['theme_id'] ?? null, // Ensure theme_id is set
-        'user_id' => Auth::id(),
+        'theme_id' => $validatedData['theme_id'] ?? null,
     ]);
+
+    // Connect the user to the list
+    $productlist->users()->attach(Auth::id());
 
     // Attach products to the list
     if (!empty($validatedData['product_ids'])) {
