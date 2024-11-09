@@ -23,16 +23,31 @@ class ListController extends Controller
     
     public function index(Request $request)
     {
-        // Use the ListService to filter product lists based on request parameters
-        $lists = $this->listService->filter($request); // Fixed casing
+        $user = Auth::user(); // Get the logged-in user
+
+        // Call the filter method with the request
+        $listsQuery = $this->listService->filter($request)
+            ->where(function ($query) use ($user) {
+                $query->where('user_id', $user->id) // Lists owned by the user
+                      ->orWhereHas('sharedUsers', function ($q) use ($user) {
+                          $q->where('user_id', $user->id); // Lists shared with the user
+                      });
+            });
 
         if (!$request->routeIs('lists.favorites')) {
-            $lists = $lists->where('is_favorite', false); // Exclude favorites on normal index
+            $listsQuery = $listsQuery->where('is_favorite', false); // Exclude favorites on normal index
         }
-        
+
+        // Debugging: Check if $listsQuery is a valid query builder
+        if (!($listsQuery instanceof \Illuminate\Database\Eloquent\Builder)) {
+            throw new \Exception('Invalid query builder instance');
+        }
+
+        $lists = $listsQuery->get();
+
         // Get all brands and categories for filtering
-        $brands = Brand::all(); // Retrieve all brands
-        $categories = Category::all(); // Retrieve all categories
+        $brands = Brand::all();
+        $categories = Category::all();
 
         // Group products by category
         $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
@@ -67,10 +82,17 @@ class ListController extends Controller
 
     public function ShowFavorites(Request $request)
     {
-        $user = Auth::user();  
+        $user = Auth::user(); // Get the logged-in user
 
-        // Fetch only favorite lists
-        $lists = ListItem::where('is_favorite', true)->get();
+        // Fetch only favorite lists that the user is connected to
+        $lists = ListItem::where('is_favorite', true)
+            ->where(function ($query) use ($user) {
+                $query->where('user_id', $user->id) // Lists owned by the user
+                      ->orWhereHas('sharedUsers', function ($q) use ($user) {
+                          $q->where('user_id', $user->id); // Lists shared with the user
+                      });
+            })
+            ->get();
 
         // Return the view with the filtered lists
         return view('lists.index', compact('lists'));

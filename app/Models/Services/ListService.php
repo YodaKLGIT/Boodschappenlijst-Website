@@ -69,8 +69,8 @@ class ListService
                 $query->orderBy('name');
         }
 
-        // Fetch the product lists with eager loading
-        return $query->with(['products.brand', 'products.category', 'theme'])->get(); // Return the filtered product lists
+        // Return the query builder instance
+        return $query->with(['products.brand', 'products.category', 'theme']);
     }
 
     public function removeProductFromList(ListItem $list, Product $product)
