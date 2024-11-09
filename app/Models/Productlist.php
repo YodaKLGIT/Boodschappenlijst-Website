@@ -46,9 +46,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
     public function sharedUsers()
     {
-    return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
-    }        
-     
+        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
+    }
+
     public function scopeAccessibleBy($query, $user)
     {
         return $query->where('user_id', $user->id)

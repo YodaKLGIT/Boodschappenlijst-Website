@@ -14,7 +14,6 @@ class NoteController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'list_id' => 'required|exists:lists,id',
         ]);
 
         Note::create([

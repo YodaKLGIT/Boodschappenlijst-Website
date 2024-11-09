@@ -85,27 +85,27 @@ class ProductlistController extends Controller
      * Display the specified resource.
      */
     public function show(Productlist $productlist)
-    {
+{
+    $userId = Auth::id();
 
-        $userId = Auth::id();
- 
-        // Check if the user is the owner or a shared user
-        if ($productlist->user_id !== $userId && !$productlist->sharedUsers->contains($userId)) {
-            abort(403, 'Unauthorized access to this list.');
-        }
- 
-        // Load the necessary relationships
-        $productlist->load(['owner', 'products.brand', 'products.category', 'notes', 'sharedUsers','theme']);
- 
-        // Get all users except the owner and already shared users
-        $users = User::where('id', '!=', $productlist->user_id)
-                     ->whereNotIn('id', $productlist->sharedUsers->pluck('id'))
-                     ->get();
- 
-        // Return the view with the productlist data
-        return view('productlist.show', compact('productlist', 'users'));
+    // Determine if the current user is the owner
+    $owner = $productlist->users()->orderBy('created_at')->first();
+    $isOwner = $owner && $owner->id === $userId;
 
+    // Check if the user is the owner or a shared user
+    if (!$isOwner && !$productlist->sharedUsers->contains($userId)) {
+        abort(403, 'Unauthorized access to this list.');
     }
+
+    // Load the necessary relationships
+    $productlist->load(['products.brand', 'products.category', 'notes', 'sharedUsers', 'theme']);
+
+    // Get all users except the owner and already shared users
+    $users = User::whereNotIn('id', $productlist->sharedUsers->pluck('id'))
+                 ->get();
+
+    return view('productlist.show', compact('productlist', 'users', 'isOwner'));
+}
     /**
      * Show the form for editing the specified resource.
      */
@@ -144,7 +144,8 @@ class ProductlistController extends Controller
         $list = Productlist::findOrFail($id);
         $list->delete();
 
-        return redirect()->route('productlist.index')->with('success', 'List deleted successfully.');
+        // Redirect to the lists.index route
+        return redirect()->route('lists.index')->with('success', 'List deleted successfully.');
     }
 
     public function update(ProductlistRequestForm $request, Productlist $productlist)
@@ -185,15 +186,22 @@ class ProductlistController extends Controller
 
     public function removeUser(Request $request, Productlist $productlist, User $user)
 {
-    // Ensure the current user is the owner of the list
-    if (Auth::id() !== $productlist->user_id) {
+    // Determine if the current user is the owner
+    $owner = $productlist->users()->orderBy('created_at')->first();
+    $isOwner = $owner && $owner->id === Auth::id();
+
+    if (!$isOwner) {
         abort(403, 'Unauthorized action.');
     }
 
-    // Detach the user from the list
+    Log::info('Attempting to remove user from list', [
+        'list_id' => $productlist->id,
+        'user_id' => $user->id,
+        'current_user_id' => Auth::id()
+    ]);
+
     $productlist->sharedUsers()->detach($user->id);
 
-    // Redirect to the correct view
     return redirect()->route('productlist.show', $productlist->id)->with('success', 'User removed successfully.');
 }
 }

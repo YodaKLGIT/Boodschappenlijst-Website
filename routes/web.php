@@ -48,7 +48,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/productlist/{productlist}/invite', [ProductlistController::class, 'invite'])->name('productlist.invite');
 
-    
+        Route::delete('/productlist/{productlist}/remove-user/{user}', [ProductlistController::class, 'removeUser'])->name('productlist.removeUser');
+
     // Custom route for viewing favorite lists
     Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
 
@@ -90,7 +91,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/productlist/{id}', [ProductListController::class, 'destroy'])->name('productlist.destroy');
 
-    Route::delete('/productlist/{productlist}/remove-user/{user}', [ProductlistController::class, 'removeUser'])->name('productlist.removeUser');
 
 });
 
