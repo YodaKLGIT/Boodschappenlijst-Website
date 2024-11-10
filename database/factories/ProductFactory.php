@@ -26,8 +26,8 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph,
-            'category_id' => Category::factory(),
-            'brand_id' => Brand::factory(),
+            'category_id' => Category::all()->random()->id,
+            'brand_id' => Brand::all()->random()->id,
             'image_url' => $this->faker->imageUrl(640, 480, 'products', true),
         ];
     }
