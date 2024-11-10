@@ -39,4 +39,26 @@
             </div>
         </div>
     </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products mb-16">
+        <div class="max-w-screen-lg mx-auto">
+            <h2 class="text-3xl font-bold mb-8">Featured Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                @foreach ($featuredProducts as $product)
+                    <a href="{{ route('products.index', ['search' => $product->name]) }}" class="product-card bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="h-48 w-full object-cover rounded-t-xl" />
+                        <div class="px-4 py-3">
+                            <span class="text-gray-400 mr-3 uppercase text-xs">{{ $product->brand->name ?? 'Brand' }}</span>
+                            <p class="text-lg font-bold text-black truncate block capitalize">{{ $product->name }}</p>
+                            <p class="text-sm text-gray-600 truncate">{{ $product->description }}</p>
+                            <div class="flex items-center mt-2">
+                                <p class="text-lg font-semibold text-black cursor-auto my-3">{{ $product->price ?? 'N/A' }}</p>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
 </x-app-layout>
