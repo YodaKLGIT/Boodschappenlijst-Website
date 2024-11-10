@@ -39,10 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         return $this->belongsTo(Theme::class);
     }
 
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+    
 
     public function sharedUsers()
     {
@@ -57,5 +54,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
                      });
     }
     
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getOwnerAttribute()
+    {
+        return $this->users()->orderBy('user_list.created_at')->first();
+    }
 
 }

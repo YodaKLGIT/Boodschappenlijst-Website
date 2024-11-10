@@ -58,7 +58,7 @@ class ProductlistController extends Controller
         'theme_id' => $validatedData['theme_id'] ?? null,
     ]);
 
-    // Connect the user to the list
+    // Attach the current user as the owner
     $productlist->users()->attach(Auth::id());
 
     // Attach products to the list
@@ -88,8 +88,10 @@ class ProductlistController extends Controller
 {
     $userId = Auth::id();
 
+    // Retrieve the owner using the custom method
+    $owner = $productlist->getOwnerAttribute();
+
     // Determine if the current user is the owner
-    $owner = $productlist->users()->orderBy('created_at')->first();
     $isOwner = $owner && $owner->id === $userId;
 
     // Check if the user is the owner or a shared user
@@ -104,7 +106,8 @@ class ProductlistController extends Controller
     $users = User::whereNotIn('id', $productlist->sharedUsers->pluck('id'))
                  ->get();
 
-    return view('productlist.show', compact('productlist', 'users', 'isOwner'));
+    // Pass the owner to the view
+    return view('productlist.show', compact('productlist', 'users', 'isOwner', 'owner'));
 }
     /**
      * Show the form for editing the specified resource.
@@ -186,8 +189,8 @@ class ProductlistController extends Controller
 
     public function removeUser(Request $request, Productlist $productlist, User $user)
 {
-    // Determine if the current user is the owner
-    $owner = $productlist->users()->orderBy('created_at')->first();
+    // Retrieve the owner using the user_id field
+    $owner = $productlist->owner;
     $isOwner = $owner && $owner->id === Auth::id();
 
     if (!$isOwner) {
