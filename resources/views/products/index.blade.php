@@ -49,6 +49,17 @@
                 selectListButton.innerText = sessionStorage.getItem('selectedListName');
             }
 
+            // Check if there are any lists available
+            const lists = @json($lists);
+            if (lists.length === 0) {
+                sessionStorage.removeItem('selectedListId');
+                sessionStorage.removeItem('selectedListName');
+                // Update the dropdown to show a message
+                if (selectListButton) {
+                    selectListButton.innerText = 'No lists available';
+                }
+            }
+
             // Show toast notification if a product was added
             if (sessionStorage.getItem('productAdded') === 'true') {
                 showToast('Product added to the list successfully!');
@@ -242,4 +253,3 @@
         <input type="hidden" name="product_id" value="">
     </form>
 </x-app-layout>
-
