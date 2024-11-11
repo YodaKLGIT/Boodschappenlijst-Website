@@ -67,6 +67,14 @@
                             </div>
                         </div>
 
+                        <!-- Add Products Button -->
+                        <div class="mt-6">
+                            <a href="{{ route('products.index') }}" 
+                                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                Add Products
+                            </a>
+                        </div>
+
                         <!-- Owner Information -->
                         <div class="mb-3">
                             <label class="block text-sm font-medium text-gray-900 dark:text-white">Owner</label>
@@ -138,7 +146,7 @@
                                     Delete List
                                 </button>
                             </form>
-                        </div>
+                        </div>           
                     </div>
                 </div>
             </div>
@@ -172,12 +180,12 @@
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">Title</label>
                                 <input type="text" name="title" id="title" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-800">
                             </div>
                             <div>
                                 <label for="description" class="block text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                 <textarea name="description" id="description" rows="3" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-0 dark:border-gray-600 dark:text-gray-800"></textarea>
                             </div>
                             <button type="submit" 
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
