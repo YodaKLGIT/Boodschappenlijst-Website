@@ -112,6 +112,18 @@
                     sessionStorage.clear();
                 });
             }
+
+            // Check if there are any lists available
+            const lists = @json($lists);
+            if (lists.length === 0) {
+                sessionStorage.removeItem('selectedListId');
+                sessionStorage.removeItem('selectedListName');
+                // Update the dropdown to show a message
+                const selectListButton = document.querySelector('.select-list-button');
+                if (selectListButton) {
+                    selectListButton.innerHTML = 'No lists available';
+                }
+            }
         });
     </script>
 </x-app-layout>
