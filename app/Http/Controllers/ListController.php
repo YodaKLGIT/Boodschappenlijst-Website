@@ -31,7 +31,7 @@ class ListController extends Controller
                 $query->where('user_id', $user->id) // Lists owned by the user
                       ->orWhereHas('sharedUsers', function ($q) use ($user) {
                           $q->where('user_id', $user->id); // Lists shared with the user
-                      });
+                });
             });
 
         if (!$request->routeIs('lists.favorites')) {

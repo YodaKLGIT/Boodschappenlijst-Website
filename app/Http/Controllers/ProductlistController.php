@@ -39,10 +39,10 @@ class ProductlistController extends Controller
     {
         $validatedData = $request->validated();
 
-        // Check for uniqueness
-        if (Productlist::where('name', $validatedData['name'])->exists()) {
+        // Ensure the 'name' field is included in the validated data
+        if (empty($validatedData['name'])) {
             throw ValidationException::withMessages([
-                'name' => ['A product list with this name already exists.'],
+                'name' => ['The name field is required.'],
             ]);
         }
 
@@ -181,5 +181,35 @@ class ProductlistController extends Controller
         $productlist->delete();
 
         return redirect()->route('lists.index')->with('success', 'Product List deleted successfully.');
+    }
+
+    public function add(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'list_id' => 'required|exists:lists,id',
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        // Find the product list entry
+        $productListEntry = Productlist::find($request->list_id);
+
+        if ($productListEntry) {
+            // Check if the product is already in the list
+            $existingProduct = $productListEntry->products()->where('product_id', $request->product_id)->first();
+
+            if ($existingProduct) {
+                // If the product is already in the list, update the quantity
+                $currentQuantity = $existingProduct->pivot->quantity;
+                $newQuantity = $currentQuantity + 1;
+                $productListEntry->products()->updateExistingPivot($request->product_id, ['quantity' => $newQuantity]);
+                Log::info('Product quantity updated in the list.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
+            } else {
+                // If the product is not in the list, create a new entry
+                $productListEntry->products()->attach($request->product_id, ['quantity' => 1]);
+                Log::info('Product added to the list successfully.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
+            }
+        }
+        return redirect()->back()->with('success', 'Product added to the list successfully.');
     }
 }

@@ -1,12 +1,51 @@
 <x-app-layout>
+    <!-- Themed Title Section -->
+    <div class="container mx-auto px-4 py-8 mb-16">
+        <div class="shopping-list-wrapper max-w-4xl mx-auto">
+            <article class="rounded-xl bg-white shadow-md overflow-hidden">
+                <div class="p-3 flex flex-col items-center" 
+                     style="background-color: {{ $productlist->theme->strap_color }};">
+                    <div class="flex items-center justify-between w-full">
+                        <!-- Favorite Toggle -->
+                        <form action="{{ route('lists.toggleFavorite', $productlist->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <input type="hidden" name="is_favorite" value="{{ $productlist->is_favorite ? 0 : 1 }}">
+                            <button type="submit" class="flex items-center focus:outline-none" onclick="event.stopPropagation();">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $productlist->is_favorite ? 'gold' : 'lightgray' }}" viewBox="0 0 24 24" class="w-4 h-4 mr-1">
+                                    <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
+                                </svg>
+                            </button>
+                        </form>
+
+                        <!-- Name Editing Form (Themed Title) -->
+                        <form action="{{ route('lists.updateName', $productlist->id) }}" method="POST" class="mt-2 flex-grow relative flex justify-center items-center">
+                            @csrf
+                            <input type="text" name="name" value="{{ $productlist->name }}" 
+                                   class="bg-transparent text-white focus:outline-none p-3 w-auto max-w-max border-2 border-transparent focus:border-blue-500 rounded-full text-center peer placeholder-black"
+                                   placeholder="Enter list name"
+                                   required 
+                                   onkeydown="if(event.key === 'Enter'){ this.form.submit(); }">
+                        </form>
+
+                        <span class="text-white text-sm font-bold px-3 py-1 rounded-full" 
+                              style="background-color: {{ $productlist->theme->count_circle_color }};">
+                            {{ $productlist->products->count() }}
+                        </span>
+                    </div>
+                    <span id="date-{{ $productlist->id }}" class="text-xs text-white mt-1 transition-opacity duration-300">
+                        {{ $productlist->updated_at->format('M d, Y') }}
+                    </span>
+                </div>
+            </article>
+        </div>
+    </div>
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8">
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Shopping List Details -->
             <div class="w-full md:w-2/3">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
                     <div class="p-6 space-y-4">
-                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ $productlist->name }}</h2>
-
                         <!-- Owner Information -->
                         <div class="mb-3">
                             <label class="block text-sm font-medium text-gray-900 dark:text-white">Owner</label>
@@ -91,7 +130,7 @@
 
                         <!-- Buttons -->
                         <div class="flex justify-between mt-4">
-                            <a href="{{ route('productlist.index') }}" 
+                            <a href="{{ route('lists.index') }}" 
                                 class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
                                 Back to Lists
                             </a>
@@ -99,6 +138,13 @@
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
                                 Edit List
                             </a>
+                            <form action="{{ route('productlist.destroy', $productlist->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                    Delete List
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

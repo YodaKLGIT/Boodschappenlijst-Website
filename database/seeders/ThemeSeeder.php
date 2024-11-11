@@ -45,14 +45,14 @@ class ThemeSeeder extends Seeder
                 'count_circle_color' => '#6A1B9A',
                 'content_bg_color' => '#FFFFFF',
             ],
-            // [
-            //     'name' => 'Mint Breeze',
-            //     'strap_color' => '#3EB489',
-            //     'body_color' => '#E0FFF0',
+            [
+                'name' => 'Mint Breeze',
+                'strap_color' => '#3EB489',
+                'body_color' => '#E0FFF0',
                 'hover_color' => 'teal-700',
                 'count_circle_color' => '#2D8B6D',
                 'content_bg_color' => '#FFFFFF',
-            // ],
+            ],
         ];
 
         foreach ($predefinedThemes as $theme) {

@@ -29,7 +29,6 @@ class CreateListsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('lists');
-        Schema::dropIfExists('lists');
     }
 
 };

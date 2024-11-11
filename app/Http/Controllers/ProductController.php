@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Brand;
-use App\Models\ListItem;
-use App\Models\Productlist;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Brand;
+use App\Models\Category; // Ensure you are using the correct model for categories
+use App\Models\Productlist; // Ensure you are using the correct model for lists
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // Fetch all categories
-        $categories = Category::all();
-
         // Fetch all brands
         $brands = Brand::all();
 
-        // Fetch all product lists
+        // Fetch all categories
+        $categories = Category::all();
 
-        // Get all available product lists
-        $lists = ListItem::all();
+        // Fetch all product lists owned by or shared with the authenticated user
+        $lists = Productlist::whereHas('users', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->orWhereHas('sharedUsers', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->get();
 
         // Fetch products with optional search and filters
         $products = Product::query();
@@ -42,17 +44,9 @@ class ProductController extends Controller
             $products->where('brand_id', $request->brand);
         }
 
-        // Apply sorting if specified
-        if ($request->sort === 'asc') {
-            $products->orderBy('name', 'asc');
-        } elseif ($request->sort === 'desc') {
-            $products->orderBy('name', 'desc');
-        }
+        // Get the paginated result
+        $products = $products->paginate(10);
 
-        // Get all filtered and sorted products
-        $products = $products->get();
-
-        // Pass data to the view
-        return view('products.index', compact('products', 'categories', 'brands', 'request', 'lists'));
+        return view('products.index', compact('products', 'brands', 'categories', 'lists'));
     }
 }
