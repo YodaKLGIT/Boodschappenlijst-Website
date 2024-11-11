@@ -74,10 +74,9 @@
 
                     {{-- Buttons --}}
                     <div class="flex justify-between mt-4">
-                        <a href="{{ route('productlist.index') }}" 
-                            class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
-                            Go Back
-                        </a>
+                    <a href="{{ route('lists.index') }}" 
+    class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
+    Go back</a>
                         <button type="submit" 
                             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
                             Create Shopping List

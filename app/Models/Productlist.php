@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
    {
        use HasFactory;
        
-    protected $fillable = ['name', 'theme_id', 'is_favorite', 'user_id'];
+    protected $fillable = ['name', 'theme_id', 'is_favorite'];
 
     protected $table = 'lists';  // This should match the lists table
 

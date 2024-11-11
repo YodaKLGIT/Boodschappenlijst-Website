@@ -145,7 +145,7 @@
 
             <!-- Notes Section -->
             <div class="w-full md:w-1/3">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
+                <div class="bg-white white:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
                     <div class="p-6 space-y-4">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
                         

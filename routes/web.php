@@ -19,6 +19,8 @@ Route::get('/dashboard', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::resource('productlist', ProductlistController::class);
+
 
 
 
@@ -26,6 +28,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBrand'])->name('products.filterByBrand');
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/productlist/add', [ProductlistController::class, 'add'])->name('productlist.add');
+});
 // Shopping List routes
 //Route::resource('shoppinglist', ShoppinglistController::class);
     //Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
@@ -96,5 +101,4 @@ Route::middleware(['auth'])->group(function () {
 
 // Include authentication routes
 require __DIR__ . '/auth.php';
-
 
