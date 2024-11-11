@@ -14,7 +14,9 @@ class CreateListsTable extends Migration
     {
         Schema::create('lists', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Ensure this column is defined as NOT NULL
+            $table->string("name")->unique(); 
+            $table->foreignId('theme_id')->nullable()->constrained()->onDelete('cascade'); // Make theme_id nullable
+            $table->boolean('is_favorite')->default(false); 
             $table->timestamps();
         });
     }
@@ -27,5 +29,9 @@ class CreateListsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('lists');
+        Schema::dropIfExists('lists');
     }
-}
+
+};
+
+

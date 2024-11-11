@@ -10,6 +10,18 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ShoppinglistController;
+use App\Http\Controllers\ProductlistController;
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+     Route::get('/shopping-lists/create', [ShoppinglistController::class, 'create'])->name('shoppinglist.create');
+     Route::post('/shopping-lists', [ShoppinglistController::class, 'store'])->name('shoppinglist.store');
+    // Add other routes that require authentication
+});
+
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -54,6 +66,8 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+
 });

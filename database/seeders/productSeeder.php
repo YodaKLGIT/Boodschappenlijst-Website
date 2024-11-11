@@ -37,7 +37,5 @@ class ProductSeeder extends Seeder
                 'category_id' => $categories->random()->id,
             ]));
         }
-
-        // Create additional random products
     }
 }

@@ -1,6 +1,6 @@
 <x-app-layout>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let selectedListId = sessionStorage.getItem('selectedListId') || null;
 
             // Toggle dropdown visibility for selecting a list
@@ -16,7 +16,7 @@
 
             // Handle list selection
             document.querySelectorAll('.list-option').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     selectedListId = this.getAttribute('data-list-id');
                     dropdownMenu.classList.add('hidden');
                     selectListButton.innerText = this.innerText;
@@ -78,7 +78,7 @@
             }
 
             // Close dropdowns when clicking outside
-            window.addEventListener('click', function() {
+            window.addEventListener('click', function () {
                 dropdownMenu.classList.add('hidden'); // Hide the list dropdown
                 brandDropdown.classList.add('hidden'); // Hide the brand dropdown
                 sortDropdown.classList.add('hidden'); // Hide the sort dropdown
@@ -242,3 +242,4 @@
         <input type="hidden" name="product_id" value="">
     </form>
 </x-app-layout>
+

@@ -5,31 +5,77 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Productlist;
+use App\Models\User; // Import User model
 use App\Http\Requests\Auth\ProductlistRequestForm;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth; // Import Auth for user management
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Theme;
+use Illuminate\Support\Facades\Log;
+use App\Models\Note;
+
+
 
 class ProductlistController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $productlists = Productlist::with(['products.brand', 'products.category'])->get();
-        $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
-
-        return view('lists.index', compact('productlists', 'groupedProducts'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+{   
     public function create()
     {
+        // Retrieve all products
+        $products = Product::with(['brand', 'category'])->get();
+
+        // Group products by category
+        $groupedProducts = $products->groupBy('category.name');
         $products = Product::with(['brand', 'category'])->get();
         $groupedProducts = $products->groupBy('category.name');
 
+        // Retrieve all users (for the user selection dropdown)
+        $users = User::where('id', '!=', Auth::id())->get();
+
+        // Retrieve all themes
+        $themes = Theme::all();
+
+        $someListId = 1; // Replace with the actual logic to get the list ID
+        return view('productlist.create', compact('groupedProducts', 'users', 'themes', 'someListId'));
+    }
+
+
+
+
+    public function store(ProductlistRequestForm $request)
+{
+    $validatedData = $request->validated();
+
+    // Create the list
+    $productlist = Productlist::create([
+        'name' => $validatedData['name'],
+        'theme_id' => $validatedData['theme_id'] ?? null,
+    ]);
+
+    // Attach the current user as the owner
+    $productlist->users()->attach(Auth::id());
+
+    // Attach products to the list
+    if (!empty($validatedData['product_ids'])) {
+        $productData = [];
+        foreach ($validatedData['product_ids'] as $productId) {
+            $quantity = $validatedData['quantities'][$productId] ?? null;
+            $productData[$productId] = ['quantity' => $quantity];
+        }
+        $productlist->products()->attach($productData);
+    }
+
+    // Attach invited users to the list
+    if (!empty($validatedData['user_ids'])) {
+        $productlist->sharedUsers()->attach($validatedData['user_ids']);
+    }
+
+    return redirect()->route('lists.index')->with('success', 'List created successfully.');
+}
+
+
+     
         return view('productlist.create', compact('groupedProducts'));
     }
 
@@ -67,32 +113,77 @@ class ProductlistController extends Controller
      * Display the specified resource.
      */
     public function show(Productlist $productlist)
-    {
-        $products = $productlist->products()->with(['brand', 'category'])->get();
-        return view('productlist.show', compact('productlist', 'products'));
+{
+    $userId = Auth::id();
+
+    // Retrieve the owner using the custom method
+    $owner = $productlist->getOwnerAttribute();
+
+    // Determine if the current user is the owner
+    $isOwner = $owner && $owner->id === $userId;
+
+    // Check if the user is the owner or a shared user
+    if (!$isOwner && !$productlist->sharedUsers->contains($userId)) {
+        abort(403, 'Unauthorized access to this list.');
     }
 
+    // Load the necessary relationships
+    $productlist->load(['products.brand', 'products.category', 'notes', 'sharedUsers', 'theme']);
+
+    // Get all users except the owner and already shared users
+    $users = User::whereNotIn('id', $productlist->sharedUsers->pluck('id'))
+                 ->get();
+    // Pass the owner to the view
+    return view('productlist.show', compact('productlist', 'users', 'isOwner', 'owner'));
+}
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Productlist $productlist)
     {
         $products = Product::with(['brand', 'category'])->get();
-        $productlist = $productlist->load(['products.brand', 'products.category']);
-        $groupedProducts = $products->groupBy('category.name');
 
-        return view('product.edit', compact('productlist', 'products', 'groupedProducts'));
+        $productlist = $productlist->load(['products.brand', 'products.category']);
+
+       // Group products by category name 
+       $groupedProducts = $products->groupBy('category.name');
+
+         // Update the view path to match the directory structure
+        return view('productlist.edit', compact('productlist', 'products', 'groupedProducts'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
+    public function invite(Request $request, Productlist $productlist)
+    {
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+    
+        // Attach the user to the list
+        $productlist->sharedUsers()->attach($validatedData['user_id']);
+    
+        return redirect()->route('productlist.show', $productlist->id)->with('success', 'User invited successfully.');
+    }
+
+
+    public function destroy($id)
+    {
+        $list = Productlist::findOrFail($id);
+        $list->delete();
+
+        // Redirect to the lists.index route
+        return redirect()->route('lists.index')->with('success', 'List deleted successfully.');
+    }
+
     public function update(ProductlistRequestForm $request, Productlist $productlist)
     {
         $validatedData = $request->validated();
 
         // Check for uniqueness, excluding the current product list
         if (Productlist::where('name', $validatedData['name'])
+            ->where('id', '!=', $productlist->id)
+            ->exists()
+        ) {
             ->where('id', '!=', $productlist->id)
             ->exists()
         ) {
@@ -108,6 +199,7 @@ class ProductlistController extends Controller
         // Prepare data for attaching products
         $productData = [];
         foreach ($validatedData['product_ids'] as $productId) {
+            $quantity = isset($validatedData['quantities'][$productId]) ? $validatedData['quantities'][$productId] : null;
             $quantity = $validatedData['quantities'][$productId] ?? null;
             $productData[$productId] = ['quantity' => $quantity];
         }
@@ -115,55 +207,28 @@ class ProductlistController extends Controller
         // Sync products with quantities
         $productlist->products()->sync($productData);
 
-        return redirect()->route('productlist.index')->with('success', 'Product List updated successfully.');
+        return redirect()->route('productlist.show', $productlist->id)->with('success', 'Product List updated successfully.');
     }
 
-    /**
-     * Add a product to the list.
-     */
-    public function add(Request $request)
+    public function removeUser(Request $request, Productlist $productlist, User $user)
 {
-    // try {
-        // Validate the request data
-        $request->validate([
-            'list_id' => 'required|exists:lists,id',
-            'product_id' => 'required|exists:products,id',
-        ]);
+    // Retrieve the owner using the user_id field
+    $owner = $productlist->owner;
+    $isOwner = $owner && $owner->id === Auth::id();
 
-        // Find the product list entry
-        $productListEntry = ProductList::where('list_id', $request->list_id)
-            ->where('product_id', $request->product_id)
-            ->first();
+    if (!$isOwner) {
+        abort(403, 'Unauthorized action.');
+    }
 
-        // Find the product
-        $product = Product::find($request->product_id);
+    Log::info('Attempting to remove user from list', [
+        'list_id' => $productlist->id,
+        'user_id' => $user->id,
+        'current_user_id' => Auth::id()
+    ]);
 
-        if ($productListEntry) {
-            // If the product is already in the list, update the quantity
-            $productListEntry->quantity += 1;
-            $productListEntry->save();
-            Log::info('Product quantity updated in the list.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
-        } else {
-            // If the product is not in the list, create a new entry
-            ProductList::create([
-                'list_id' => $request->list_id,
-                'product_id' => $request->product_id,
-                'quantity' => 1
-            ]);
-            Log::info('Product added to the list successfully.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
-        }
+    $productlist->sharedUsers()->detach($user->id);
 
-        return redirect()->back()->with('success', 'Successfully added ' . $product->name . ' to the list.');
-    // } catch (\Exception $e) {
-    //     Log::error('Failed to add product to the list.', [
-    //         'error' => $e->getMessage(),
-    //         'trace' => $e->getTraceAsString()
-    //     ]);
-    //     return redirect()->back()->with('error', 'Failed to add product to the list.');
-    // }
-}
-
-
+    return redirect()->route('productlist.show', $productlist->id)->with('success', 'User removed successfully.');
     /**
      * Remove the specified resource from storage.
      */
@@ -174,4 +239,5 @@ class ProductlistController extends Controller
 
         return redirect()->route('lists.index')->with('success', 'Product List deleted successfully.');
     }
+}
 }

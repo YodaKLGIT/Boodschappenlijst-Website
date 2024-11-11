@@ -13,14 +13,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        
+        // Create or update the test user
+        User::updateOrCreate(
+            ['email' => 'test@example.com'], // Check for existing email
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password'),
+                'role' => 'user',
+            ]
+        );
 
-        //Create 10 random users with the role 'user'
+        // Create 10 random users with unique emails
         User::factory()->count(10)->create([
             'role' => 'user',
         ]);
-
-    
-        
     }
 }

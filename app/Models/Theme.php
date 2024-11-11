@@ -9,11 +9,17 @@ class Theme extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'strap_color', 'body_color'];
+    protected $fillable = [
+        'name',
+        'strap_color',
+        'body_color',
+        'content_bg_color',
+        'hover_color',
+        'count_circle_color'
+    ];
 
     public function lists()
     {
-        return $this->belongsToMany(ListItem::class, 'list_theme', 'theme_id', 'list_id');
+        return $this->hasMany(ListItem::class);
     }
 }
-

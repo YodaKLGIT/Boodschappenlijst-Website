@@ -2,21 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Note;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable, HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -24,23 +19,11 @@ class User extends Authenticatable
         'role',
     ];
 
-    
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -54,8 +37,32 @@ class User extends Authenticatable
         return $this->hasMany(Note::class, 'user_id');
     }
     
+    public function shoppingLists()
+    {
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class, 'recipient_id', 'id');
+    }
+    
     public function userList()
     {
         return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+    }
+    public function lists()
+    {
+        return $this->hasMany(ListItem::class, 'user_id');
+    }
+
+    public function sharedLists()
+    {
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+    }
+
+    public function productLists()
+    {
+        return $this->belongsToMany(Productlist::class, 'user_list', 'user_id', 'list_id');
     }
 }

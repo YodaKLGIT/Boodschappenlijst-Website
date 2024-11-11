@@ -5,24 +5,24 @@
             <div class="w-full md:w-2/3">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
                     <div class="p-6 space-y-4">
-                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ $productlist->name }}</h2>
+                        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ $shoppinglist->name }}</h2>
 
-                        <!-- Owner Information -->
+                        {{-- Owner Information --}}
                         <div class="mb-3">
                             <label class="block text-sm font-medium text-gray-900 dark:text-white">Owner</label>
-                            <p class="mt-1 text-gray-600 dark:text-gray-400">{{ $owner->name ?? 'Unknown' }}</p>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">{{ $shoppinglist->user->name }}</p>
                         </div>
 
-                        <!-- Shared Users -->
+                        {{-- Shared Users --}}
                         <div class="mb-3">
                             <label class="block text-sm font-medium text-gray-900 dark:text-white">Shared with</label>
-                            @if ($productlist->sharedUsers->isNotEmpty())
+                            @if ($shoppinglist->sharedUsers->isNotEmpty())
                                 <ul class="mt-1 space-y-2">
-                                    @foreach ($productlist->sharedUsers as $user)
+                                    @foreach ($shoppinglist->sharedUsers as $user)
                                         <li class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-2 rounded">
                                             <span class="text-gray-800 dark:text-gray-200">{{ $user->name }}</span>
-                                            @if ($isOwner && $user->id !== $owner->id)
-                                                <form action="{{ route('productlist.removeUser', [$productlist->id, $user->id]) }}" method="POST">
+                                            @if (Auth::id() === $shoppinglist->user_id)
+                                                <form action="{{ route('shoppinglist.removeUser', [$shoppinglist, $user]) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
@@ -38,13 +38,13 @@
                             @endif
                         </div>
 
-                        <!-- Products List -->
+                        {{-- Products List --}}
                         <div class="mb-3">
                             <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Products</label>
-                            @if ($productlist->products->isNotEmpty())
+                            @if ($shoppinglist->products->isNotEmpty())
                                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
                                     <ul class="divide-y divide-gray-200 dark:divide-gray-600">
-                                        @foreach ($productlist->products as $product)
+                                        @foreach ($shoppinglist->products as $product)
                                             <li class="p-3 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                                                 <div class="flex justify-between items-center">
                                                     <span class="text-gray-900 dark:text-white">
@@ -66,36 +66,32 @@
                             @endif
                         </div>
 
-                        <!-- Invite Users Section (Only visible to owner) -->
-                        @if ($isOwner)
+                        {{-- Invite Users Section (Only visible to owner) --}}
+                        @if (Auth::id() === $shoppinglist->user_id)
                             <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Invite Users</h3>
-                                <form action="{{ route('productlist.invite', $productlist->id) }}" method="POST" class="space-y-2">
+                                <form action="{{ route('shoppinglist.invite', $shoppinglist) }}" method="POST" class="space-y-2">
                                     @csrf
                                     <div>
-                                        <label for="user_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select User</label>
-                                        <select id="user_id" name="user_id" class="w-full p-3 rounded bg-white border border-gray-300 text-gray-800" required>
-                                            <option value="">Select a user</option>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                        <input type="email" name="email" id="email" required
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                                     </div>
                                     <button type="submit" 
                                         class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                                        Invite User
+                                        Send Invitation
                                     </button>
                                 </form>
                             </div>
                         @endif
 
-                        <!-- Buttons -->
+                        {{-- Buttons --}}
                         <div class="flex justify-between mt-4">
-                            <a href="{{ route('productlist.index') }}" 
+                            <a href="{{ route('shoppinglist.index') }}" 
                                 class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
                                 Back to Lists
                             </a>
-                            <a href="{{ route('productlist.edit', $productlist->id) }}" 
+                            <a href="{{ route('shoppinglist.edit', $shoppinglist) }}" 
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
                                 Edit List
                             </a>
@@ -110,10 +106,10 @@
                     <div class="p-6 space-y-4">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
                         
-                        <!-- Display existing notes -->
-                        @if ($productlist->notes->isNotEmpty())
+                        {{-- Display existing notes --}}
+                        @if ($shoppinglist->notes->isNotEmpty())
                             <div class="space-y-2 mb-4 max-h-96 overflow-y-auto">
-                                @foreach ($productlist->notes as $note)
+                                @foreach ($shoppinglist->notes as $note)
                                     <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                         <h4 class="font-semibold text-gray-900 dark:text-white">{{ $note->title }}</h4>
                                         <p class="text-gray-600 dark:text-gray-400">{{ $note->description }}</p>
@@ -127,8 +123,8 @@
                             <p class="text-gray-600 dark:text-gray-400 mb-4">No notes yet</p>
                         @endif
 
-                        <!-- Add new note form -->
-                        <form action="{{ route('list.notes.store', $productlist->id) }}" method="POST" class="space-y-2">
+                        {{-- Add new note form --}}
+                        <form action="{{ route('notes.store', $shoppinglist) }}" method="POST" class="space-y-2">
                             @csrf
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">Title</label>
