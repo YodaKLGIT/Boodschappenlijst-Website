@@ -77,6 +77,16 @@
         <!-- Include the footer -->
         @include('layouts.footer')
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutLink = document.querySelector('a[href="{{ route('logout') }}"]');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function() {
+                    sessionStorage.clear();
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
