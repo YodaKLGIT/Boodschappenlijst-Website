@@ -10,7 +10,7 @@
             <div class="flex justify-center lg:justify-end space-x-3">
                 <a href="{{ route('productlist.create') }}" class="btn-primary inline-flex items-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-500 rounded-lg">Create a new list</a>
                 <a href="{{ route('lists.index') }}" class="btn-secondary inline-flex items-center px-4 py-2 text-white bg-gray-600 hover:bg-gray-500 rounded-lg">All Lists</a>
-                <a href="{{ route('lists.favorites') }}" class="btn-secondary inline-flex items-center px-4 py-2 text-white bg-gray-600 hover:bg-gray-500 rounded-lg">Favorites</a>
+                <a href="{{ route('lists.favorites') }}" class="btn-secondary inline-flex items-center px-4 py-2 text-white bg-gray-600 hover:bg-gray-500 rounded-lg">Favorite Lists</a>
             </div>
         </div>
     </div>
