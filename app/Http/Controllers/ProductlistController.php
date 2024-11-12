@@ -212,4 +212,12 @@ class ProductlistController extends Controller
         }
         return redirect()->back()->with('success', 'Product added to the list successfully.');
     }
+
+    public function removeProduct($productlistId, $productId)
+    {
+        $productlist = ProductList::findOrFail($productlistId);
+        $productlist->products()->detach($productId);
+
+        return redirect()->route('productlist.show', $productlistId)->with('success', 'Product removed successfully.');
+    }
 }
