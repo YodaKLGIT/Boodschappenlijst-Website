@@ -177,6 +177,15 @@
                                         <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
                                             By {{ $note->user->name }} on {{ $note->created_at->format('M d, Y H:i') }}
                                         </p>
+                                        @if (Auth::id() === $note->user_id)
+                                            <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
