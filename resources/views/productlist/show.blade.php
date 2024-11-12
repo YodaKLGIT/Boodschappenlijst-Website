@@ -55,6 +55,14 @@
                                                         <span class="text-gray-600 dark:text-gray-400">
                                                             Quantity: {{ $product->pivot->quantity }}
                                                         </span>
+                                                        <!-- Delete Product Form -->
+                                                        <form action="{{ route('productlist.removeProduct', [$productlist->id, $product->id]) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
+                                                                Delete
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                                         Category: {{ $product->category->name }}
@@ -139,13 +147,15 @@
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
                                 Edit List
                             </a>
-                            <form action="{{ route('productlist.destroy', $productlist->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                                    Delete List
-                                </button>
-                            </form>
+                            @if ($isOwner)
+                                <form action="{{ route('productlist.destroy', $productlist->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                        Delete List
+                                    </button>
+                                </form>
+                            @endif
                         </div>           
                     </div>
                 </div>

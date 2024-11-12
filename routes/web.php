@@ -76,17 +76,11 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Invitation routes
-    Route::post('/shoppinglist/{shoppinglist}/invite', [InvitationController::class, 'store'])->name('invitation.store');
-    Route::post('/invitation/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitation.accept');
-    Route::post('/invitation/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitation.decline');
+
 
     Route::post('/productlist/{productlist}/notes', [ProductlistController::class, 'storeNote'])->name('notes.store');
     
-    Route::post('/shoppinglists/{shoppinglist}/invite', [ShoppinglistController::class, 'invite'])->name('shoppinglist.invite');
-    
-    Route::delete('/shoppinglists/{shoppinglist}/users/{user}', [ShoppinglistController::class, 'removeUser'])->name('shoppinglist.removeUser');
 
-    Route::get('/shoppinglist/{shoppinglist}', [ShoppinglistController::class, 'show'])->name('shoppinglist.show');
 
     Route::get('/productlist/{productlist}', [ProductlistController::class, 'show'])->name('productlist.show');
 
@@ -96,6 +90,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/productlist/{id}', [ProductListController::class, 'destroy'])->name('productlist.destroy');
 
+    Route::delete('/productlist/{productlist}/product/{product}', [ProductlistController::class, 'removeProduct'])
+        ->name('productlist.removeProduct');
 
 });
 
