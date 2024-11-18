@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_list', function (Blueprint $table) {
-            $table->id();
+            $table->boolean('is_new');
            
 
             // Foreign key for the users table

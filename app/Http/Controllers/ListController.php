@@ -29,6 +29,12 @@ class ListController extends Controller
         if (!$request->routeIs('lists.favorites')) {
             $lists = $lists->where('is_favorite', false); // Exclude favorites on normal index
         }
+
+        $lists->transform(function ($lists) {
+            $lists->is_new = $lists->is_new; // Ensure is_new is available
+            return $lists;
+        });
+    
         
         // Get all brands and categories for filtering
         $brands = Brand::all(); // Retrieve all brands

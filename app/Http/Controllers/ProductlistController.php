@@ -14,16 +14,7 @@ class ProductlistController extends Controller
     
 
     
-    public function index(Request $request)
-    {
-        
-        $productlists = Productlist::with(['products.brand', 'products.category'])->get();
-
-        
-        $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
    
-        return view('lists.index', compact('productlists', 'groupedProducts'));
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -54,9 +45,10 @@ class ProductlistController extends Controller
 
          $validatedData = $request->validate();
      
-         // Create a new ProductList with timestamps
+         // Create a new ProductList with timestamps and is_new
          $productlist = Productlist::create([
              'name' => $validatedData['name'],
+             'is_new' => $validatedData['is_new'] ?? false, // Handle is_new
              'created_at' => now(),
              'updated_at' => now(),
          ]);

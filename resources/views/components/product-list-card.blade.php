@@ -5,6 +5,13 @@
                  onclick="toggleProducts(event, '{{ $productlist->id }}')"
                  style="background-color: {{ $productlist->theme->strap_color }};">
                 <div class="flex items-center justify-between">
+                    <!-- New Label -->
+                    @if ($productlist->is_new) <!-- Check if the list is new -->
+                        <span class="text-xs text-white font-bold px-2 py-1 rounded-full" 
+                              style="background-color: green; color: white;">
+                            New
+                        </span>
+                    @endif
                     <!-- Gold Star Before Name -->
                     <form action="{{ route('lists.toggleFavorite', $productlist->id) }}" method="POST" style="display: inline;">
                         @csrf
