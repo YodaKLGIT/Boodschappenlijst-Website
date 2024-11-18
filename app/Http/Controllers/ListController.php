@@ -23,19 +23,28 @@ class ListController extends Controller
     
     public function index(Request $request)
     {
-        // Use the ListService to filter product lists based on request parameters
-        $lists = $this->listService->filter($request); // Fixed casing
+        $user = Auth::user(); // Get the logged-in user
+
+        // Call the filter method with the request
+        $listsQuery = $this->listService->filter($request)
+            ->where('user_id', $user->id); // Lists owned by the user
 
         if (!$request->routeIs('lists.favorites')) {
-            $lists = $lists->where('is_favorite', false); // Exclude favorites on normal index
+            $listsQuery = $listsQuery->where('is_favorite', false); // Exclude favorites on normal index
         }
 
-        $lists->transform(function ($lists) {
-            $lists->is_new = $lists->is_new; // Ensure is_new is available
-            return $lists;
+        // Debugging: Check if $listsQuery is a valid query builder
+        if (!($listsQuery instanceof \Illuminate\Database\Eloquent\Builder)) {
+            throw new \Exception('Invalid query builder instance');
+        }
+
+        // Fetch the lists
+        $lists = $listsQuery->with('sharedUsers')->get()->map(function ($list) {
+            // Directly retrieve the is_new value
+            $list->is_new = $list->is_new; // Ensure is_new is available
+            return $list;
         });
-    
-        
+
         // Get all brands and categories for filtering
         $brands = Brand::all(); // Retrieve all brands
         $categories = Category::all(); // Retrieve all categories
