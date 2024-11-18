@@ -36,6 +36,11 @@ class ListItem extends Model
                     ->withPivot('is_new');
     }
 
+    public function sharedUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_lists', 'list_id', 'user_id')->withTimestamps();
+    }
+
     public function theme()
     {
        return $this->belongsTo(Theme::class, 'theme_id');
