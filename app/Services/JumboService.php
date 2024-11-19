@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Ljpc\Jumboextras\JumboExtras;
+use LJPc\JumboExtras\Calls\JumboExtras;
 
 class JumboService
 {
@@ -20,6 +20,6 @@ class JumboService
 
     public function getProducts()
     {
-        return $this->jumbo->getProducts(); // Adjust this method based on the actual API
+        return $this->jumbo->getSavingOffers();
     }
 }
