@@ -23,7 +23,7 @@ class JumboController extends Controller
             $this->jumboService->login($username, $password);
 
             // Retrieve products
-            $products = $this->jumboService->getProducts();
+            $products = $this->jumboService->getAllAvailableProducts();
 
             // Return products as JSON response
             return response()->json($products);
