@@ -9,7 +9,7 @@ class UserList extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_lists';  
+    protected $table = 'user_list';  
 
     public function users()
     {

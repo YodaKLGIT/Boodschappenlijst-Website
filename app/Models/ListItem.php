@@ -38,7 +38,7 @@ class ListItem extends Model
 
     public function sharedUsers()
     {
-        return $this->belongsToMany(User::class, 'user_lists', 'list_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id')->withTimestamps();
     }
 
     public function theme()

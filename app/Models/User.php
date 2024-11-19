@@ -35,12 +35,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class, 'user_id');
     }
-    
-    public function shoppinglists()
-    {
-        return $this->belongsToMany(Shoppinglist::class, 'user_lists', 'user_id', 'list_id')
-            ->withTimestamps();
-    }
 
     public function invitations()
     {

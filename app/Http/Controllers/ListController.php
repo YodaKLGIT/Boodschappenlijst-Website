@@ -25,9 +25,16 @@ class ListController extends Controller
     {
         $user = Auth::user(); // Get the logged-in user
 
-        // Call the filter method with the request
-        $listsQuery = $this->listService->filter($request)
-            ->where('user_id', $user->id); // Lists owned by the user
+        // Call the filter method with the request to get the base query
+        $listsQuery = $this->listService->filter($request);
+
+        // Apply additional conditions for user ownership and shared lists
+        $listsQuery = $listsQuery->where(function ($query) use ($user) {
+            $query->where('user_id', $user->id) // Lists owned by the user
+                  ->orWhereHas('sharedUsers', function ($q) use ($user) {
+                      $q->where('user_id', $user->id); // Lists shared with the user
+            });
+        });
 
         if (!$request->routeIs('lists.favorites')) {
             $listsQuery = $listsQuery->where('is_favorite', false); // Exclude favorites on normal index
