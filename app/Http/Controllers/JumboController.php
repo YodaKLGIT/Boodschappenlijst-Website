@@ -17,12 +17,15 @@ class JumboController extends Controller
     public function getProducts(Request $request)
     {
         try {
-            // Authenticate with Jumbo API
-            $username = env('JUMBO_USERNAME'); // Use environment variables for credentials
+            // Example: Using username/password authentication
+            $username = env('JUMBO_USERNAME');
             $password = env('JUMBO_PASSWORD');
             $this->jumboService->login($username, $password);
 
-            // Retrieve products
+            // OR, if using access/refresh tokens
+            // $this->jumboService->setTokens($accessToken, $refreshToken);
+
+            // Fetch products from the Jumbo API
             $products = $this->jumboService->getAllAvailableProducts();
 
             // Return products as JSON response

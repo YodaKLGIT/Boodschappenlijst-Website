@@ -66,33 +66,9 @@
                 sessionStorage.removeItem('productAdded');
             }
 
-            // Toggle dropdown visibility for brand filter
-            const brandButton = document.querySelector('.brand-button');
-            const brandDropdown = document.querySelector('.brand-dropdown');
-
-            if (brandButton) {
-                brandButton.addEventListener('click', function(event) {
-                    event.stopPropagation(); // Prevent click from bubbling up
-                    brandDropdown.classList.toggle('hidden'); // Toggle visibility
-                });
-            }
-
-            // Toggle dropdown visibility for sort filter
-            const sortButton = document.querySelector('.sort-button');
-            const sortDropdown = document.querySelector('.sort-dropdown');
-
-            if (sortButton) {
-                sortButton.addEventListener('click', function(event) {
-                    event.stopPropagation(); // Prevent click from bubbling up
-                    sortDropdown.classList.toggle('hidden'); // Toggle visibility
-                });
-            }
-
             // Close dropdowns when clicking outside
             window.addEventListener('click', function () {
                 dropdownMenu.classList.add('hidden'); // Hide the list dropdown
-                brandDropdown.classList.add('hidden'); // Hide the brand dropdown
-                sortDropdown.classList.add('hidden'); // Hide the sort dropdown
             });
         });
 
@@ -114,10 +90,7 @@
     <div class="flex justify-center p-10">
         <!-- Sidebar -->
         <div class="w-64 p-6 bg-white border-r border-gray-200">
-            <h2 class="font-bold text-xl mb-4">Filters</h2>
-
-            <!-- Select List Dropdown -->
-            <h3 class="font-semibold text-lg mb-2">Select list</h3>
+            <h2 class="font-bold text-xl mb-4">Select List</h2>
             <div class="relative mb-4">
                 <button class="w-full border rounded-lg p-2 flex items-center select-list-button bg-blue-500 text-white hover:bg-blue-600">
                     Select List
@@ -135,66 +108,6 @@
                                 </button>
                             </li>
                         @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Category Filter -->
-            <h3 class="font-semibold text-lg mb-2">Category</h3>
-            <div class="flex flex-col space-y-2 mb-4">
-                @foreach ($categories as $category)
-                    <a href="?category={{ $category->id }}" class="block border p-2 rounded-lg hover:bg-gray-200">
-                        {{ $category->name }}
-                    </a>
-                @endforeach
-            </div>
-
-            <!-- Brand Filter Dropdown -->
-            <h3 class="font-semibold text-lg mb-2">Brand</h3>
-            <div class="relative mb-4">
-                <button class="w-full border rounded-lg p-2 flex items-center brand-button bg-blue-500 text-white hover:bg-blue-600">
-                    Brand
-                    <span class="ml-1 text-gray-600">{{ request()->brand ? $brands->find(request()->brand)->name : 'Select a brand' }}</span>
-                    <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-                <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10 w-full brand-dropdown">
-                    <ul class="py-1">
-                        <li>
-                            <a href="{{ request()->fullUrlWithQuery(['brand' => null]) }}" class="block px-4 py-2 hover:bg-gray-200">All Brands</a>
-                        </li>
-                        @foreach ($brands as $brand)
-                            <li>
-                                <a href="{{ request()->fullUrlWithQuery(['brand' => $brand->id]) }}" class="block px-4 py-2 hover:bg-gray-200">
-                                    {{ $brand->name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sorting Options Dropdown -->
-            <h3 class="font-semibold text-lg mb-2">Sort By</h3>
-            <div class="relative mb-4">
-                <button class="w-full border rounded-lg p-2 flex items-center sort-button bg-blue-500 text-white hover:bg-blue-600">
-                    Sort
-                    <span class="ml-1 text-gray-600">{{ request()->sort ? (request()->sort == 'asc' ? 'Name (A-Z)' : 'Name (Z-A)') : 'Select Sorting' }}</span>
-                    <svg class="inline h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-                <div class="absolute hidden mt-1 bg-white rounded-lg shadow-lg z-10 w-full sort-dropdown">
-                    <ul class="py-1">
-                        <li>
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'asc']) }}"
-                               class="block px-4 py-2 hover:bg-gray-200">Sort by Asc</a>
-                        </li>
-                        <li>
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'desc']) }}"
-                               class="block px-4 py-2 hover:bg-gray-200">Sort by Desc</a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -223,18 +136,10 @@
                                         <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                             class="h-64 w-full object-cover rounded-t-xl" />
                                         <div class="px-4 py-3">
-                                            <span class="text-gray-400 mr-3 uppercase text-xs">
-                                                {{ $product->brand->name ?? 'Brand' }}
-                                            </span>
                                             <p class="text-lg font-bold text-black truncate block capitalize">
                                                 {{ $product->name }}
                                             </p>
                                             <p class="text-sm text-gray-600 truncate">{{ $product->description }}</p>
-                                            <div class="flex items-center mt-2">
-                                                <p class="text-lg font-semibold text-black cursor-auto my-3">
-                                                    {{ $product->price ?? 'N/A' }}
-                                                </p>
-                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

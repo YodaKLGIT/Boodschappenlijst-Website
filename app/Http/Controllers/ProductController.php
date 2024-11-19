@@ -8,9 +8,17 @@ use App\Models\Brand;
 use App\Models\Category; // Ensure you are using the correct model for categories
 use App\Models\Productlist; // Ensure you are using the correct model for lists
 use Illuminate\Support\Facades\Auth;
+use App\Services\JumboService;
 
 class ProductController extends Controller
 {
+    protected $jumboService;
+
+    public function __construct(JumboService $jumboService)
+    {
+        $this->jumboService = $jumboService;
+    }
+
     public function index(Request $request)
     {
         // Fetch all brands
@@ -26,26 +34,12 @@ class ProductController extends Controller
             $query->where('user_id', Auth::id());
         })->get();
 
-        // Fetch products with optional search and filters
-        $products = Product::query();
+        // Fetch products from the Jumbo API
+        $products = $this->jumboService->getAllAvailableProducts();
 
-        // Apply search filter if specified
-        if ($request->search) {
-            $products->where('name', 'like', "%{$request->search}%");
-        }
-
-        // Apply category filter if specified
-        if ($request->category) {
-            $products->where('category_id', $request->category);
-        }
-
-        // Apply brand filter if specified
-        if ($request->brand) {
-            $products->where('brand_id', $request->brand);
-        }
-
-        // Get the paginated result
-        $products = $products->paginate(10);
+        // Optionally, you can apply filters here if needed
+        // For example, if you want to filter products based on search, category, or brand
+        // You can implement filtering logic similar to what you had before
 
         return view('products.index', compact('products', 'brands', 'categories', 'lists'));
     }

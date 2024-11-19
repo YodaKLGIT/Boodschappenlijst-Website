@@ -18,6 +18,17 @@ class JumboService
         return $this->jumbo->login($username, $password);
     }
 
+    public function setTokens($accessToken, $refreshToken)
+    {
+        $this->jumbo::setAccessToken($accessToken);
+        $this->jumbo::setRefreshToken($refreshToken);
+    }
+
+    public function refreshToken()
+    {
+        return $this->jumbo->refreshToken();
+    }
+
     public function getAllAvailableProducts()
     {
         // Initialize an array to hold all products
@@ -31,7 +42,7 @@ class JumboService
                 'title' => $offer['title'],
                 'description' => $offer['description'],
                 'image' => $offer['image'],
-                'type' => 'saving_offer', // Indicate the type of offer
+                'type' => 'saving_offer',
             ];
         }
 
@@ -43,7 +54,7 @@ class JumboService
                 'title' => $offer['title'],
                 'description' => $offer['description'],
                 'image' => $offer['image'],
-                'type' => 'redeem_offer', // Indicate the type of offer
+                'type' => 'redeem_offer',
             ];
         }
 
@@ -55,7 +66,7 @@ class JumboService
                 'title' => $offer['title'],
                 'description' => $offer['description'],
                 'image' => $offer['image'],
-                'type' => 'homescreen_offer', // Indicate the type of offer
+                'type' => 'homescreen_offer',
             ];
         }
 
