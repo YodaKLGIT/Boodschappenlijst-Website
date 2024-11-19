@@ -23,7 +23,7 @@ class ProductlistRequestForm extends FormRequest
 {
     return [
         'name' => 'required|string|max:255|unique:lists,name',
-        'product_ids' => 'required|array',
+        'product_ids' => 'nullable|array',
         'product_ids.*' => 'exists:products,id',
         'quantities' => 'nullable|array',
         'quantities.*' => 'nullable|integer|min:0',
