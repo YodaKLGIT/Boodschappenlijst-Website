@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc71846f7b759835cb9d441d7190a821",
+    "content-hash": "741db2c1b706017f1c0c1e7138dbf6af",
     "packages": [
         {
             "name": "brick/math",
@@ -1876,6 +1876,47 @@
                 }
             ],
             "time": "2024-01-28T23:22:08+00:00"
+        },
+        {
+            "name": "ljpc/jumboextras",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Lars-/Jumbo-Extras-API.git",
+                "reference": "b78b0e3b1a08b776ad7c750551d5909599629037"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Lars-/Jumbo-Extras-API/zipball/b78b0e3b1a08b776ad7c750551d5909599629037",
+                "reference": "b78b0e3b1a08b776ad7c750551d5909599629037",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LJPc\\JumboExtras\\Calls\\": "Calls"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lars Jansen",
+                    "email": "lars@ljpc.nl"
+                }
+            ],
+            "description": "Talks to the Jumbo servers",
+            "support": {
+                "issues": "https://github.com/Lars-/Jumbo-Extras-API/issues",
+                "source": "https://github.com/Lars-/Jumbo-Extras-API/tree/1.0.2"
+            },
+            "time": "2020-02-10T08:14:52+00:00"
         },
         {
             "name": "monolog/monolog",
