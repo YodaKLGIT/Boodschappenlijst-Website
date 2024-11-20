@@ -6,23 +6,27 @@
                  style="background-color: {{ $productlist->theme->strap_color }};">
                 <div class="flex items-center justify-between relative">
                     <!-- New Label -->
-                    @if ($productlist->is_new) <!-- Check if the list is new -->
-                        <span class="text-xs text-black font-bold px-2 py-1 rounded-full bg-green-500 absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2">
-                            New
-                        </span>
-                    @endif
-                    <!-- Gold Star Before Name -->
-                    <form action="{{ route('lists.toggleFavorite', $productlist->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        <input type="hidden" name="is_favorite" value="{{ $productlist->is_favorite ? 0 : 1 }}"> <!-- Toggle the value -->
-                        <button type="submit" class="flex items-center focus:outline-none"
-                                onclick="event.stopPropagation();">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $productlist->is_favorite ? 'gold' : 'lightgray' }}"
-                                 viewBox="0 0 24 24" class="w-4 h-4 mr-1">
-                                <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
-                            </svg>
-                        </button>
-                    </form>
+                        @php
+                            $currentUser = $productlist->users->firstWhere('id', auth()->id());
+                        @endphp
+
+                        @if ($currentUser && $currentUser->pivot->is_new)
+                            <p class="text-white bg-red-500 rounded px-2 py-1 absolute top-0 left-0">NEW</p>
+                        @endif
+               
+
+
+                        <!-- Gold Star Before Name -->
+                        <form action="{{ route('lists.toggleFavorite', $productlist->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <input type="hidden" name="is_favorite" value="{{ $productlist->is_favorite ? 0 : 1 }}"> <!-- Toggle the value -->
+                            <button type="submit" class="flex items-center focus:outline-none" onclick="event.stopPropagation();">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $productlist->is_favorite ? 'gold' : 'lightgray' }}" viewBox="0 0 24 24" class="w-4 h-4 mr-1">
+                                    <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
+                                </svg>
+                            </button>
+                        </form>
+                     <!-- Close the if condition here -->
 
                     <a href="{{ route('productlist.show', [$productlist->id]) }}"
                        id="product-link-{{ $productlist->id }}"
@@ -42,6 +46,7 @@
                     {{ $productlist->updated_at->format('M d, Y') }}
                 </span>
             </div>
+
             @if ($productlist->products->isNotEmpty()) <!-- Check if there are products -->
                 <div id="products-{{ $productlist->id }}" class="products overflow-hidden transition-all duration-300 ease-in-out flex-grow"
                      style="max-height: 0; opacity: 0; background-color: {{ $productlist->theme->content_bg_color }};">
@@ -78,3 +83,4 @@
         </article>
     </div>
 </div>
+

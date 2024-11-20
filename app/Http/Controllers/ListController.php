@@ -22,45 +22,42 @@ class ListController extends Controller
     }
     
     public function index(Request $request)
-    {
-        $user = Auth::user(); // Get the logged-in user
+{
+    $user = Auth::user(); // Get the logged-in user
 
-        // Call the filter method with the request to get the base query
-        $listsQuery = $this->listService->filter($request);
+    // Call the filter method with the request to get the base query
+    $listsQuery = $this->listService->filter($request);
 
-        // Apply additional conditions for user ownership and shared lists
-        $listsQuery = $listsQuery->where(function ($query) use ($user) {
-            $query->where('user_id', $user->id) // Lists owned by the user
-                  ->orWhereHas('sharedUsers', function ($q) use ($user) {
-                      $q->where('user_id', $user->id); // Lists shared with the user
-            });
+    // Apply additional conditions for user ownership and shared lists
+    $listsQuery = $listsQuery->where(function ($query) use ($user) {
+        $query->where('user_id', $user->id) // Lists owned by the user
+              ->orWhereHas('sharedUsers', function ($q) use ($user) {
+                  $q->where('user_id', $user->id); // Lists shared with the user
         });
+    });
 
-        if (!$request->routeIs('lists.favorites')) {
-            $listsQuery = $listsQuery->where('is_favorite', false); // Exclude favorites on normal index
-        }
-
-        // Debugging: Check if $listsQuery is a valid query builder
-        if (!($listsQuery instanceof \Illuminate\Database\Eloquent\Builder)) {
-            throw new \Exception('Invalid query builder instance');
-        }
-
-        // Fetch the lists
-        $lists = $listsQuery->with('sharedUsers')->get()->map(function ($list) {
-            // Directly retrieve the is_new value
-            $list->is_new = $list->is_new; // Ensure is_new is available
-            return $list;
-        });
-
-        // Get all brands and categories for filtering
-        $brands = Brand::all(); // Retrieve all brands
-        $categories = Category::all(); // Retrieve all categories
-
-        // Group products by category
-        $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
-
-        return view('lists.index', compact('lists', 'groupedProducts', 'brands', 'categories'));
+    if (!$request->routeIs('lists.favorites')) {
+        $listsQuery = $listsQuery->where('is_favorite', false); // Exclude favorites on normal index
     }
+
+    // Fetch the lists with the necessary relations
+    $lists = $listsQuery->with('sharedUsers')->get();
+
+    // Loop through the lists to check if the current user needs to mark it as seen
+    
+
+    // Get all brands and categories for filtering
+    $brands = Brand::all(); // Retrieve all brands
+    $categories = Category::all(); // Retrieve all categories
+
+    // Group products by category
+    $groupedProducts = Product::with(['brand', 'category'])->get()->groupBy('category.name');
+
+    // Return the view with the lists and other data
+    return view('lists.index', compact('lists', 'groupedProducts', 'brands', 'categories', 'user'));
+}
+
+
 
     public function removeProductFromList(ListItem $list, Product $product)
     {

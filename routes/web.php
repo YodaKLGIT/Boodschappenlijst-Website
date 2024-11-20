@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
     Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
+    Route::post('/lists/{list}/new', [ListController::class, 'Newlist'])->middleware('auth')->name('lists.Newlist');
+
     
     Route::resource('/productlist', ProductlistController::class);
 

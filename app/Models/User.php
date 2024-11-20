@@ -41,8 +41,9 @@ class User extends Authenticatable
         return $this->hasMany(Invitation::class, 'recipient_id', 'id');
     }
     
-    public function userList()
+    public function lists()
     {
-        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id')
+        ->withPivot('is_new');
     }
 }

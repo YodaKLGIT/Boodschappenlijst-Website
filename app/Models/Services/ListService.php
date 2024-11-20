@@ -6,7 +6,9 @@ use App\Models\ListItem;
 use App\Models\Brand; 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Log;
 
@@ -111,7 +113,7 @@ class ListService
         Log::error('Failed to update ListItem', ['id' => $listItem->id]);
     }
 
-    return true; // Indicate success
+       return true; // Indicate success
     }
 
     
@@ -133,7 +135,22 @@ class ListService
             'is_favorite' => $listItem->is_favorite,
         ]);
     }
+
     }
+
+    
+    public function Newlist(ListItem $list, User $user)
+    {
+        // Check if the user is in the list's pivot table
+        $pivot = $list->users()->where('user_id', $user)->first();
+    
+        if ($pivot && $pivot->pivot->is_new) {
+            // Update the pivot table's 'is_new' to false for this user
+            $list->users()->updateExistingPivot($user, ['is_new' => false]);
+        }
+    }
+    
+
 
 
 
