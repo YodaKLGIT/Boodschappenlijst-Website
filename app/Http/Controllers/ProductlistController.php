@@ -47,10 +47,14 @@ class ProductlistController extends Controller
             ]);
         }
 
+        // Set default theme ID for dark blue if no theme is selected
+        $defaultThemeId = 1; // Replace with the actual ID of the dark blue theme
+        $themeId = $validatedData['theme_id'] ?? $defaultThemeId;
+
         // Create the list
         $productlist = Productlist::create([
             'name' => $validatedData['name'],
-            'theme_id' => $validatedData['theme_id'] ?? null,
+            'theme_id' => $themeId,
         ]);
 
         // Attach the current user as the owner
