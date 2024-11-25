@@ -6,27 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateInvitationsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('invitations', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->foreignId('shoppinglist_id')->constrained()->onDelete('cascade'); // Foreign key with cascade delete
-            $table->foreignId('recipient_id')->constrained('users')->onDelete('cascade'); // Add recipient_id foreign key
-            $table->string('email'); // Email of the invited user
-            $table->timestamps(); // created_at and updated_at
+            $table->id();
+            $table->foreignId('list_id')->constrained('lists')->onDelete('cascade'); // Reference the lists table
+            $table->foreignId('recipient_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
+            $table->string('status')->default('pending'); // Track invitation status
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('invitations');

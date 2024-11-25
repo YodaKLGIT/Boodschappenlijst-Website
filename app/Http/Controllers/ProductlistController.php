@@ -14,6 +14,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Theme;
 use App\Models\Note;
+use App\Models\Invitation;
 
 class ProductlistController extends Controller
 {
@@ -148,10 +149,27 @@ class ProductlistController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        // Attach the user to the list
-        $productlist->sharedUsers()->attach($validatedData['user_id']);
+        // Check if a pending invitation already exists
+        $existingInvitation = Invitation::where('list_id', $productlist->id)
+            ->where('recipient_id', $validatedData['user_id'])
+            ->where('status', 'pending')
+            ->first();
 
-        return redirect()->route('productlist.show', $productlist->id)->with('success', 'User invited successfully.');
+        if ($existingInvitation) {
+            return redirect()->route('productlist.show', $productlist->id)
+                ->with('info', 'User has already been invited.');
+        }
+
+        // Create an invitation with a pending status
+        Invitation::create([
+            'list_id' => $productlist->id,
+            'recipient_id' => $validatedData['user_id'],
+            'sender_id' => Auth::id(),
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('productlist.show', $productlist->id)
+            ->with('success', 'User invited successfully.');
     }
 
     public function removeUser(Request $request, Productlist $productlist, User $user)
