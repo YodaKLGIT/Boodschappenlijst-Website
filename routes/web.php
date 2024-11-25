@@ -76,6 +76,9 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Invitation routes
+    Route::get('/invitations', [InvitationController::class, 'index'])->name('invitations.index');
+    Route::post('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
+    Route::post('/invitations/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitations.decline');
 
 
     Route::post('/productlist/{productlist}/notes', [ProductlistController::class, 'storeNote'])->name('notes.store');
@@ -97,4 +100,5 @@ Route::middleware(['auth'])->group(function () {
 
 // Include authentication routes
 require __DIR__ . '/auth.php';
+
 

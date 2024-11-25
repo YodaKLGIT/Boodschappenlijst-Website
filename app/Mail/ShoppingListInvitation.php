@@ -8,51 +8,37 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Shoppinglist;
+use App\Models\Productlist;
 
 class ShoppingListInvitation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $shoppinglist;
+    public $productlist;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(Shoppinglist $shoppinglist)
+    public function __construct(Productlist $productlist)
     {
-        $this->shoppinglist = $shoppinglist;
+        $this->productlist = $productlist;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation to Join Shopping List',
+            subject: 'Invitation to Join List',
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
             view: 'emails.shoppinglist-invitation',
             with: [
-                'acceptUrl' => route('shoppinglist.accept', $this->shoppinglist->id),
-                'declineUrl' => route('shoppinglist.decline', $this->shoppinglist->id),
+                'acceptUrl' => route('invitations.accept', $this->productlist->id),
+                'declineUrl' => route('invitations.decline', $this->productlist->id),
             ],
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];
