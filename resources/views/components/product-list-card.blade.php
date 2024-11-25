@@ -6,13 +6,7 @@
                  style="background-color: {{ $productlist->theme->strap_color }};">
                 <div class="flex items-center justify-between relative">
                     <!-- New Label -->
-                        @php
-                            $currentUser = $productlist->users->firstWhere('id', auth()->id());
-                        @endphp
-
-                        @if ($currentUser && $currentUser->pivot->is_new)
-                            <p class="text-white bg-red-500 rounded px-2 py-1 absolute top-0 left-0">NEW</p>
-                        @endif
+                        
                
 
 

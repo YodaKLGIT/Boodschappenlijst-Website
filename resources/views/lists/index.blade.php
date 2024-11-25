@@ -71,14 +71,9 @@
 
                 <!-- Cards Section -->
                 <div class="lg:w-4/5">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Render Favorite Lists -->
-                        @foreach ($lists->where('is_favorite', true) as $productlist) 
-                            <x-product-list-card :productlist="$productlist" />
-                        @endforeach
-
-                        <!-- Render Non-Favorite Lists -->
-                        @foreach ($lists->where('is_favorite', false) as $productlist) 
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">                    
+                        <!-- Render All lists --> 
+                        @foreach ($lists  as $productlist) 
                             <x-product-list-card :productlist="$productlist" />
                         @endforeach
                     </div>

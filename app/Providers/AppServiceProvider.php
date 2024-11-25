@@ -3,11 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Invitation;
-use App\Policies\InvitationPolicy;
-use App\Models\Shoppinglist;
-use App\Policies\ShoppinglistPolicy;
+use App\Services\Contracts\ListServiceInterface;
+use App\Services\ListService;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ListServiceInterface::class, ListService::class);
     }
 
     /**
