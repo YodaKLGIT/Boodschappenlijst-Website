@@ -27,7 +27,8 @@ class ListItem extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
-                    ->withPivot('quantity');
+                    ->withPivot('quantity', 'is_new');
+ 
     }
 
     public function users()
