@@ -24,13 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('layouts.navigation', function ($view) {
-            $pendingCount = 0;
-            if (Auth::check()) {
-                $pendingCount = Invitation::where('recipient_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->count();
-            }
-            $view->with('pendingCount', $pendingCount);
-        });
+            $view->with('invitations', Auth::user() ? Auth::user()->invitations : []);
+        });   
     }
 }
