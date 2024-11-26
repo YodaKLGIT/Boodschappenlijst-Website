@@ -146,16 +146,17 @@ if ($listItem->save()) {
        return $lists; 
     }
 
-    public function Newproduct(ListItem $listItem, Product $product)
+    public function markProductAsSeen(ListItem $list, Product $product)
     {
-        // Check if the product is associated with the list
-        $listItem->products()->where('product_id', $product->id)->firstOrFail()->pivot;
+       // Check if the product is associated with the list
+       $list->products()->where('product_id', $product->id)->firstOrFail()->pivot;
 
-        // Update the is_new field to false
-        $listItem->products()->updateExistingPivot($product->id, ['is_new' => false]);
+       // Update the is_new field to false
+       $list->products()->updateExistingPivot($product->id, ['is_new' => false]);
 
-        return $listItem;
+       return $list;
     }
+
 
     /**
      * Get all brands for filtering.

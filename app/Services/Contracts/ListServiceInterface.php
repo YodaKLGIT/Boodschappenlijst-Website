@@ -14,7 +14,7 @@ interface ListServiceInterface
     public function updateName(Request $request, ListItem $listItem);
     public function toggleFavorite(Request $request, ListItem $listItem);
     public function getFavoriteLists();
-    public function Newproduct(ListItem $listItem, Product $product);
+    public function markProductAsSeen(ListItem $listItem, Product $product);
     public function getAllBrands();
     public function getAllCategories();
 }

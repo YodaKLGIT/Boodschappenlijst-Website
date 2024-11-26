@@ -54,9 +54,26 @@
                                             style="background-color: {{ $productlist->theme->body_color }};">
                                             
                                             <!-- New badge -->
+                                            <form action="{{ route('product.markAsSeen', ['list' => $productlist->id, 'product' => $product->id]) }}" 
+                                                method="POST" 
+                                                class="mt-2 flex-grow relative flex justify-center items-center">
+                                            @csrf
+                                          
+                                            <!-- New badge inside the form -->
                                             @if ($product->pivot->is_new)
-                                                <span class="text-white bg-red-500 rounded px-2 py-1 mr-2">NEW</span>
+                                                <button type="submit" 
+                                                        class="text-white bg-red-500 rounded px-2 py-1 mr-2 hover:bg-red-600 focus:outline-none">
+                                                    NEW
+                                                </button>
                                             @endif
+                                          </form>
+                                          
+                                          
+                                         
+                                          
+
+
+                                            
                                 
                                             <!-- Product Name -->
                                             <a href="{{ route('products.index', $product->id) }}"

@@ -44,16 +44,16 @@ class ListServiceController extends Controller
      */
     
      public function updateName(Request $request, ListItem $list)
-{
-    // Directly call the updateName method and check if it was successful
-    if ($this->listService->updateName($request, $list)) {
+    {
+        // Directly call the updateName method and check if it was successful
+        if ($this->listService->updateName($request, $list)) {
         // If true, the update was successful, so redirect with a success message
         return redirect()->back()->with('success', 'List name updated successfully.');
-    } else {
+        } else {
         // If false, the update failed, so redirect back with an error message
         return redirect()->back()->withErrors(['error' => 'Failed to update the list name.']);
+        }
     }
-}
 
 
     /**
@@ -93,16 +93,14 @@ class ListServiceController extends Controller
      * @param Product $product
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function newProduct(ListItem $listItem, Product $product)
+    
+    public function markProductAsSeen(ListItem $list, Product $product)
     {
-        $result = $this->listService->Newproduct($listItem, $product);
-
-        if ($result) {
-            return redirect()->back()->with('success', 'Product added to list.');
+        if ($this->listService->markProductAsSeen($list, $product)) {
+            return redirect()->back()->with('success', 'List name updated successfully.');
         } else {
-            return redirect()->back()->withErrors(['error' => 'Failed to add product.']);
+        // If false, the update failed, so redirect back with an error message
+        return redirect()->back()->withErrors(['error' => 'Failed to update the list name.']);
         }
     }
 }
-
-

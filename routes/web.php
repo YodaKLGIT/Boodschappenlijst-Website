@@ -50,10 +50,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/lists/{list}/products/{product}', [ListServiceController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
         
-          Route::get('/lists/favorites', [ListServiceController::class, 'getFavoriteLists'])->name('lists.favorites');
+    Route::get('/lists/favorites', [ListServiceController::class, 'getFavoriteLists'])->name('lists.favorites');
     Route::post('/lists/{list}/favorite', [ListServiceController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
     
     Route::post('/lists/{list}/updateName', [ListServiceController::class, 'updateName'])->name('lists.updateName');
+
+    Route::post('/lists/{list}/products/{product}/mark-seen', [ListServiceController::class, 'markProductAsSeen'])
+    ->name('product.markAsSeen');
+
+
 
         Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
 
