@@ -33,7 +33,7 @@
 
                     <span class="text-white text-sm font-bold px-3 py-1 rounded-full"
                           style="background-color: {{ $productlist->theme->count_circle_color }};">
-                        {{ $productlist->products->count() }}
+                          {{ $productlist->products->sum(fn($product) => $product->pivot->quantity) }}
                     </span>
                 </div>
                 <span id="date-{{ $productlist->id }}" class="text-xs text-white mt-1 transition-opacity duration-300">
@@ -53,27 +53,19 @@
                                         <li class="flex justify-between items-center text-sm p-2 rounded transition-colors duration-200"
                                             style="background-color: {{ $productlist->theme->body_color }};">
                                             
-                                            <!-- New badge -->
                                             <form action="{{ route('product.markAsSeen', ['list' => $productlist->id, 'product' => $product->id]) }}" 
                                                 method="POST" 
-                                                class="mt-2 flex-grow relative flex justify-center items-center">
+                                                class="mt-2 flex justify-center items-center space-x-2">
                                             @csrf
-                                          
+                                                                                    
                                             <!-- New badge inside the form -->
                                             @if ($product->pivot->is_new)
                                                 <button type="submit" 
-                                                        class="text-white bg-red-500 rounded px-2 py-1 mr-2 hover:bg-red-600 focus:outline-none">
+                                                        class="text-white bg-red-500 rounded px-2 py-1 hover:bg-red-600 focus:outline-none text-xs -mt-1 mr-4">
                                                     NEW
                                                 </button>
                                             @endif
-                                          </form>
-                                          
-                                          
-                                         
-                                          
-
-
-                                            
+                                          </form>   
                                 
                                             <!-- Product Name -->
                                             <a href="{{ route('products.index', $product->id) }}"
