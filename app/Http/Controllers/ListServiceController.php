@@ -43,10 +43,10 @@ class ListServiceController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     
-     public function updateName(Request $request, ListItem $listItem)
+     public function updateName(Request $request, ListItem $list)
 {
     // Directly call the updateName method and check if it was successful
-    if ($this->listService->updateName($request, $listItem)) {
+    if ($this->listService->updateName($request, $list)) {
         // If true, the update was successful, so redirect with a success message
         return redirect()->back()->with('success', 'List name updated successfully.');
     } else {
