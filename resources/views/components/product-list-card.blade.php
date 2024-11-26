@@ -37,7 +37,7 @@
                     </span>
                 </div>
                 <span id="date-{{ $productlist->id }}" class="text-xs text-white mt-1 transition-opacity duration-300">
-                    {{ $productlist->updated_at->format('M d, Y') }}
+                    <span class="text-white-500 text-xs">Updated on:</span> {{ $productlist->updated_at->format('M d, Y') }}
                 </span>
             </div>
 
