@@ -53,10 +53,8 @@ class User extends Authenticatable
         return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id')
         ->withPivot('is_new');
     }
-    public function lists()
-    {
-        return $this->hasMany(ListItem::class, 'user_id');
-    }
+    
+    
 
     public function sharedLists()
     {

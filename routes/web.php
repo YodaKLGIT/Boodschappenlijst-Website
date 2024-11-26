@@ -68,10 +68,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::resource('/productlist', ProductlistController::class);
 
-    Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
-
-    Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
-    Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
+   
 
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     // Profile routes

@@ -118,17 +118,25 @@ class ListService implements ListServiceInterface
 
 
     
-    public function toggleFavorite(ListItem $listItem)
-    {
-      // Update the is_favorite status (assuming the request is trusted)
-      $listItem->is_favorite = !$listItem->is_favorite; // Toggle the favorite status
+public function toggleFavorite(Request $request, ListItem $listItem)
+{
+// Validate the incoming request
+$request->validate([
+    'is_favorite' => 'required|boolean',
+]);
 
-      // Save the ListItem instance
-      $listItem->save();
-    
-      // Optionally, return a success value or confirmation
-      return true;
-   }
+// Update the is_favorite status
+$listItem->is_favorite = $request->is_favorite;
+
+// Save the ListItem
+if ($listItem->save()) {
+    // Log the action (optional)
+    Log::info('ListItem favorite status updated', [
+        'id' => $listItem->id,
+        'is_favorite' => $listItem->is_favorite,
+    ]);
+}
+}
 
 
     public function getFavoriteLists()
