@@ -60,11 +60,12 @@ class ListServiceController extends Controller
      * Toggle the favorite status of a list item.
      *
      * @param ListItem $listItem
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function toggleFavorite(ListItem $listItem)
+    public function toggleFavorite(Request $request, ListItem $listItem)
     {
-        $result = $this->listService->toggleFavorite($listItem);
+        $result = $this->listService->toggleFavorite($request, $listItem);
 
         if ($result) {
             return redirect()->route('lists.index')->with('success', 'Favorite status updated.');
