@@ -12,7 +12,7 @@ interface ListServiceInterface
     public function filter(Request $request);
     public function removeProductFromList(ListItem $list, Product $product);
     public function updateName(Request $request, ListItem $listItem);
-    public function toggleFavorite(ListItem $listItem);
+    public function toggleFavorite(Request $request, ListItem $listItem);
     public function getFavoriteLists();
     public function Newproduct(ListItem $listItem, Product $product);
     public function getAllBrands();

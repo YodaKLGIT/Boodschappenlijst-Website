@@ -61,10 +61,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function sharedUsers()
-    {
-        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
-    }
+    
 
 }
 
