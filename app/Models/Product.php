@@ -27,14 +27,23 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id'); // Ensure Brand model is properly named
     }
 
-    // Define the many-to-many relationship with the ShoppingList model
     public function productList()
-    {
-        return $this->belongsToMany(Productlist::class)->withPivot('quantity');
-    }
+{
+    return $this->belongsToMany(Productlist::class, 'product_list')
+                ->withPivot('quantity')
+                ->withTimestamps();
+}
 
     public function productListItem()
     {
         return $this->belongsToMany(ListItem::class)->withPivot('quantity', 'is_new');
     }
+
+    public function lists()
+    {
+        return $this->belongsToMany(ProductList::class, 'product_list_product');
+    }
+
+    
+
 }

@@ -72,6 +72,8 @@ class ListService implements ListServiceInterface
                 $query->orderBy('name');
         }
 
+        // Return the query builder instance
+        return $query->with(['products.brand', 'products.category', 'theme']);
         // Return the query builder (no ->get() here)
         return $query; // Return the builder, not the result
     }
@@ -166,6 +168,8 @@ class ListService implements ListServiceInterface
     {
         return Category::all();
     }
+
 }
+
 
 

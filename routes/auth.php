@@ -11,13 +11,14 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShoppinglistController;
+use App\Http\Controllers\ProductlistController;
 
 
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/shopping-lists/create', [ShoppinglistController::class, 'create'])->name('shoppinglist.create');
-    Route::post('/shopping-lists', [ShoppinglistController::class, 'store'])->name('shoppinglist.store');
+     Route::get('/shopping-lists/create', [ShoppinglistController::class, 'create'])->name('shoppinglist.create');
+     Route::post('/shopping-lists', [ShoppinglistController::class, 'store'])->name('shoppinglist.store');
     // Add other routes that require authentication
 });
 
@@ -67,4 +68,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+
 });

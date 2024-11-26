@@ -4,18 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Shoppinglist;
-
+use App\Models\Productlist;
 
 class Invitation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['shoppinglist_id', 'sender_id', 'recipient_id', 'status'];
+    protected $fillable = ['list_id', 'sender_id', 'recipient_id', 'status'];
 
-    public function shoppinglist()
+    public function list()
     {
-        return $this->belongsTo(Shoppinglist::class, 'shoppinglist_id');
+        return $this->belongsTo(Productlist::class, 'list_id');
     }
 
     public function sender()

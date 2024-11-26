@@ -21,6 +21,7 @@ return new class extends Migration
             // Foreign key for the lists table
             $table->foreignId('list_id')->constrained()->onDelete('cascade');
 
+         
             // Ensure the combination of user_id and list_id is unique
             $table->unique(['user_id', 'list_id']); 
             $table->timestamps();

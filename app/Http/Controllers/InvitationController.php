@@ -2,72 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ShoppingListInvitation;
 use App\Models\Invitation;
-use App\Models\Shoppinglist;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Mail;
 
 class InvitationController extends Controller
 {
-    use AuthorizesRequests;
+    public function accept(Invitation $invitation)
+    {
+        if (Auth::id() !== $invitation->recipient_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
-    public function store(Request $request, Shoppinglist $shoppinglist)
-{
-    $this->authorize('invite', $shoppinglist);
+        $invitation->update(['status' => 'accepted']);
+        $invitation->list->users()->attach(Auth::id());
 
-    $request->validate([
-        'user_ids' => 'required|array',
-        'user_ids.*' => 'exists:users,id'
-    ]);
-
-    foreach ($request->user_ids as $userId) {
-        Invitation::create([
-            'shoppinglist_id' => $shoppinglist->id,
-            'sender_id' => Auth::id(),
-            'recipient_id' => $userId,
-        ]);
+        return redirect()->route('lists.index')->with('success', 'Invitation accepted.');
     }
 
-    return redirect()->route('shoppinglist.show', $shoppinglist)
-        ->with('success', 'Invitations sent successfully.');
-}
-
-    public function accept($id)
+    public function decline(Invitation $invitation)
     {
-        $invitation = Invitation::findOrFail($id);
-        $invitation->status = 'accepted'; // Update the status
-        $invitation->save();
+        if (Auth::id() !== $invitation->recipient_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
-        // Attach the user to the shopping list
-        $shoppinglist = $invitation->shoppinglist;
-        $shoppinglist->sharedUsers()->attach(Auth::id());
+        $invitation->update(['status' => 'declined']);
 
-        return redirect()->route('shoppinglist.show', $shoppinglist)
-            ->with('success', 'You have accepted the invitation.');
+        return redirect()->route('lists.index')->with('success', 'Invitation declined.');
     }
 
-    public function decline($id)
+    public function index()
     {
-        $invitation = Invitation::findOrFail($id);
-        $invitation->status = 'declined'; // Update the status
-        $invitation->save();
+        $invitations = Invitation::where('recipient_id', Auth::id())->get();
+        $pendingCount = $invitations->where('status', 'pending')->count();
 
-        return redirect()->back()->with('success', 'You have declined the invitation.');
-    }
-
-
-    public function mail()
-    {
-
-        $shoppinglist = new Shoppinglist();
-        Mail::to('test@test.com')->send(new ShoppingListInvitation($shoppinglist));
-
-        return view('emails.shoppinglist-invitation');
-
- 
+        return view('productlist.invitation', compact('invitations', 'pendingCount'));
     }
 }

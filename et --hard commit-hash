@@ -1,0 +1,81 @@
+[33mf78c097[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: rebase (start): checkout origin/main
+[33md44dada[m[33m ([m[1;31morigin/AddProductToolist[m[33m, [m[1;32mAddProductToolist[m[33m)[m HEAD@{1}: checkout: moving from AddProductToolist to AddProductToolist
+[33md44dada[m[33m ([m[1;31morigin/AddProductToolist[m[33m, [m[1;32mAddProductToolist[m[33m)[m HEAD@{2}: checkout: moving from main to AddProductToolist
+[33mf78c097[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: checkout: moving from AddProductToolist to main
+[33md44dada[m[33m ([m[1;31morigin/AddProductToolist[m[33m, [m[1;32mAddProductToolist[m[33m)[m HEAD@{4}: checkout: moving from main to AddProductToolist
+[33mf78c097[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{5}: pull --tags origin main: Fast-forward
+[33m347f3bf[m HEAD@{6}: checkout: moving from AddProductToolist to main
+[33md44dada[m[33m ([m[1;31morigin/AddProductToolist[m[33m, [m[1;32mAddProductToolist[m[33m)[m HEAD@{7}: checkout: moving from AddProductToolist to AddProductToolist
+[33md44dada[m[33m ([m[1;31morigin/AddProductToolist[m[33m, [m[1;32mAddProductToolist[m[33m)[m HEAD@{8}: commit: Ui changes
+[33m4fb4d66[m HEAD@{9}: commit: Ui changes
+[33m41fe3fa[m HEAD@{10}: commit: dynamic home page category selections
+[33mabe274b[m HEAD@{11}: commit: Added a nav notif on product added
+[33mc1dd510[m HEAD@{12}: commit: Added back the PopUp on Product added too list
+[33ma1fd7b9[m HEAD@{13}: commit: Nav bar changes / UI changes
+[33m24b1359[m HEAD@{14}: commit: index fixes
+[33mc4e187b[m HEAD@{15}: commit: Css
+[33ma9332c7[m HEAD@{16}: commit: Added adding products too existing lists
+[33m0860c1d[m HEAD@{17}: pull origin main: Fast-forward
+[33m9a73f92[m HEAD@{18}: pull origin main: Fast-forward
+[33mb52fb10[m HEAD@{19}: checkout: moving from main to AddProductToolist
+[33m347f3bf[m HEAD@{20}: commit: css
+[33mb52fb10[m HEAD@{21}: checkout: moving from AddProductToolist to main
+[33mb52fb10[m HEAD@{22}: checkout: moving from main to AddProductToolist
+[33mb52fb10[m HEAD@{23}: commit: fixed page errors
+[33m7114ec4[m HEAD@{24}: pull: Fast-forward
+[33m9244b91[m HEAD@{25}: commit: update style
+[33m6e269a9[m HEAD@{26}: pull: Fast-forward
+[33m1bb8e82[m HEAD@{27}: pull origin main: Fast-forward
+[33mdc55ad0[m[33m ([m[1;32mProductUpdate[m[33m)[m HEAD@{28}: checkout: moving from Products to main
+[33mabbb161[m[33m ([m[1;31morigin/Products[m[33m, [m[1;32mProducts[m[33m)[m HEAD@{29}: checkout: moving from ProductUpdate to Products
+[33mdc55ad0[m[33m ([m[1;32mProductUpdate[m[33m)[m HEAD@{30}: checkout: moving from ProductUpdate to ProductUpdate
+[33mdc55ad0[m[33m ([m[1;32mProductUpdate[m[33m)[m HEAD@{31}: checkout: moving from main to ProductUpdate
+[33mdc55ad0[m[33m ([m[1;32mProductUpdate[m[33m)[m HEAD@{32}: checkout: moving from Products to main
+[33mabbb161[m[33m ([m[1;31morigin/Products[m[33m, [m[1;32mProducts[m[33m)[m HEAD@{33}: checkout: moving from main to Products
+[33mdc55ad0[m[33m ([m[1;32mProductUpdate[m[33m)[m HEAD@{34}: commit: added images
+[33m5baa506[m HEAD@{35}: pull --tags origin main: Fast-forward
+[33m597b82c[m HEAD@{36}: checkout: moving from Products to main
+[33mabbb161[m[33m ([m[1;31morigin/Products[m[33m, [m[1;32mProducts[m[33m)[m HEAD@{37}: pull --tags origin Products: Merge made by the 'ort' strategy.
+[33me3e1aec[m HEAD@{38}: commit: Idk
+[33m9aee899[m HEAD@{39}: reset: moving to HEAD
+[33m9aee899[m HEAD@{40}: commit: Added Images + more style
+[33m82de37e[m HEAD@{41}: commit (merge): Added filter / category functionality too the product page
+[33m343f06f[m HEAD@{42}: commit: Added Filter/ category functionality
+[33md8a62ed[m HEAD@{43}: checkout: moving from main to Products
+[33m597b82c[m HEAD@{44}: checkout: moving from Products to main
+[33md8a62ed[m HEAD@{45}: commit: Added product page/ front end development/ bugfixes
+[33m2913a6c[m HEAD@{46}: pull origin main: Merge made by the 'ort' strategy.
+[33m183afbf[m HEAD@{47}: checkout: moving from main to Products
+[33m597b82c[m HEAD@{48}: pull: Fast-forward
+[33mbecde3b[m HEAD@{49}: pull: Fast-forward
+[33mf403d83[m HEAD@{50}: checkout: moving from Products to main
+[33m183afbf[m HEAD@{51}: commit: Cosmetic changes + added products view/route
+[33mf403d83[m HEAD@{52}: checkout: moving from main to Products
+[33mf403d83[m HEAD@{53}: commit: Fixed homepage loggedOut error
+[33ma0e3670[m HEAD@{54}: checkout: moving from HomePage to main
+[33m5e65773[m[33m ([m[1;31morigin/HomePage[m[33m, [m[1;32mHomePage[m[33m)[m HEAD@{55}: checkout: moving from main to HomePage
+[33ma0e3670[m HEAD@{56}: commit: Lil change
+[33mef59160[m HEAD@{57}: pull --tags origin main: Merge made by the 'ort' strategy.
+[33mfa44be5[m HEAD@{58}: commit (merge): idk exactly
+[33m859fa22[m HEAD@{59}: commit: Test lessons
+[33m2eb9b28[m HEAD@{60}: commit: Added back home Route
+[33m6ec5414[m HEAD@{61}: checkout: moving from HomePage to main
+[33m5e65773[m[33m ([m[1;31morigin/HomePage[m[33m, [m[1;32mHomePage[m[33m)[m HEAD@{62}: checkout: moving from main to HomePage
+[33m6ec5414[m HEAD@{63}: commit: change
+[33m4858291[m HEAD@{64}: pull --tags origin main: Fast-forward
+[33mc426bbd[m HEAD@{65}: checkout: moving from HomePage to main
+[33m5e65773[m[33m ([m[1;31morigin/HomePage[m[33m, [m[1;32mHomePage[m[33m)[m HEAD@{66}: commit: Fixed Error when logged out
+[33m7ad00b3[m HEAD@{67}: commit: Home page edits
+[33m85fe9be[m HEAD@{68}: commit: changes
+[33m3269365[m HEAD@{69}: commit: Added homepage, categories, navigation, profile, footer.
+[33mc426bbd[m HEAD@{70}: checkout: moving from main to HomePage
+[33mc426bbd[m HEAD@{71}: commit: Product amount
+[33m3f253e9[m HEAD@{72}: pull: Fast-forward
+[33m83220bb[m HEAD@{73}: pull --tags origin main: Fast-forward
+[33m67000a9[m HEAD@{74}: commit: Filled migartions
+[33m71938b0[m HEAD@{75}: commit: Added all migrations
+[33m6bf4b51[m HEAD@{76}: commit: name changes
+[33m439a43d[m HEAD@{77}: commit: list, category migration
+[33m6d016df[m HEAD@{78}: pull --tags origin main: Merge made by the 'ort' strategy.
+[33m9a67ac1[m HEAD@{79}: commit: product, user migration
+[33mf519f20[m HEAD@{80}: commit (initial): init commit

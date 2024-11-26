@@ -19,15 +19,28 @@
 
                     {{-- Title Input --}}
                     <div class="mb-3">
-                        <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">List Name</label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}"
                             class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             required>
                     </div>
 
+                    {{-- Theme Selection --}}
+                    <div class="mb-3">
+                        <label for="theme_id" class="block text-sm font-medium text-gray-900 dark:text-white">Select Theme</label>
+                        <select id="theme_id" name="theme_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="">Select a theme (optional)</option>
+                            @foreach($themes as $theme)
+                                <option value="{{ $theme->id }}" {{ old('theme_id') == $theme->id ? 'selected' : '' }}>
+                                    {{ $theme->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     {{-- Products Dropdown --}}
                     <div class="mb-3">
-                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Products</label>
+                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Select Products</label>
                         <details class="relative border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600">
                             <summary class="flex items-center justify-between cursor-pointer p-2">
                                 Select Products
@@ -59,25 +72,14 @@
                         </details>
                     </div>
 
-                    {{-- Users Dropdown --}}
-                    <div class="mb-3">
-                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Share with Users</label>
-                        <select name="user_ids[]" multiple class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     {{-- Buttons --}}
                     <div class="flex justify-between mt-4">
-                        <a href="{{ route('productlist.index') }}" 
-                            class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
-                            Go Back
-                        </a>
+                    <a href="{{ route('lists.index') }}" 
+    class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition">
+    Go back</a>
                         <button type="submit" 
                             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                            Create Product List
+                            Create Shopping List
                         </button>
                     </div>
                 </form>
@@ -85,11 +87,3 @@
         </div>
     </div>
 </x-app-layout>
-
-
-
-
-
-
-
-
