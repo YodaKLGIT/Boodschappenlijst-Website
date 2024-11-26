@@ -85,33 +85,37 @@ class ListService implements ListServiceInterface
         return true;
     }
 
+    // WORK IN PROGRESS 
     public function updateName(Request $request, ListItem $listItem)
-    {
-        // Validate the incoming request
-        $request->validate([
-            'name' => 'required|string|max:255', // Validate the name
-        ]);
+{
+    // Validate the incoming request
+    $request->validate([
+        'name' => 'required|string|max:255', // Validate the name
+    ]);
 
-        // Update the name
-        $listItem->name = $request->name;
+    // Update the name of the list item
+    $listItem->name = $request->name;
 
-        // If a theme_id is provided, update it; otherwise, retain the existing value
-        if ($request->has('theme_id')) {
-            $listItem->theme_id = $request->theme_id;
-        }
-
-        if ($listItem->save()) {
-            Log::info('ListItem updated successfully', [
-                'id' => $listItem->id, 
-                'name' => $listItem->name, 
-            ]);
-        } else {
-            Log::error('Failed to update ListItem', ['id' => $listItem->id]);
-        }
-
-        return true; // Indicate success
+    // If a theme_id is provided, update it; otherwise, retain the existing value
+    if ($request->has('theme_id')) {
+        $listItem->theme_id = $request->theme_id;
     }
 
+    // Attempt to save the updated ListItem
+    if ($listItem->save()) {
+        Log::info('ListItem updated successfully', [
+            'id' => $listItem->id,
+            'name' => $listItem->name,
+        ]);
+        return true;  // Return true if saved successfully
+    } else {
+        Log::error('Failed to update ListItem', ['id' => $listItem->id]);
+        return false;  // Return false if failed to save
+    }
+}
+
+
+    
     public function toggleFavorite(ListItem $listItem)
     {
       // Update the is_favorite status (assuming the request is trusted)
@@ -140,8 +144,7 @@ class ListService implements ListServiceInterface
         // Update the is_new field to false
         $listItem->products()->updateExistingPivot($product->id, ['is_new' => false]);
 
-        // Optionally, return a response
-        return redirect()->back()->with('success', 'Product is_new updated successfully!');
+        return $listItem;
     }
 
     /**
