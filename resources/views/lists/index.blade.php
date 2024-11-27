@@ -1,5 +1,5 @@
 <x-app-layout>
-
+    <!-- Header Section -->
     <!-- Header Section -->
     <div class="bg-blue-800 -xl p-6 mb-6">
         <div class="max-w-screen-lg mx-auto flex flex-col lg:flex-row items-center">
@@ -22,31 +22,24 @@
                 <p class="text-gray-600 mb-4">No product lists available.</p>
             </div>
         @else
-            <div class="flex flex-col lg:flex-row">
-
-                <!-- Filter Section -->
-                <div class="lg:w-1/5 mb-6 lg:mb-0 lg:pr-6">
-                    <div class="bg-white rounded-lg shadow-md p-4 sticky top-4">
-                        <h2 class="font-semibold text-lg mb-4">Filters</h2>
+            <div class=" p-8 rounded-lg border-2  shadow-xl">
+                <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+                    <!-- Filter Section -->
+                    <div class="lg:w-1/5 bg-white p-6 rounded-lg shadow-lg border border-sky-200">
+                        <h2 class="font-semibold text-lg text-gray-800 mb-6">Filters</h2>
                         <form action="{{ route('lists.index') }}" method="GET">
-                            <div class="relative mb-4">
+                            <div class="relative mb-6">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    <svg class="w-4 h-4 text-sky-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                     </svg>
                                     <span class="sr-only">Search icon</span>
                                 </div>
-                                <input type="text" name="search" id="search-navbar"
-                                    class="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Search..." value="{{ request('search') }}">
+                                <input type="text" name="search" id="search-navbar" class="block w-full p-2 pl-10 text-sm text-black border border-sky-300 rounded-md bg-sky-50 focus:ring-2 focus:ring-sky-500 focus:border-sky-500" placeholder="Search..." value="{{ request('search') }}">
                             </div>
 
-                            <label for="sort" class="block mb-2 text-sm font-medium text-gray-700 mt-4">Order By</label>
-                            <select id="sort" name="sort"
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-0 focus:border-gray-300"
-                                onchange="this.form.submit()">
+                            <label for="sort" class="block mb-2 text-sm font-medium text-gray-700">Order By</label>
+                            <select id="sort" name="sort" class="w-full border-sky-300 rounded-md shadow-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500" onchange="this.form.submit()">
                                 <option value="title" {{ request('sort') === 'title' ? 'selected' : '' }}>Name</option>
                                 <option value="last_added" {{ request('sort') === 'last_added' ? 'selected' : '' }}>Last Added</option>
                                 <option value="last_updated" {{ request('sort') === 'last_updated' ? 'selected' : '' }}>Last Updated</option>
@@ -56,15 +49,16 @@
                             </select>
                         </form>
                     </div>
-                </div>
 
-                <!-- Cards Section -->
-                <div class="lg:w-4/5">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">                    
-                        <!-- Render All lists --> 
-                        @foreach ($lists  as $productlist) 
-                            <x-product-list-card :productlist="$productlist" />
-                        @endforeach
+                    <!-- Cards Section -->
+                    <div class="lg:w-4/5">
+                        <div class="bg-sky-50 p-8 rounded-lg border-2 border-sky-200 shadow-md">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                @foreach ($lists as $productlist)
+                                    <x-product-list-card :productlist="$productlist" />
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,3 +88,4 @@
         });
     </script>
 </x-app-layout>
+

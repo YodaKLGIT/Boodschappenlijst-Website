@@ -1,26 +1,21 @@
 <div class="w-full">
     <div class="shopping-list-wrapper">
-        <article class="rounded-xl bg-white shadow-md overflow-hidden h-auto">
+        <article class="rounded-xl shadow-md overflow-hidden h-auto 
+                        {{ $productlist->is_favorite ? 'border-4 border-yellow-400 bg-yellow-50' : 'bg-white' }}">
             <div class="p-3 flex flex-col cursor-pointer"
                  onclick="toggleProducts(event, '{{ $productlist->id }}')"
                  style="background-color: {{ $productlist->theme->strap_color }};">
                 <div class="flex items-center justify-between relative">
-                    <!-- New Label -->
-                        
-               
-
-
-                        <!-- Gold Star Before Name -->
-                        <form action="{{ route('lists.toggleFavorite', $productlist->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            <input type="hidden" name="is_favorite" value="{{ $productlist->is_favorite ? 0 : 1 }}"> <!-- Toggle the value -->
-                            <button type="submit" class="flex items-center focus:outline-none" onclick="event.stopPropagation();">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $productlist->is_favorite ? 'gold' : 'lightgray' }}" viewBox="0 0 24 24" class="w-4 h-4 mr-1">
-                                    <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
-                                </svg>
-                            </button>
-                        </form>
-                     <!-- Close the if condition here -->
+                    <!-- Gold Star Before Name -->
+                    <form action="{{ route('lists.toggleFavorite', $productlist->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="is_favorite" value="{{ $productlist->is_favorite ? 0 : 1 }}"> <!-- Toggle the value -->
+                        <button type="submit" class="flex items-center focus:outline-none" onclick="event.stopPropagation();">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $productlist->is_favorite ? 'gold' : 'lightgray' }}" viewBox="0 0 24 24" class="w-4 h-4 mr-1">
+                                <path d="M12 .587l3.668 7.568 8.332 1.207-6 5.848 1.416 8.25L12 18.896l-7.416 3.908L6 14.162l-6-5.848 8.332-1.207z"/>
+                            </svg>
+                        </button>
+                    </form>
 
                     <a href="{{ route('productlist.show', [$productlist->id]) }}"
                        id="product-link-{{ $productlist->id }}"
@@ -40,8 +35,7 @@
                     <span class="text-white-500 text-xs">Updated on:</span> {{ $productlist->updated_at->format('M d, Y') }}
                 </span>
             </div>
-
-            @if ($productlist->products->isNotEmpty()) <!-- Check if there are products -->
+            @if ($productlist->products->isNotEmpty())
                 <div id="products-{{ $productlist->id }}" class="products overflow-hidden transition-all duration-300 ease-in-out flex-grow"
                      style="max-height: 0; opacity: 0; background-color: {{ $productlist->theme->content_bg_color }};">
                     <div class="p-4 space-y-4">
@@ -66,13 +60,13 @@
                                                 </button>
                                             @endif
                                           </form>   
-                                
+                                 
                                             <!-- Product Name -->
                                             <a href="{{ route('products.index', $product->id) }}"
                                                class="text-gray-600 truncate flex-1 hover:text-{{$productlist->theme->hover_color}} duration-200">
                                                 {{ $product->brand->name }} {{ $product->name }}
                                             </a>
-                                
+                                 
                                             <!-- Additional Info -->
                                             <span class="text-gray-500 ml-2 bg-white px-2 py-1 rounded-full text-xs">{{ $product->pivot->quantity }}</span>
                                             
@@ -89,7 +83,6 @@
                                         </li>
                                     @endforeach
                                 </ul>
-                                
                             </div>
                         @endforeach
                     </div>
@@ -98,4 +91,5 @@
         </article>
     </div>
 </div>
+
 
