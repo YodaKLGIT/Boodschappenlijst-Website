@@ -1,6 +1,5 @@
 <x-app-layout>
     <!-- Header Section -->
-    <!-- Header Section -->
     <div class="bg-blue-800 -xl p-6 mb-6">
         <div class="max-w-screen-lg mx-auto flex flex-col lg:flex-row items-center">
             <div class="text-center lg:text-left lg:mr-auto mb-4 lg:mb-0">
@@ -22,10 +21,10 @@
                 <p class="text-gray-600 mb-4">No product lists available.</p>
             </div>
         @else
-            <div class=" p-8 rounded-lg border-2  shadow-xl">
+            <div class="p-8 rounded-lg border-2 shadow-xl">
                 <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
                     <!-- Filter Section -->
-                    <div class="lg:w-1/5 bg-white p-6 rounded-lg shadow-lg border border-sky-200">
+                    <div class="lg:w-1/5 bg-white p-6 rounded-lg shadow-lg border border-sky-200 h-[400px] overflow-y-auto">
                         <h2 class="font-semibold text-lg text-gray-800 mb-6">Filters</h2>
                         <form action="{{ route('lists.index') }}" method="GET">
                             <div class="relative mb-6">
@@ -88,4 +87,3 @@
         });
     </script>
 </x-app-layout>
-
