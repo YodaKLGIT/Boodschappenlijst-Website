@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lists/{list}/products/{product}/mark-seen', [ListServiceController::class, 'markProductAsSeen'])
     ->name('product.markAsSeen');
 
+    Route::get('/lists', [ListServiceController::class, 'listFilter'])->name('lists.filter');
+
 
 
         Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
