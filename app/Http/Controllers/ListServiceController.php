@@ -63,9 +63,9 @@ class ListServiceController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function toggleFavorite(Request $request, ListItem $listItem)
+    public function toggleFavorite(Request $request, ListItem $list)
     {
-        $result = $this->listService->toggleFavorite($request, $listItem);
+        $result = $this->listService->toggleFavorite($request, $list);
 
         if ($result) {
             return redirect()->route('lists.index')->with('success', 'Favorite status updated.');

@@ -118,7 +118,7 @@ class ListService implements ListServiceInterface
 
 
     
-public function toggleFavorite(Request $request, ListItem $listItem)
+public function toggleFavorite(Request $request, ListItem $list)
 {
 // Validate the incoming request
 $request->validate([
@@ -126,14 +126,14 @@ $request->validate([
 ]);
 
 // Update the is_favorite status
-$listItem->is_favorite = $request->is_favorite;
+$list->is_favorite = $request->is_favorite;
 
 // Save the ListItem
-if ($listItem->save()) {
+if ($list->save()) {
     // Log the action (optional)
     Log::info('ListItem favorite status updated', [
-        'id' => $listItem->id,
-        'is_favorite' => $listItem->is_favorite,
+        'id' => $list->id,
+        'is_favorite' => $list->is_favorite,
     ]);
 }
 }
