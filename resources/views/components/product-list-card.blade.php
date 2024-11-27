@@ -16,6 +16,7 @@
                             </svg>
                         </button>
                     </form>
+                    
 
                     <a href="{{ route('productlist.show', [$productlist->id]) }}"
                        id="product-link-{{ $productlist->id }}"
