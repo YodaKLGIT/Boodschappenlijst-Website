@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductlistController;
 use App\Http\Controllers\ShoppinglistController;
 use App\Http\Controllers\UserProductListController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\ListServiceController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,8 +47,20 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Custom route for removing a product from a list
-    Route::delete('/lists/{list}/products/{product}', [ListController::class, 'removeProductFromList'])
+    Route::delete('/lists/{list}/products/{product}', [ListServiceController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
+        
+    Route::get('/lists/favorites', [ListServiceController::class, 'getFavoriteLists'])->name('lists.favorites');
+    Route::post('/lists/{list}/favorite', [ListServiceController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
+    
+    Route::post('/lists/{list}/updateName', [ListServiceController::class, 'updateName'])->name('lists.updateName');
+
+    Route::post('/lists/{list}/products/{product}/mark-seen', [ListServiceController::class, 'markProductAsSeen'])
+    ->name('product.markAsSeen');
+
+    Route::post('/lists', [ListServiceController::class, 'listFilter'])->name('lists.filter');
+
+
 
         Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');
 
@@ -56,17 +69,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/productlist/{productlist}/remove-user/{user}', [ProductlistController::class, 'removeUser'])->name('productlist.removeUser');
 
     // Custom route for viewing favorite lists
-    Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
+  
+    Route::patch('/lists/{listItem}/products/{product}/newproduct', [ProductListController::class, 'Newproduct'])
+    ->name('lists.products.newproduct');
 
-    Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
-    Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
     
     Route::resource('/productlist', ProductlistController::class);
 
-    Route::get('/lists/favorites', [ListController::class, 'showFavorites'])->name('lists.favorites');
-
-    Route::post('/lists/{list}/favorite', [ListController::class, 'toggleFavorite'])->name('lists.toggleFavorite');
-    Route::post('/lists/{list}/updateName', [ListController::class, 'updateName'])->name('lists.updateName');
+   
 
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     // Profile routes

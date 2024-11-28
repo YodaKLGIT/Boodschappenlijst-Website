@@ -36,12 +36,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_list', 'list_id', 'product_id')
-                    ->withPivot('quantity');
+                    ->withPivot('quantity', 'is_new');
+ 
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id')
+                    ->withPivot('is_new');
+    }
+
+    public function sharedUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id')->withTimestamps();
     }
 
     public function theme()
@@ -54,10 +61,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function sharedUsers()
-    {
-        return $this->belongsToMany(User::class, 'user_list', 'list_id', 'user_id');
-    }
+    
 
 }
 

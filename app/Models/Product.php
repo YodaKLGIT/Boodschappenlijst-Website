@@ -36,7 +36,7 @@ class Product extends Model
 
     public function productListItem()
     {
-        return $this->belongsToMany(ListItem::class)->withPivot('quantity');
+        return $this->belongsToMany(ListItem::class)->withPivot('quantity', 'is_new');
     }
 
     public function lists()

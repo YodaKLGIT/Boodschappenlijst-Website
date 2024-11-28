@@ -36,6 +36,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class, 'user_id');
     }
+
     
     public function shoppingLists()
     {
@@ -47,14 +48,13 @@ class User extends Authenticatable
         return $this->hasMany(Invitation::class, 'recipient_id', 'id');
     }
     
-    public function userList()
-    {
-        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id');
-    }
     public function lists()
     {
-        return $this->hasMany(ListItem::class, 'user_id');
+        return $this->belongsToMany(ListItem::class, 'user_list', 'user_id', 'list_id')
+        ->withPivot('is_new');
     }
+    
+    
 
     public function sharedLists()
     {

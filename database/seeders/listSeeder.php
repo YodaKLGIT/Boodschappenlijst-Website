@@ -45,8 +45,10 @@ class ListSeeder extends Seeder
             ->count(5)
             ->create()
             ->each(function ($listItem) use ($users, $products) {
-                // Attach users
-                $listItem->users()->attach($users->pluck('id'));
+                // Attach users with is_new value
+                $listItem->users()->attach($users->pluck('id')->map(function ($userId) {
+                    return ['user_id' => $userId, 'is_new' => true];
+                }));
 
                 // Attach products
                 $productData = $products->mapWithKeys(function ($product) {
