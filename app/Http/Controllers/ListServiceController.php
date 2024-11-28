@@ -18,14 +18,13 @@ class ListServiceController extends Controller
 
     public function listFilter(Request $request)
     {
-        if ($this->listService->filter($request)) {
-            // If true, the update was successful, so redirect with a success message
-            return redirect()->back()->with('success', 'List name updated successfully.');
-            } else {
-            // If false, the update failed, so redirect back with an error message
-            return redirect()->back()->withErrors(['error' => 'Failed to update the list name.']);
-            }
+       // Get the filtered lists by calling the filter method
+       $dit = $this->listService->filter($request);
+
+       // Return the filtered lists to the view
+       return view('lists.index', compact('dit'));
     }
+
 
     /**
      * Remove a product from a list.
