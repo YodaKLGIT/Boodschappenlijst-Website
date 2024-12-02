@@ -27,12 +27,14 @@ class ListController extends Controller
     $user = Auth::user(); // Get the logged-in user
 
     // Get lists owned by or shared with the user
-    $listsQuery = ListItem::where(function ($query) use ($user) {
-        $query->where('user_id', $user->id) // Lists owned by the user
-              ->orWhereHas('sharedUsers', function ($q) use ($user) {
-                  $q->where('user_id', $user->id); // Lists shared with the user
-              });
-    });
+     // Load lists with relationships
+     $listsQuery = ListItem::with('theme') // Eager-load theme
+     ->where(function ($query) use ($user) {
+         $query->where('user_id', $user->id)
+               ->orWhereHas('sharedUsers', function ($q) use ($user) {
+                   $q->where('user_id', $user->id);
+               });
+     });
 
     // Use distinct to ensure we don't get repeated lists
     $lists = $listsQuery->with('sharedUsers')->get();
