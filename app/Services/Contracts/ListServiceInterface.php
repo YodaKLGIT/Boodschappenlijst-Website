@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 interface ListServiceInterface
 {
-    public function filter(Request $request);
+    public function filter(Request $request, $query);
     public function removeProductFromList(ListItem $list, Product $product);
     public function updateName(Request $request, ListItem $listItem);
     public function toggleFavorite(Request $request, ListItem $listItem);

@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
 
+
     
     Route::resource('/productlists', ProductlistController::class);
     Route::middleware(['auth'])->group(function () {
@@ -58,8 +59,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lists/{list}/products/{product}/mark-seen', [ListServiceController::class, 'markProductAsSeen'])
     ->name('product.markAsSeen');
 
-    Route::post('/lists', [ListServiceController::class, 'listFilter'])->name('lists.filter');
-
+    
+   
+    
 
 
         Route::delete('/lists/{list}', [ListController::class, 'destroy'])->name('lists.destroy');

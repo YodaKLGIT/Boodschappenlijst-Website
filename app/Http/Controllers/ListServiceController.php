@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ListItem;
 use App\Models\Product;
+use App\Models\Theme;
 use App\Models\User;
 use App\Services\Contracts\ListServiceInterface;
 use Illuminate\Http\Request;
@@ -16,14 +17,16 @@ class ListServiceController extends Controller
         $this->listService = $listService;
     }
 
+    /*
     public function listFilter(Request $request)
     {
-       // Get the filtered lists by calling the filter method
-       $dit = $this->listService->filter($request);
+       // Call the service to filter data
+       $lists = $this->listService->filter($request);
 
        // Return the filtered lists to the view
-       return view('lists.index', compact('dit'));
+       return view('lists.index', compact('lists'));
     }
+    */
 
 
     /**
