@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\Services\Contracts\ListServiceInterface;
-use App\Models\Services\ListService;
+
 
 use Illuminate\Support\Facades\Auth; // Add this line
 
 use App\Models\Product;
 use App\Models\ListItem;
 use App\Models\Brand;
-use App\Models\Category; 
+use App\Models\Category;
+
 use Illuminate\Http\Request;
 
 class ListController extends Controller
@@ -23,19 +24,24 @@ class ListController extends Controller
     }
    
     public function index(Request $request)
-    {
+{
     $user = Auth::user(); // Get the logged-in user
 
     // Get lists owned by or shared with the user
-    $listsQuery = ListItem::where(function ($query) use ($user) {
-        $query->where('user_id', $user->id) // Lists owned by the user
-              ->orWhereHas('sharedUsers', function ($q) use ($user) {
-                  $q->where('user_id', $user->id); // Lists shared with the user
-              });
-    });
+    // Load lists with relationships
+    $listsQuery = ListItem::with(['theme', 'sharedUsers']) // Eager-load theme and sharedUsers
+        ->where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                  ->orWhereHas('sharedUsers', function ($q) use ($user) {
+                      $q->where('user_id', $user->id);
+                  });
+        });
+
+    // Apply filter using the list service
+    $this->listService->filter($request, $listsQuery);
 
     // Use distinct to ensure we don't get repeated lists
-    $lists = $listsQuery->with('sharedUsers')->get();
+    $lists = $listsQuery->get(); // Get the results after applying the query and filters
 
     // Fetch all brands and categories for filtering options
     $brands = Brand::all();
@@ -46,6 +52,8 @@ class ListController extends Controller
 
     // Return the view with the necessary data
     return view('lists.index', compact('lists', 'groupedProducts', 'brands', 'categories', 'user'));
-    }
+}
+
+
 }
 
