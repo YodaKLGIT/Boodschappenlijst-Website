@@ -150,12 +150,15 @@ class ProductlistController extends Controller
     public function invite(Request $request, Productlist $productlist)
     {
         $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'email' => 'required|email|exists:users,email',
         ]);
+
+        // Find the user by email
+        $user = User::where('email', $validatedData['email'])->first();
 
         // Check if a pending invitation already exists
         $existingInvitation = Invitation::where('list_id', $productlist->id)
-            ->where('recipient_id', $validatedData['user_id'])
+            ->where('recipient_id', $user->id)
             ->where('status', 'pending')
             ->first();
 
@@ -167,7 +170,7 @@ class ProductlistController extends Controller
         // Create an invitation with a pending status
         Invitation::create([
             'list_id' => $productlist->id,
-            'recipient_id' => $validatedData['user_id'],
+            'recipient_id' => $user->id,
             'sender_id' => Auth::id(),
             'status' => 'pending',
         ]);
@@ -241,5 +244,14 @@ class ProductlistController extends Controller
         $productlist->products()->detach($productId);
 
         return redirect()->route('productlist.show', $productlistId)->with('success', 'Product removed successfully.');
+    }
+
+    public function showNotes(Productlist $productlist)
+    {
+        // Load the necessary relationships
+        $productlist->load(['notes.user']);
+
+        // Pass the product list to the view
+        return view('productlist.notes', compact('productlist'));
     }
 }

@@ -5,8 +5,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\ProductlistController;
-use App\Http\Controllers\ShoppinglistController;
-use App\Http\Controllers\UserProductListController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
@@ -31,9 +29,7 @@ Route::get('/products/filter-by-brand', [ProductController::class, 'filterByBran
 Route::middleware(['auth'])->group(function () {
     Route::post('/productlist/add', [ProductlistController::class, 'add'])->name('productlist.add');
 });
-// Shopping List routes
-//Route::resource('shoppinglist', ShoppinglistController::class);
-    //Route::get('/shoppinglist/{shoppinglist}/products', [ShoppinglistController::class, 'viewProducts'])->name('shoppinglist.view_products');
+
     
 Route::middleware(['auth'])->group(function () {
     Route::get('/lists', [ListController::class, 'index'])->name('lists.index');
@@ -80,10 +76,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
     Route::post('/invitations/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitations.decline');
 
+    Route::get('/productlist/{productlist}/notes', [ProductlistController::class, 'showNotes'])->name('productlist.notes');
 
     Route::post('/productlist/{productlist}/notes', [ProductlistController::class, 'storeNote'])->name('notes.store');
     
-
+    Route::get('/productlist/{productlist}/notes', [ProductListController::class, 'showNotes'])->name('productlist.notes');
 
     Route::get('/productlist/{productlist}', [ProductlistController::class, 'show'])->name('productlist.show');
 
@@ -100,5 +97,6 @@ Route::middleware(['auth'])->group(function () {
 
 // Include authentication routes
 require __DIR__ . '/auth.php';
+
 
 
