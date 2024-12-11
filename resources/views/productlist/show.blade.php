@@ -49,12 +49,14 @@
                                             @foreach ($productlist->products as $product)
                                                 <li class="p-3 hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-200">
                                                     <div class="flex justify-between items-center">
-                                                        <span class="text-gray-900 dark:text-white">
+                                                        <span class="text-gray-900 dark:text-white flex-grow">
                                                             {{ $product->brand->name }} - {{ $product->name }}
                                                         </span>
-                                                        <span class="text-gray-600 dark:text-gray-400">
-                                                            Quantity: {{ $product->pivot->quantity }}
-                                                        </span>
+                                                        <div class="flex justify-center items-center w-32">
+                                                            <span class="text-gray-600 dark:text-gray-400">
+                                                                Quantity: {{ $product->pivot->quantity }}
+                                                            </span>
+                                                        </div>
                                                         <!-- Delete Product Form -->
                                                         <form action="{{ route('productlist.removeProduct', [$productlist->id, $product->id]) }}" method="POST" class="inline">
                                                             @csrf
@@ -121,13 +123,8 @@
                                 <form action="{{ route('productlist.invite', $productlist->id) }}" method="POST" class="space-y-2">
                                     @csrf
                                     <div>
-                                        <label for="user_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select User</label>
-                                        <select id="user_id" name="user_id" class="w-full p-3 rounded bg-white border border-gray-300 text-gray-800" required>
-                                            <option value="">Select a user</option>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Enter User Email</label>
+                                        <input type="email" id="email" name="email" class="w-full p-3 rounded bg-white border border-gray-300 text-gray-800" required>
                                     </div>
                                     <button type="submit" 
                                         class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow transition">
@@ -147,6 +144,10 @@
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
                                 Edit List
                             </a>
+                            <a href="{{ route('productlist.notes', $productlist->id) }}" 
+                                class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+                                View Notes
+                            </a>
                             @if ($isOwner)
                                 <form action="{{ route('productlist.destroy', $productlist->id) }}" method="POST" class="inline">
                                     @csrf
@@ -157,60 +158,6 @@
                                 </form>
                             @endif
                         </div>           
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notes Section -->
-            <div class="w-full md:w-1/3">
-                <div class="bg-white white:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
-                    <div class="p-6 space-y-4">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
-                        
-                        <!-- Display existing notes -->
-                        @if ($productlist->notes->isNotEmpty())
-                            <div class="space-y-2 mb-4 max-h-96 overflow-y-auto">
-                                @foreach ($productlist->notes as $note)
-                                    <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                                        <h4 class="font-semibold text-gray-900 dark:text-white">{{ $note->title }}</h4>
-                                        <p class="text-gray-600 dark:text-gray-400">{{ $note->description }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                                            By {{ $note->user->name }} on {{ $note->created_at->format('M d, Y H:i') }}
-                                        </p>
-                                        @if (Auth::id() === $note->user_id)
-                                            <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <p class="text-gray-600 dark:text-gray-400 mb-4">No notes yet</p>
-                        @endif
-
-                        <!-- Add new note form -->
-                        <form action="{{ route('list.notes.store', $productlist->id) }}" method="POST" class="space-y-2">
-                            @csrf
-                            <div>
-                                <label for="title" class="block text-sm font-medium text-gray-900 dark:text-white">Title</label>
-                                <input type="text" name="title" id="title" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-800">
-                            </div>
-                            <div>
-                                <label for="description" class="block text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                <textarea name="description" id="description" rows="3" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-0 dark:border-gray-600 dark:text-gray-800"></textarea>
-                            </div>
-                            <button type="submit" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-                                Add Note
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
