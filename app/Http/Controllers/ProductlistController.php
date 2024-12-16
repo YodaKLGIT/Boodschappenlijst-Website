@@ -57,8 +57,8 @@ class ProductlistController extends Controller
             'theme_id' => $themeId,
         ]);
 
-        // Attach the current user as the owner
-        $productlist->users()->attach(Auth::id());
+        // Attach the current user as the owner with is_new set to false
+        $productlist->users()->attach(Auth::id(), ['is_new' => false]);
 
         // Attach products to the list
         if (!empty($validatedData['product_ids'])) {
@@ -70,9 +70,11 @@ class ProductlistController extends Controller
             $productlist->products()->attach($productData);
         }
 
-        // Attach invited users to the list
+        // Attach invited users to the list with is_new set to true
         if (!empty($validatedData['user_ids'])) {
-            $productlist->sharedUsers()->attach($validatedData['user_ids']);
+            foreach ($validatedData['user_ids'] as $userId) {
+                $productlist->sharedUsers()->attach($userId, ['is_new' => true]);
+            }
         }
 
         return redirect()->route('lists.index')->with('success', 'List created successfully.');
