@@ -39,6 +39,12 @@ class ListServiceController extends Controller
      */
     public function removeProductFromList(ListItem $listItem, Product $product)
     {
+        // Debugging: Log the IDs to ensure correct binding
+        \Log::info('Removing product from list', [
+            'listItem_id' => $listItem->id,
+            'product_id' => $product->id,
+        ]);
+
         $result = $this->listService->removeProductFromList($listItem, $product);
 
         if ($result) {
