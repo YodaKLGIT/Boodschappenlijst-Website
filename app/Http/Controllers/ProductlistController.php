@@ -32,7 +32,7 @@ class ProductlistController extends Controller
         // Retrieve all themes
         $themes = Theme::all();
 
-        $someListId = 1; // Replace with the actual logic to get the list ID
+        $someListId = 1; 
         return view('productlist.create', compact('groupedProducts', 'users', 'themes', 'someListId'));
     }
 
@@ -40,27 +40,22 @@ class ProductlistController extends Controller
     {
         $validatedData = $request->validated();
 
-        // Ensure the 'name' field is included in the validated data
         if (empty($validatedData['name'])) {
             throw ValidationException::withMessages([
                 'name' => ['The name field is required.'],
             ]);
         }
 
-        // Set default theme ID for dark blue if no theme is selected
         $defaultThemeId = 1; // Replace with the actual ID of the dark blue theme
         $themeId = $validatedData['theme_id'] ?? $defaultThemeId;
 
-        // Create the list
         $productlist = Productlist::create([
             'name' => $validatedData['name'],
             'theme_id' => $themeId,
         ]);
 
-        // Attach the current user as the owner with is_new set to false
         $productlist->users()->attach(Auth::id(), ['is_new' => false]);
 
-        // Attach products to the list
         if (!empty($validatedData['product_ids'])) {
             $productData = [];
             foreach ($validatedData['product_ids'] as $productId) {
@@ -70,7 +65,6 @@ class ProductlistController extends Controller
             $productlist->products()->attach($productData);
         }
 
-        // Attach invited users to the list with is_new set to true
         if (!empty($validatedData['user_ids'])) {
             foreach ($validatedData['user_ids'] as $userId) {
                 $productlist->sharedUsers()->attach($userId, ['is_new' => true]);
@@ -84,24 +78,18 @@ class ProductlistController extends Controller
     {
         $userId = Auth::id();
 
-        // Retrieve the owner using the custom method
         $owner = $productlist->getOwnerAttribute();
 
-        // Determine if the current user is the owner
         $isOwner = $owner && $owner->id === $userId;
 
-        // Check if the user is the owner or a shared user
         if (!$isOwner && !$productlist->sharedUsers->contains($userId)) {
             abort(403, 'Unauthorized access to this list.');
         }
 
-        // Load the necessary relationships
         $productlist->load(['products.brand', 'products.category', 'notes', 'sharedUsers', 'theme']);
 
-        // Get all users except the owner and already shared users
         $users = User::whereNotIn('id', $productlist->sharedUsers->pluck('id'))->get();
 
-        // Pass the owner to the view
         return view('productlist.show', compact('productlist', 'users', 'isOwner', 'owner'));
     }
 
@@ -114,7 +102,6 @@ class ProductlistController extends Controller
         // Group products by category name 
         $groupedProducts = $products->groupBy('category.name');
 
-        // Update the view path to match the directory structure
         return view('productlist.edit', compact('productlist', 'products', 'groupedProducts'));
     }
 
@@ -122,7 +109,6 @@ class ProductlistController extends Controller
     {
         $validatedData = $request->validated();
 
-        // Check for uniqueness, excluding the current product list
         if (Productlist::where('name', $validatedData['name'])
             ->where('id', '!=', $productlist->id)
             ->exists()
@@ -136,14 +122,12 @@ class ProductlistController extends Controller
         $productlist->updated_at = now();
         $productlist->save();
 
-        // Prepare data for attaching products
         $productData = [];
         foreach ($validatedData['product_ids'] as $productId) {
             $quantity = $validatedData['quantities'][$productId] ?? null;
             $productData[$productId] = ['quantity' => $quantity];
         }
 
-        // Sync products with quantities
         $productlist->products()->sync($productData);
 
         return redirect()->route('productlist.show', $productlist->id)->with('success', 'Product List updated successfully.');
@@ -155,10 +139,8 @@ class ProductlistController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
 
-        // Find the user by email
         $user = User::where('email', $validatedData['email'])->first();
 
-        // Check if a pending invitation already exists
         $existingInvitation = Invitation::where('list_id', $productlist->id)
             ->where('recipient_id', $user->id)
             ->where('status', 'pending')
@@ -169,7 +151,6 @@ class ProductlistController extends Controller
                 ->with('info', 'User has already been invited.');
         }
 
-        // Create an invitation with a pending status
         Invitation::create([
             'list_id' => $productlist->id,
             'recipient_id' => $user->id,
@@ -183,7 +164,6 @@ class ProductlistController extends Controller
 
     public function removeUser(Request $request, Productlist $productlist, User $user)
     {
-        // Retrieve the owner using the user_id field
         $owner = $productlist->owner;
         $isOwner = $owner && $owner->id === Auth::id();
 
@@ -212,21 +192,17 @@ class ProductlistController extends Controller
 
     public function add(Request $request)
     {
-        // Validate the request data
         $request->validate([
             'list_id' => 'required|exists:lists,id',
             'product_id' => 'required|exists:products,id',
         ]);
 
-        // Find the product list entry
         $productListEntry = Productlist::find($request->list_id);
 
         if ($productListEntry) {
-            // Check if the product is already in the list
             $existingProduct = $productListEntry->products()->where('product_id', $request->product_id)->first();
 
             if ($existingProduct) {
-                // If the product is already in the list, update the quantity
                 $currentQuantity = $existingProduct->pivot->quantity;
                 $newQuantity = $currentQuantity + 1;
                 $productListEntry->products()->updateExistingPivot($request->product_id, ['quantity' => $newQuantity]);
@@ -250,10 +226,22 @@ class ProductlistController extends Controller
 
     public function showNotes(Productlist $productlist)
     {
-        // Load the necessary relationships
         $productlist->load(['notes.user']);
 
-        // Pass the product list to the view
         return view('productlist.notes', compact('productlist'));
+    }
+
+    public function updateQuantity(Request $request, $productlistId, $productId)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $productlist = Productlist::findOrFail($productlistId);
+        $product = $productlist->products()->where('product_id', $productId)->firstOrFail();
+
+        $productlist->products()->updateExistingPivot($productId, ['quantity' => $request->quantity]);
+
+        return response()->json(['success' => true]);
     }
 }

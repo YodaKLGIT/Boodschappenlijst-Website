@@ -53,17 +53,24 @@
                                                         {{ $product->brand->name }} - {{ $product->name }}
                                                     </span>
                                                     <div class="flex justify-center items-center w-32">
-                                                        <span class="text-gray-600 dark:text-gray-400">
-                                                            Quantity: {{ $product->pivot->quantity }}
+                                                        <button class="text-gray-600 dark:text-gray-400" onclick="updateQuantity({{ $productlist->id }}, {{ $product->id }}, -1)">
+                                                            -
+                                                        </button>
+                                                        <span class="mx-2 text-gray-600 dark:text-gray-400" id="quantity-{{ $product->id }}">
+                                                            {{ $product->pivot->quantity }}
                                                         </span>
+                                                        <button class="text-gray-600 dark:text-gray-400" onclick="updateQuantity({{ $productlist->id }}, {{ $product->id }}, 1)">
+                                                            +
+                                                        </button>
                                                     </div>
+                                                    <!-- Remove Product Button -->
+                                                    <button class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600 ml-4" onclick="document.getElementById('delete-form-{{ $product->id }}').submit();">
+                                                        Remove
+                                                    </button>
                                                     <!-- Delete Product Form -->
-                                                    <form action="{{ route('lists.products.remove', ['listItem' => $productlist->id, 'product' => $product->id]) }}" method="POST" class="inline">
+                                                    <form id="delete-form-{{ $product->id }}" action="{{ route('lists.products.remove', ['listItem' => $productlist->id, 'product' => $product->id]) }}" method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-600">
-                                                            Delete
-                                                        </button>
                                                     </form>
                                                 </div>
                                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -182,4 +189,36 @@
         <span class="block sm:inline">{{ session('info') }}</span>
     </div>
     @endif
+
+    <script>
+    function updateQuantity(listId, productId, change) {
+        const quantityElement = document.getElementById(`quantity-${productId}`);
+        let currentQuantity = parseInt(quantityElement.textContent);
+
+        if (currentQuantity + change <= 0) {
+            // If quantity is 1 and minus is clicked, delete the product
+            document.getElementById(`delete-form-${productId}`).submit();
+        } else {
+            // Update the quantity
+            currentQuantity += change;
+            quantityElement.textContent = currentQuantity;
+
+            // Send an AJAX request to update the quantity in the backend
+            fetch(`/lists/${listId}/products/${productId}/update-quantity`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ quantity: currentQuantity })
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to update quantity');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>
 </x-app-layout>
