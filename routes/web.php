@@ -43,7 +43,8 @@ Route::middleware(['auth'])->group(function () {
         // Other routes that require authentication
     });
     
-    // Custom route for removing a product from a list
+    Route::post('/lists/{list}/products/{product}/update-quantity', [ProductlistController::class, 'updateQuantity']);
+
     Route::delete('/lists/{listItem}/products/{product}', [ListServiceController::class, 'removeProductFromList'])
         ->name('lists.products.remove');
         
