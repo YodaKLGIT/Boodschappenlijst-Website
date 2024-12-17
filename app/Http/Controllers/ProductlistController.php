@@ -195,6 +195,7 @@ class ProductlistController extends Controller
         $request->validate([
             'list_id' => 'required|exists:lists,id',
             'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
         ]);
 
         $productListEntry = Productlist::find($request->list_id);
@@ -204,16 +205,17 @@ class ProductlistController extends Controller
 
             if ($existingProduct) {
                 $currentQuantity = $existingProduct->pivot->quantity;
-                $newQuantity = $currentQuantity + 1;
+                $newQuantity = $currentQuantity + $request->quantity;
                 $productListEntry->products()->updateExistingPivot($request->product_id, ['quantity' => $newQuantity]);
-                Log::info('Product quantity updated in the list.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
             } else {
-                // If the product is not in the list, create a new entry
-                $productListEntry->products()->attach($request->product_id, ['quantity' => 1]);
-                Log::info('Product added to the list successfully.', ['list_id' => $request->list_id, 'product_id' => $request->product_id]);
+                // If the product is not in the list, add it with the specified quantity
+                $productListEntry->products()->attach($request->product_id, ['quantity' => $request->quantity]);
             }
+
+            return redirect()->back()->with('success', 'Product added to the list successfully.');
         }
-        return redirect()->back()->with('success', 'Product added to the list successfully.');
+
+        return redirect()->back()->with('error', 'Failed to add product to the list.');
     }
 
     public function removeProduct($productlistId, $productId)
